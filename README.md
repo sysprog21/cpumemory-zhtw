@@ -1,3 +1,4 @@
-# My Awesome Book
+# What Every Programmer Should Know About Memory
 
-This file file serves as your book's preface, a great place to describe your book's content and ideas.
+翻譯自：[https://people.freebsd.org/~lstewart/articles/cpumemory.pdf](https://people.freebsd.org/~lstewart/articles/cpumemory.pdf)
+
