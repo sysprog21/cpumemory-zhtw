@@ -1,10 +1,5 @@
 {
   "plugins": [
-    "image-captions"
-  ],
-  "pluginsConfig": {
-    "image-captions": {
-      "caption": "_CAPTION_"
-    }
-  }
+    "katex"
+  ]
 }
