@@ -7,7 +7,7 @@
 這些年來，個人電腦以及小型伺服器被標準化為一張晶片組（chipset），其具有兩個部份：北橋（Northbridge）與南橋（Southbridge）。圖 2.1 示意了這個結構。
 
 <figure>
-  <img src="assets/figure-2.1.png" alt="圖 2.1：包含北橋與南橋的結構">
+  <img src="./assets/figure-2.1.png" alt="圖 2.1：包含北橋與南橋的結構">
   <figcaption>圖 2.1：包含北橋與南橋的結構</figcaption>
 </figure>
 
@@ -32,7 +32,7 @@
 在一些比較昂貴的系統上，北橋並不真的包含記憶體控制器。作為替代，北橋可以連接到多個外部記憶體控制器（在下例中，共有四個）。
 
 <figure>
-  <img src="assets/figure-2.2.png" alt="圖 2.2：包含外部控制器的北橋">
+  <img src="./assets/figure-2.2.png" alt="圖 2.2：包含外部控制器的北橋">
   <figcaption>圖 2.2：包含外部控制器的北橋</figcaption>
 </figure>
 
@@ -42,7 +42,7 @@
 Intel 將從 Nehalem 處理器開始支援通用系統介面（Common System Interface，CSI）；這基本上也是相同的方法：一個讓每個處理器都能擁有區域（local）記憶體的整合式記憶體控制器。
 
 <figure>
-  <img src="assets/figure-2.3.png" alt="圖 2.3：整合式記憶體控制器">
+  <img src="./assets/figure-2.3.png" alt="圖 2.3：整合式記憶體控制器">
   <figcaption>圖 2.3：整合式記憶體控制器</figcaption>
 </figure>
 
