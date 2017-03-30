@@ -43,7 +43,7 @@
 
 ## 致謝
 
-我要感謝 Johnray Fuller 以及 LWN 的全體成員（尤其是 Jonathan Corbet 承擔著將作者式的英文改成更加傳統形式的艱鉅任務）。Markus Armbruster 針對本文的問題與疏忽提供了諸多有價值的建議。
+我要感謝 Johnray Fuller 以及 LWN 的夥伴們（尤其是 Jonathan Corbet 承擔著將作者式的英文改成更加傳統形式的艱鉅任務）。Markus Armbruster 針對本文的問題與疏忽提供了諸多有價值的建議。
 
 ## 關於本文
 
