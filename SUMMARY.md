@@ -10,6 +10,7 @@
         * [2.1.3. DRAM 存取](commodity-hardware-today/ram-types/dram-access.md)
         * [2.1.4. 結論](commodity-hardware-today/ram-types/conclusions.md)
     * [2.2. DRAM 存取技術細節](commodity-hardware-today/dram-access-technical-details.md)
+        * [2.2.1. 讀取協定](commodity-hardware-today/dram-access-technical-details/read-access-protocol.md)
 * [6. 程式設計師能做些什麼？](what-programmers-can-do.md)
     * [6.1. 繞過快取](what-programmers-can-do/bypassing-the-cache.md)
 
