@@ -12,6 +12,7 @@
     * [2.2. DRAM 存取技術細節](commodity-hardware-today/dram-access-technical-details.md)
         * [2.2.1. 讀取協定](commodity-hardware-today/dram-access-technical-details/read-access-protocol.md)
         * [2.2.2. 預充電與有效化](commodity-hardware-today/dram-access-technical-details/precharge-and-activation.md)
+        * [2.2.3. 再充電](commodity-hardware-today/dram-access-technical-details/recharging.md)
 * [6. 程式設計師能做些什麼？](what-programmers-can-do.md)
     * [6.1. 繞過快取](what-programmers-can-do/bypassing-the-cache.md)
 
