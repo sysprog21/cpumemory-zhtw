@@ -16,6 +16,7 @@
         * [2.2.4. 記憶體類型](commodity-hardware-today/dram-access-technical-details/memory-types.md)
         * [2.2.5. 結論](commodity-hardware-today/dram-access-technical-details/conclusions.md)
     * [2.3. 其它主記憶體使用者](commodity-hardware-today/other-main-memory-users.md)
+* [3. CPU 快取](cpu-caches.md)
 * [6. 程式設計師能做些什麼？](what-programmers-can-do.md)
     * [6.1. 繞過快取](what-programmers-can-do/bypassing-the-cache.md)
 
