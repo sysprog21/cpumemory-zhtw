@@ -20,6 +20,7 @@
     * [3.1. 概觀 CPU 快取](cpu-caches/cpu-caches-in-the-big-picture.md)
     * [3.2. 高階快取操作](cpu-caches/cache-operation-at-high-level.md)
     * [3.3. CPU 快取實作細節](cpu-caches/cpu-cache-implementation-details.md)
+        * [3.3.1. 關聯度](cpu-caches/cpu-cache-implementation-details/associativity.md)
 * [6. 程式設計師能做些什麼？](what-programmers-can-do.md)
     * [6.1. 繞過快取](what-programmers-can-do/bypassing-the-cache.md)
 
