@@ -8,10 +8,6 @@ figure > img {
   margin: 0 auto;
 }
 
-.markdown-section figure > table {
-  display: block;
-}
-
 figcaption {
   clear: left;
   margin: .75em 0;
