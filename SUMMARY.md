@@ -24,6 +24,7 @@
         * [3.3.2. 快取影響的量測](cpu-caches/cpu-cache-implementation-details/measurements-of-cache-effects.md)
         * [3.3.3. 寫入行為](cpu-caches/cpu-cache-implementation-details/write-behavior.md)
         * [3.3.4. 多處理器支援](cpu-caches/cpu-cache-implementation-details/multi-processor-support.md)
+        * [3.3.5. 其它細節](cpu-caches/cpu-cache-implementation-details/other-details.md)
 * [6. 程式設計師能做些什麼？](what-programmers-can-do.md)
     * [6.1. 繞過快取](what-programmers-can-do/bypassing-the-cache.md)
 
