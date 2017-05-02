@@ -26,6 +26,7 @@
         * [3.3.4. 多處理器支援](cpu-caches/cpu-cache-implementation-details/multi-processor-support.md)
         * [3.3.5. 其它細節](cpu-caches/cpu-cache-implementation-details/other-details.md)
     * [3.4. 指令快取](cpu-caches/instruction-cache.md)
+        * [3.4.1. 自我修改的程式碼](cpu-caches/instruction-cache/self-modifying-code.md)
 * [6. 程式設計師能做些什麼？](what-programmers-can-do.md)
     * [6.1. 繞過快取](what-programmers-can-do/bypassing-the-cache.md)
 
