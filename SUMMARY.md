@@ -30,6 +30,7 @@
     * [3.5. 快取錯失的因素](cpu-caches/cache-miss-factors.md)
         * [3.5.1. 快取與記憶體頻寬](cpu-caches/cache-miss-factors/cache-and-memory-bandwidth.md)
         * [3.5.2. 關鍵字組的載入](cpu-caches/cache-miss-factors/critical-word-load.md)
+        * [3.5.3. 快取的配置](cpu-caches/cache-miss-factors/cache-placement.md)
         * [3.5.4. FSB 的影響](cpu-caches/cache-miss-factors/fsb-influence.md)
 * [6. 程式設計師能做些什麼？](what-programmers-can-do.md)
     * [6.1. 繞過快取](what-programmers-can-do/bypassing-the-cache.md)
