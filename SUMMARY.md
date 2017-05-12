@@ -33,7 +33,7 @@
         * [3.5.3. 快取的配置](cpu-caches/cache-miss-factors/cache-placement.md)
         * [3.5.4. FSB 的影響](cpu-caches/cache-miss-factors/fsb-influence.md)
 * [4. 虛擬記憶體](virtual-memory.md)
-    * [4.1. 最簡單的位址轉換](virtual-memory/simplest-address-translation.md)
+    * [4.1. 最簡單的位址轉譯](virtual-memory/simplest-address-translation.md)
     * [4.2. 多層級分頁表](virtual-memory/multi-level-page-tables.md)
 * [6. 程式設計師能做些什麼？](what-programmers-can-do.md)
     * [6.1. 繞過快取](what-programmers-can-do/bypassing-the-cache.md)
