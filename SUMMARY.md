@@ -35,6 +35,7 @@
 * [4. 虛擬記憶體](virtual-memory.md)
     * [4.1. 最簡單的位址轉譯](virtual-memory/simplest-address-translation.md)
     * [4.2. 多層級分頁表](virtual-memory/multi-level-page-tables.md)
+    * [4.3. 最佳化分頁表存取](virtual-memory/optimizing-page-table-access.md)
 * [6. 程式設計師能做些什麼？](what-programmers-can-do.md)
     * [6.1. 繞過快取](what-programmers-can-do/bypassing-the-cache.md)
 
