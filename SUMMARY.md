@@ -38,6 +38,7 @@
     * [4.3. 最佳化分頁表存取](virtual-memory/optimizing-page-table-access.md)
         * [4.3.1. 使用 TLB 的預警](virtual-memory/optimizing-page-table-access/caveats-of-using-a-tlb.md)
         * [4.3.2. 影響 TLB 效能](virtual-memory/optimizing-page-table-access/influencing-tlb-performance.md)
+    * [4.4. 虛擬化的影響](virtual-memory/impact-of-virtualization.md)
 * [6. 程式設計師能做些什麼？](what-programmers-can-do.md)
     * [6.1. 繞過快取](what-programmers-can-do/bypassing-the-cache.md)
 
