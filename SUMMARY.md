@@ -40,6 +40,7 @@
         * [4.3.2. 影響 TLB 效能](virtual-memory/optimizing-page-table-access/influencing-tlb-performance.md)
     * [4.4. 虛擬化的影響](virtual-memory/impact-of-virtualization.md)
 * [5. NUMA 支援](numa-support.md)
+    * [5.1. NUMA 硬體](numa-support/numa-hardware.md)
 * [6. 程式設計師能做些什麼？](what-programmers-can-do.md)
     * [6.1. 繞過快取](what-programmers-can-do/bypassing-the-cache.md)
 
