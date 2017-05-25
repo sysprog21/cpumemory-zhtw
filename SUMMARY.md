@@ -43,6 +43,7 @@
     * [5.1. NUMA 硬體](numa-support/numa-hardware.md)
     * [5.2. OS 對 NUMA 的支援](numa-support/os-support-for-numa.md)
     * [5.3. 被發布的資訊](numa-support/published-information.md)
+    * [5.4. 遠端存取成本](numa-support/remote-access-costs.md)
 * [6. 程式設計師能做些什麼？](what-programmers-can-do.md)
     * [6.1. 繞過快取](what-programmers-can-do/bypassing-the-cache.md)
 
