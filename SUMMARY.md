@@ -46,4 +46,5 @@
     * [5.4. 遠端存取成本](numa-support/remote-access-costs.md)
 * [6. 程式設計師能做些什麼？](what-programmers-can-do.md)
     * [6.1. 繞過快取](what-programmers-can-do/bypassing-the-cache.md)
+    * [6.2. 快取存取](what-programmers-can-do/cache-access.md)
 
