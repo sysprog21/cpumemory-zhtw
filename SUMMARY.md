@@ -48,6 +48,7 @@
     * [6.1. 繞過快取](what-programmers-can-do/bypassing-the-cache.md)
     * [6.2. 快取存取](what-programmers-can-do/cache-access.md)
         * [6.2.1. 最佳化一階資料快取存取](what-programmers-can-do/cache-access/optimizing-level-1-data-cache-access.md)
+        * [6.2.2. 最佳化一階指令快取存取](what-programmers-can-do/cache-access/optimizing-level-1-instruction-cache-access.md)
 * [A. 範例與基準測試程式](examples-and-benchmark-programs.md)
     * [A.1 矩陣乘法](examples-and-benchmark-programs/matrix-multiplication.md)
 * [參考書目](bibliography.md)
