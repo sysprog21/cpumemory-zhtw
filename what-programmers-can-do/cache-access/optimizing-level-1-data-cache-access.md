@@ -74,8 +74,7 @@ for (i = 0; i < N; ++i)
 
 `gcc -DCLS=$(getconf LEVEL1_DCACHE_LINESIZE) ...`
 
-If the binaries are supposed to be generic, the largest cache line size should be used.
-使用非常小的 L1d 表示並非所有資料都能塞進快取，但這種處理器無論如何都不適合高效能程式。我們寫出的程式碼看起來像這樣：
+若是二元檔是假定為一般化（generic）的話，應該使用最大的快取行大小。使用非常小的 L1d 表示並非所有資料都能塞進快取，但這種處理器無論如何都不適合高效能程式。我們寫出的程式碼看起來像這樣：
 
 ```c
 #define SM (CLS / sizeof (double))
