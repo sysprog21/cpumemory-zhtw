@@ -53,6 +53,7 @@
         * [6.2.4. 最佳化 TLB 使用](what-programmers-can-do/cache-access/optimizing-tlb-usage.md)
     * [6.3. 預取](what-programmers-can-do/prefetching.md)
         * [6.3.1. 硬體預取](what-programmers-can-do/prefetching/hardware-prefetching.md)
+        * [6.3.2. 軟體預取](what-programmers-can-do/prefetching/software-prefetching.md)
 * [A. 範例與基準測試程式](examples-and-benchmark-programs.md)
     * [A.1 矩陣乘法](examples-and-benchmark-programs/matrix-multiplication.md)
 * [參考書目](bibliography.md)
