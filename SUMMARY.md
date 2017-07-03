@@ -55,6 +55,7 @@
         * [6.3.1. 硬體預取](what-programmers-can-do/prefetching/hardware-prefetching.md)
         * [6.3.2. 軟體預取](what-programmers-can-do/prefetching/software-prefetching.md)
         * [6.3.3. 特殊的預取類型：猜測](what-programmers-can-do/prefetching/special-kind-of-prefetch-speculation.md)
+        * [6.3.4. 輔助執行緒](what-programmers-can-do/prefetching/helper-threads.md)
 * [A. 範例與基準測試程式](examples-and-benchmark-programs.md)
     * [A.1 矩陣乘法](examples-and-benchmark-programs/matrix-multiplication.md)
 * [參考書目](bibliography.md)
