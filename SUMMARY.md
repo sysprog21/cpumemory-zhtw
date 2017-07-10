@@ -58,6 +58,7 @@
         * [6.3.4. 輔助執行緒](what-programmers-can-do/prefetching/helper-threads.md)
         * [6.3.5. 直接快取存取](what-programmers-can-do/prefetching/direct-cache-access.md)
     * [6.4. 多執行緒最佳化](what-programmers-can-do/multi-thread-optimizations.md)
+        * [6.4.1. 並行最佳化](what-programmers-can-do/multi-thread-optimizations/concurrency-optimizations.md)
 * [A. 範例與基準測試程式](examples-and-benchmark-programs.md)
     * [A.1 矩陣乘法](examples-and-benchmark-programs/matrix-multiplication.md)
 * [參考書目](bibliography.md)
