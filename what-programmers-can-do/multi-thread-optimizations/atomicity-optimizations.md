@@ -20,6 +20,110 @@
   <dd>這些操作僅在 x86 與 x86-64 可用，其能夠在記憶體位置上執行算術與邏輯操作。這些處理器擁有對這些操作的非原子版本的支援，但 RISC 架構則否。所以，怪不得它們的可用性是有限的。</dd>
 </dl>
 
+一個架構要不支援 LL/SC 指令、要不支援 CAS 指令，並不會兩者都支援。兩種方法基本上相同；它們能提供一樣好的原子算術操作實作，但看起來 CAS 是近來偏好的方法。其它所有的操作都能夠間接地以它來實作。例如，一個原子加法：
+
+```c
+int curval;
+int newval;
+do {
+  curval = var;
+  newval = curval + addend;
+} while (CAS(&var, curval, newval));
+```
+
+呼叫 `CAS` 的結果指出了操作是否成功。若是它回傳失敗（非零的值），迴圈會再次執行、執行加法、並且再次嘗試呼叫 `CAS`。這會重複到成功為止。這段程式值得注意的是，記憶體位置的位址必須以兩個獨立的指令來計算。[^42]對於 LL/SC，程式看起來大致相同：
+
+```c
+int curval;
+int newval;
+do {
+  curval = LL(var);
+  newval = curval + addend;
+} while (SC(var, newval));
+```
+
+這裡我們必須使用一個特殊的載入指令（`LL`），而且我們不必將記憶體位置的當前值傳遞給 `SC`，因為處理器知道記憶體位置是否曾在這期間被修改過。
+
+<figure>
+  <table>
+    <tr>
+      <td><pre><code>for (i = 0; i < N; ++i)
+  __sync_add_and_fetch(&var,1);</code></pre></td>
+      <td><pre><code>for (i = 0; i < N; ++i)
+  __sync_fetch_and_add(&var,1);</code></pre></td>
+      <td><pre><code>for (i = 0; i < N; ++i) {
+  long v, n;
+  do {
+    v = var;
+    n = v + 1;
+  } while (!__sync_bool_compare_and_swap(&var, v,n));
+}</code></pre></td>
+    </tr>
+    <tr>
+      <th>1. 做加法並讀取結果</th>
+      <th>2. 做加法並回傳舊值</th>
+      <th>3. 原子地以新值替換</th>
+    </tr>
+  </table>
+  <figcaption>圖 6.12：在一個迴圈中原子遞增</figcaption>
+</figure>
+
+The big differentiators are x86 and x86-64, where we have the atomic operations and, here, it is important to select the proper atomic operation to achieve the best result.
+圖 6.12 顯示了實作一個原子遞增操作的三種方法。在 x86 與 x86-64 上，三種方法全都會產生不同的程式，而在其它的架構上，程式則可能完全相同。效能的差異很大。下面的表格顯示了由四條並行的執行緒進行 1 百萬次遞增的執行時間。程式使用了 gcc 的內建函數（`__sync_*`）
+
+<table>
+  <tr>
+    <th>1. Exchange Add</th>
+    <th>2. Add Fetch</th>
+    <th>3. CAS</th>
+  </tr>
+  <tr>
+    <td>0.23s</td>
+    <td>0.21s</td>
+    <td style="background: yellow">0.73s</td>
+  </tr>
+</table>
+
+前兩個數字很相近；我們看到回傳舊值稍微快了一點點。重要的資訊在被強調的那一欄，使用 CAS 時的成本。毫不意外，它要昂貴許多。對此有諸多理由：1. 有兩個記憶體操作、2. CAS 操作本身比較複雜，甚至需要條件操作、以及 3. 整個操作必須在一個迴圈中完成，以防兩個同時的存取造成一次 CAS 呼叫失敗。
+
+現在讀者可能會問個問題：為什麼有人會使用這種利用 CAS 的複雜、而且較長的程式？對此的回答是：複雜性通常會被隱藏。如同先前提過的，CAS 是橫跨所有有趣架構的統一原子操作。所以有些人認為，以 CAS 定義所有的原子操作就足夠了。這令程式更為簡單。但就如數字所顯示的，這絕對不是最好的結果。CAS 解法的記憶體管理的間接成本很大。下面示意了僅有兩條執行緒的執行，每條在它們自己的核心上。
+
+<table>
+  <tr>
+    <th>執行緒 #1</th>
+    <th>執行緒 #2</th>
+    <th><code>var</code> 快取狀態</th>
+  </tr>
+  <tr>
+    <td><code>v = var</code></td>
+    <td></td>
+    <td>在 Proc 1 上為「E」</td>
+  </tr>
+  <tr>
+    <td><code>n = v + 1</code></td>
+    <td><code>v = var</code></td>
+    <td>在 Proc 1+2 上為「S」</td>
+  </tr>
+  <tr>
+    <td>CAS(<code>var</code>)</td>
+    <td><code>n = v + 1</code></td>
+    <td>在 Proc 1 上為「E」</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>CAS(<code>var</code>)</td>
+    <td>在 Proc 2 上為「E」</td>
+  </tr>
+</table>
+
+我們看到，在這段很短的執行期間內，快取行狀態至少改變了三次；兩次改變為 RFO。再加上，因為第二個 CAS 會失敗，所以這條執行緒必須重複整個操作。在這個操作的期間，相同的情況可能會再度發生。
+
+相比之下，在使用原子算術操作時，處理器能夠將執行加法（或者其它什麼的）所需的載入與儲存操作保持在一起。能夠確保同時發出的快取行請求直到原子操作完成前都會被阻擋。
+
+因此，在範例中的每次迴圈疊代至多會產生一次 RFO 快取請求，就沒有別的了。
+
+這所有的一切都意味著，在一個能夠使用原子算術與邏輯操作的層級定義機器抽象是很重要的。CAS 不該被普遍地用作統一的機制。
+
 
 
 [^40]: HP Parisc 仍然沒有提供更多的操作...
