@@ -30,3 +30,53 @@
 
 執行緒親和性表示，將一條執行緒指派給一顆或多顆核心。排程器接著將會在決定在哪執行這條執行緒的時候，（只）在那些核心中選擇。即使有其它閒置的核心，它們也不會被考慮。這聽來可能像是個缺陷，但這是必須償付的代價。假如太多執行緒排外地執行在一組核心上，剩餘的核心可能大多數都是閒置的，而除了改變親和性之外就沒什麼能做的了。預設情況下，執行緒能夠執行在任一核心上。
 
+有一些查詢與改變一條執行緒的親和性的介面：
+
+```c
+#define _GNU_SOURCE
+#include <sched.h>
+int sched_setaffinity(pid_t pid, size_t size,
+                      const cpu_set_t *cpuset);
+int sched_getaffinity(pid_t pid, size_t size,
+                      cpu_set_t *cpuset);
+```
+
+這兩個介面必須要被用在單執行緒的程式上。`pid` 引數指定了哪個行程的親和性應該要被改變或測定。呼叫者顯然需要適當的權限來做這件事。第二與第三個參數指定了核心的位元遮罩。第一個函數需要填入位元遮罩，使得它能夠設定親和性。第二個函數以選擇的執行緒的排程資訊來填充位元遮罩。這些介面都被宣告在 `<sched.h>` 中。
+
+`cpu_set_t` 型別也和一些操作與使用這個型別物件的巨集一同被定義在這個標頭檔中。
+
+```c
+#define _GNU_SOURCE
+#include <sched.h>
+#define CPU_SETSIZE
+#define CPU_SET(cpu, cpusetp)
+#define CPU_CLR(cpu, cpusetp)
+#define CPU_ZERO(cpusetp)
+#define CPU_ISSET(cpu, cpusetp)
+#define CPU_COUNT(cpusetp)
+```
+
+`CPU_SETSIZE` 指定有多少 CPU 能夠以這個資料結構表示。其它三個巨集運用了 `cpu_set_t` 物件。要初始化一個物件，應該使用 `CPU_ZERO`；其它兩個巨集應該用以選擇或取消選擇個別的核心。`CPU_ISSET` 測試一個指定的處理器是否為集合的一部分。`CPU_COUNT` 回傳集合中被選擇的核心數量。`cpu_set_t` 型別為 CPU 數量的上限提供了一個合理的預設值。隨著時間推移，肯定會證實它太小了；在這個時間點，這個型別將會被調整。這表示程式必須一直將這個大小放在心上。上述的便利巨集根據 `cpu_set_t` 的定義，隱式地處理了這個大小。若是需要更動態的大小管理，應該使用一組擴充的巨集：
+
+```c
+#define _GNU_SOURCE
+#include <sched.h>
+#define CPU_SET_S(cpu, setsize, cpusetp)
+#define CPU_CLR_S(cpu, setsize, cpusetp)
+#define CPU_ZERO_S(setsize, cpusetp)
+#define CPU_ISSET_S(cpu, setsize, cpusetp)
+#define CPU_COUNT_S(setsize, cpusetp)
+```
+
+這些介面接收一個對應於這個大小的額外參數。為了能夠分配動態大小的 CPU 集，提供了三個巨集：
+
+```c
+#define _GNU_SOURCE
+#include <sched.h>
+#define CPU_ALLOC_SIZE(count)
+#define CPU_ALLOC(count)
+#define CPU_FREE(cpuset)
+```
+
+`CPU_ALLOC_SIZE` 巨集的回傳值為，必須為一個能夠處理 CPU 計數的 `cpu_set_t` 結構而分配的位元組數量。為了分配這種區塊，能夠使用 `CPU_ALLOC` 巨集。以這種方式分配的記憶體必須使用一次 `CPU_FREE` 的呼叫來釋放。這些巨集可能會在背後使用 `malloc` 與 `free`，但並不是非得要維持這種方式。
+
