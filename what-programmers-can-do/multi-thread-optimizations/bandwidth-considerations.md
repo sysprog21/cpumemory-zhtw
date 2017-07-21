@@ -80,3 +80,56 @@ int sched_getaffinity(pid_t pid, size_t size,
 
 `CPU_ALLOC_SIZE` 巨集的回傳值為，必須為一個能夠處理 CPU 計數的 `cpu_set_t` 結構而分配的位元組數量。為了分配這種區塊，能夠使用 `CPU_ALLOC` 巨集。以這種方式分配的記憶體必須使用一次 `CPU_FREE` 的呼叫來釋放。這些巨集可能會在背後使用 `malloc` 與 `free`，但並不是非得要維持這種方式。
 
+最後，定義了一些對 CPU 集物件的操作：
+
+```c
+#define _GNU_SOURCE
+#include <sched.h>
+#define CPU_EQUAL(cpuset1, cpuset2)
+#define CPU_AND(destset, cpuset1, cpuset2)
+#define CPU_OR(destset, cpuset1, cpuset2)
+#define CPU_XOR(destset, cpuset1, cpuset2)
+#define CPU_EQUAL_S(setsize, cpuset1, cpuset2)
+#define CPU_AND_S(setsize, destset, cpuset1,
+                  cpuset2)
+#define CPU_OR_S(setsize, destset, cpuset1,
+                 cpuset2)
+#define CPU_XOR_S(setsize, destset, cpuset1,
+                  cpuset2)
+```
+
+這兩組四個巨集的集合能夠檢查兩個集合的相等性，以及對集合執行邏輯 AND、OR、與 XOR 操作。這些操作在使用一些 libNUMA 函數（見附錄 D）的時候會派上用場。
+
+一個行程能夠使用 `sched_getcpu` 介面來確定它當前跑在哪個處理器上：
+
+```c
+#define _GNU_SOURCE
+#include <sched.h>
+int sched_getcpu(void);
+```
+
+結果為 CPU 在 CPU 集中的索引。由於排程的本質，這個數字並不總是 100% 正確。在回傳結果的時間、與執行緒回到使用者層級的時間之間，執行緒可能已經被移到一個不同的 CPU 上。程式必須總是將這種不正確的可能性納入考量。在任何情況下，更為重要的是被允許執行執行緒的那組 CPU。這個集合能夠使用 `sched_getaffinity` 來查詢。集合會被子執行緒與行程繼承。執行緒不能指望集合在生命週期中是穩定的。親和性遮罩能夠從外界設置（見上面原型中的 `pid` 參數）；Linux 也支援 CPU 熱插拔（hot-plugging），這意味著 CPU 能夠從系統中消失––因此，也能從親和 CPU 集消失。
+
+在多執行緒程式中，個別的執行緒並沒有如 POSIX 定義的正式行程 ID，因此無法使用上面兩個函數。作為替代，`<pthread.h>` 宣告了四個不同的介面：
+
+```c
+#define _GNU_SOURCE
+#include <pthread.h>
+int pthread_setaffinity_np(pthread_t th,
+                           size_t size,
+                           const cpu_set_t *cpuset);
+int pthread_getaffinity_np(pthread_t th,
+                           size_t size,
+                           cpu_set_t *cpuset);
+int pthread_attr_setaffinity_np(
+                           pthread_attr_t *at,
+                           size_t size,
+                           const cpu_set_t *cpuset);
+int pthread_attr_getaffinity_np(
+                           pthread_attr_t *at,
+                           size_t size,
+                           cpu_set_t *cpuset);
+```
+
+前兩個介面基本上與我們已經看過的那兩個相同，除了它們在第一個參數拿的是一個執行緒的控制柄（handle），而非一個行程 ID。這能夠定址在一個行程中的個別執行緒。這也代表這些介面無法在另一個行程使用，它們完全是為了行程內部使用的。第三與第四個介面使用了一個執行緒屬性。這些屬性是在建立一條新的執行緒的時候使用的。藉由設置屬性，一條執行緒能夠在開始時就被排程在一個特定的 CPU 集合上。這麼早選擇目標處理器––而非在執行緒已經啟動之後––能夠在許多不同層面上受益，包含（而且尤其是）記憶體分配（見 6.5 節的 NUMA）。
+
