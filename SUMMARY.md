@@ -61,6 +61,7 @@
         * [6.4.1. 並行最佳化](what-programmers-can-do/multi-thread-optimizations/concurrency-optimizations.md)
         * [6.4.2. 原子性最佳化](what-programmers-can-do/multi-thread-optimizations/atomicity-optimizations.md)
         * [6.4.3. 頻寬考量](what-programmers-can-do/multi-thread-optimizations/bandwidth-considerations.md)
+    * [6.5. NUMA 程式設計](what-programmers-can-do/numa-programming.md)
 * [A. 範例與基準測試程式](examples-and-benchmark-programs.md)
     * [A.1 矩陣乘法](examples-and-benchmark-programs/matrix-multiplication.md)
 * [參考書目](bibliography.md)
