@@ -63,6 +63,7 @@
         * [6.4.3. 頻寬考量](what-programmers-can-do/multi-thread-optimizations/bandwidth-considerations.md)
     * [6.5. NUMA 程式設計](what-programmers-can-do/numa-programming.md)
         * [6.5.1. 記憶體策略](what-programmers-can-do/numa-programming/memory-policy.md)
+        * [6.5.2. 指定策略](what-programmers-can-do/numa-programming/specifying-policies.md)
 * [A. 範例與基準測試程式](examples-and-benchmark-programs.md)
     * [A.1 矩陣乘法](examples-and-benchmark-programs/matrix-multiplication.md)
 * [參考書目](bibliography.md)
