@@ -31,3 +31,29 @@ int NUMA_mem_get_node_mask(void *addr,
 
 `NUMA_mem_get_node_mask` 根據管理策略，在 `dest` 中設置代表所有分配（或者可能分配）範圍 [`addr`, `addr`+`size`) 中的分頁的記憶體節點的位元。`NUMA_mem_get_node` 只看位址 `addr`，並回傳分配（或者可能分配）這個位址的記憶體節點的索引。這些介面比 `get_mempolicy` 還容易使用，而且應該是首選。
 
+當前正由一條執行緒使用的 CPU 能夠使用 `sched_getcpu` 來查詢（見 6.4.3 節）。使用這個資訊，一支程式能夠使用來自 libNUMA 的 `NUMA_cpu_to_memnode` 介面來確定 CPU 本地的記憶體節點（們）：
+
+```c
+#include <libNUMA.h>
+int NUMA_cpu_to_memnode(size_t cpusetsize,
+                        const cpu_set_t *cpuset,
+                        size_t memnodesize,
+                        memnode_set_t *
+                        memnodeset);
+```
+
+對這個函數的一次呼叫會設置所有對應於任何在第二個參數指到的集合中的 CPU 本地的記憶體節點的位元。就如同 CPU 資訊本身，這個資訊直到機器的配置改變（例如，CPU 被移除或新增）時才會是正確的。
+
+`memnode_set_t` 物件中的位元能被用在像 `get_mempolicy` 這種低階函數的呼叫上。使用 libNUMA 中的其它函數會更加方便。反向映射能透過下述函數取得：
+
+```c
+#include <libNUMA.h>
+int NUMA_memnode_to_cpu(size_t memnodesize,
+                        const memnode_set_t *
+                        memnodeset,
+                        size_t cpusetsize,
+                        cpu_set_t *cpuset)
+```
+
+在產生的 `cpuset` 中設置的位元為任何在 `memnodeset` 中設置的位元所對應的記憶體節點本地的那些 CPU。對於這兩個介面，程式設計師都必須意識到，資訊可能隨著時間改變（尤其是使用 CPU 熱插拔的情況）。在許多情境中，在輸入的位元集中只會設置單一個位元，但舉例來說，將 `sched_getaffinity` 呼叫檢索到的整個 CPU 集合傳遞到 `NUMA_cpu_to_memnode`，以確定哪些記憶體節點能夠被執行緒直接存取到，也是有意義的。
+
