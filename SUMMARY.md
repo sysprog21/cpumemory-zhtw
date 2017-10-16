@@ -67,6 +67,7 @@
         * [6.5.3. 置換與策略](what-programmers-can-do/numa-programming/swapping-and-policies.md)
         * [6.5.4. VMA 策略](what-programmers-can-do/numa-programming/vma-policy.md)
         * [6.5.5. 查詢節點資訊](what-programmers-can-do/numa-programming/querying-node-information.md)
+        * [6.5.6. CPU 與節點集合](what-programmers-can-do/numa-programming/cpu-and-node-sets.md)
 * [A. 範例與基準測試程式](examples-and-benchmark-programs.md)
     * [A.1 矩陣乘法](examples-and-benchmark-programs/matrix-multiplication.md)
 * [參考書目](bibliography.md)
