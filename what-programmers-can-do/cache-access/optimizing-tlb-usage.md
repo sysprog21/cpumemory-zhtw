@@ -10,6 +10,6 @@
 
 只有在最大效能至關重要的情況下，才應該關掉 ASLR。額外目錄的成本低到足以令這步是不必要的，除了一些極端的狀況之外。系統核心能隨時執行的一個可能的最佳化是，確保一個單一的映射不會橫跨兩個目錄之間的記憶體空間邊界。這會以最小的方式限制 ASLR，但不足以大幅地削弱它。
 
-程式設計師直接受此影響的唯一方式是在明確請求一個位址空間區域的時候。這會在以 `MAP_FIXED` 使用 `mmap` 的時候發生。
+程式開發者直接受此影響的唯一方式是在明確請求一個位址空間區域的時候。這會在以 `MAP_FIXED` 使用 `mmap` 的時候發生。
 Allocating new a address space region this way is very dangerous and hardly ever done. It is possible, though, and, if it is used and the addresses can be freely chosen, the programmer should know about the boundaries of the last level page directory and select the requested address appropriately.
 

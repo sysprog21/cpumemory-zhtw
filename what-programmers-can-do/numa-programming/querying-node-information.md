@@ -55,5 +55,5 @@ int NUMA_memnode_to_cpu(size_t memnodesize,
                         cpu_set_t *cpuset)
 ```
 
-在產生的 `cpuset` 中設置的位元為任何在 `memnodeset` 中設置的位元所對應的記憶體節點本地的那些 CPU。對於這兩個介面，程式設計師都必須意識到，資訊可能隨著時間改變（尤其是使用 CPU 熱插拔的情況）。在許多情境中，在輸入的位元集中只會設置單一個位元，但舉例來說，將 `sched_getaffinity` 呼叫檢索到的整個 CPU 集合傳遞到 `NUMA_cpu_to_memnode`，以確定哪些記憶體節點能夠被執行緒直接存取到，也是有意義的。
+在產生的 `cpuset` 中設置的位元為任何在 `memnodeset` 中設置的位元所對應的記憶體節點本地的那些 CPU。對於這兩個介面，程式開發者都必須意識到，資訊可能隨著時間改變（尤其是使用 CPU 熱插拔的情況）。在許多情境中，在輸入的位元集中只會設置單一個位元，但舉例來說，將 `sched_getaffinity` 呼叫檢索到的整個 CPU 集合傳遞到 `NUMA_cpu_to_memnode`，以確定哪些記憶體節點能夠被執行緒直接存取到，也是有意義的。
 
