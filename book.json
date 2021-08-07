@@ -7,11 +7,15 @@
     "katex",
     "github-issue-feedback",
     "-highlight",
-    "prism"
+    "prism",
+    "theme-comscore"
   ],
   "pluginsConfig": {
     "github-issue-feedback": {
       "repo": "sysprog21/cpumemory-zhtw"
+    },
+    "theme-default": {
+      "showLevel": false
     }
   }
 }
