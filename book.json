@@ -1,8 +1,15 @@
 {
+  "gitbook": ">=3.0.0",
   "plugins": [
     "-lunr",
     "-search",
     "search-pro",
-    "katex"
-  ]
+    "katex",
+   "github-issue-feedback"
+  ],
+  "pluginsConfig": {
+    "github-issue-feedback": {
+      "repo": "sysprog21/cpumemory-zhtw"
+    }
+  }
 }
