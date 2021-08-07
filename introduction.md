@@ -47,7 +47,7 @@
 
 ## 關於本文
 
-本文標題致敬於 David Goldberg 的經典論文《What Every Computer Scientist Should Know About Floating-Point Arithmetic》。這篇論文仍鮮少人知，雖然這應該是任何勇於嚴謹地撰寫程式而敲下鍵盤者的先決條件。
+本文標題致敬於 David Goldberg 的經典論文《[What Every Computer Scientist Should Know About Floating-Point Arithmetic](https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html)》。這篇論文仍鮮少人知，雖然這應該是任何勇於嚴謹地撰寫程式而敲下鍵盤者的先決條件。
 
 [^1]: 然而，為了保證使用儲存裝置快取時的資料完整性（data integrity），改變是必要的。
 
