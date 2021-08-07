@@ -5,7 +5,9 @@
     "-search",
     "search-pro",
     "katex",
-   "github-issue-feedback"
+    "github-issue-feedback",
+    "-highlight",
+    "prism"
   ],
   "pluginsConfig": {
     "github-issue-feedback": {
