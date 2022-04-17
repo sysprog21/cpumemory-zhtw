@@ -69,7 +69,7 @@ do {
 </figure>
 
 The big differentiators are x86 and x86-64, where we have the atomic operations and, here, it is important to select the proper atomic operation to achieve the best result.
-圖 6.12 顯示了實作一個原子遞增操作的三種方法。在 x86 與 x86-64 上，三種方法全都會產生不同的程式，而在其它的架構上，程式則可能完全相同。效能的差異很大。下面的表格顯示了由四條並行的執行緒進行 1 百萬次遞增的執行時間。程式使用了 gcc 的內建函數（`__sync_*`）
+圖 6.12 顯示了實作一個原子遞增操作的三種方法。在 x86 與 x86-64 上，三種方法全都會產生不同的程式，而在其它的架構上，程式則可能完全相同。效能的差異很大。下面的表格顯示了由四條並行的執行緒進行 1 百萬次遞增的執行時間。程式使用了 gcc 的內建函式（`__sync_*`）
 
 <table>
   <tr>

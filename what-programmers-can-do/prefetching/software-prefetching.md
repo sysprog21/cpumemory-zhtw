@@ -1,7 +1,7 @@
 # 6.3.2. 軟體預取
 
 硬體預取的優勢在於不必調整程式。缺點如同方才描述的，存取模式必須很直觀，而且預取無法橫跨分頁邊界進行。因為這些原因，我們現在有了更多可能性，軟體預取它們之中最重要的。軟體預取不需藉由插入特殊的指令來修改原始碼。某些編譯器支援編譯指示（pragma）以或多或少地自動插入預取指令。
-On x86 and x86-64 Intel’s convention for compiler intrinsics to insert these special instructions is generally used:
+在 x86 和 x86-64，intrinsic 函式會由編譯器產生特殊的指令:
 
 ```c
 #include <xmmintrin.h>
