@@ -11,7 +11,8 @@
     "-highlight",
     "prism",
     "splitter",
-    "theme-comscore"
+    "theme-comscore",
+    "hide-element"
   ],
   "pluginsConfig": {
     "github-buttons": {
@@ -27,6 +28,9 @@
     },
     "theme-default": {
       "showLevel": false
+    },
+    "hide-element": {
+      "elements": [".gitbook-link"]
     }
   }
 }
