@@ -291,7 +291,7 @@ If variables which are used together are also stored together the likelihood tha
 
 [^28]: 我們這裡忽略可能會改變上溢位（overflow）、下溢位（underflow）、或是四捨五入（rounding）的發生的算術影響。
 
-[^譯註]: 這裡可能講得比較抽象。作者的意思是：在一開始三層迴圈的實作中，最內部的每一次 `k` 迴圈迭代同時處理 `res[i][j] += mul1[i][k] * mul2[k][j]` 與 `res[i][j + 1] += mul1[i][k] * mul2[k][j + 1]`。由於才剛存取過 `mul2[k][j]` 與 `res[i][j]`，所以 `mul2[k][j + 1]` 與 `res[i][j + 1]` 還在 L1d 快取中，因而降低錯失率。後述的方法是這個方法的一般化（generalization）。
+[^譯註]: 原文說法較簡略，作者的意思是：在一開始三層迴圈的實作中，最內部的每一次 `k` 迴圈迭代同時處理 `res[i][j] += mul1[i][k] * mul2[k][j]` 與 `res[i][j + 1] += mul1[i][k] * mul2[k][j + 1]`。由於才剛存取過 `mul2[k][j]` 與 `res[i][j]`，所以 `mul2[k][j + 1]` 與 `res[i][j + 1]` 還在 L1d 快取中，因而降低錯失率。後述的方法是這個方法的一般化（generalization）。
 
 [^29]: 理論上在 1999 年修訂版引入 C 語言的 `restrict` 關鍵字應該解決這個問題。不過編譯器還是不理解。原因主要是存在著太多不正確的程式碼，其會誤導編譯器、並導致它產生不正確的目的碼（object code）。
 
