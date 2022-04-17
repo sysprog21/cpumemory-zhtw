@@ -8,4 +8,5 @@
 本文解釋用於現代電腦硬體的記憶體子系統的結構、闡述 CPU 快取發展的考量、它們如何運作，以及程式該如何針對記憶體操作調整，從而達到最佳的效能。
 
 ## 翻譯資訊
-譯者: [Chi-En Wu](https://github.com/jason2506)
+譯者: [Chi-En Wu](https://github.com/jason2506), [Jim Huang](https://github.com/jserv)
+* 關於翻譯內容的修正、改進建議，和貢獻，請造訪 [sysprog21/cpumemory-zhtw](https://github.com/sysprog21/cpumemory-zhtw)
