@@ -9,4 +9,5 @@
 
 ## 翻譯資訊
 譯者: [Chi-En Wu](https://github.com/jason2506), [Jim Huang](https://github.com/jserv)
-:warning: 關於翻譯內容的修正、改進建議，和貢獻，請造訪 [sysprog21/cpumemory-zhtw](https://github.com/sysprog21/cpumemory-zhtw)
+
+關於翻譯內容的修正、改進建議，和貢獻，請造訪 [sysprog21/cpumemory-zhtw](https://github.com/sysprog21/cpumemory-zhtw)
