@@ -6,6 +6,7 @@
     "-sharing",
     "sharing-plus",
     "katex",
+    "github-buttons",
     "github-issue-feedback",
     "-highlight",
     "prism",
@@ -13,14 +14,19 @@
     "theme-comscore"
   ],
   "pluginsConfig": {
+    "github-buttons": {
+      "buttons": [{
+        "user": "sysprog21",
+        "repo": "cpumemory-zhtw",
+        "type": "star",
+        "size": "small"
+      }]
+    },
     "github-issue-feedback": {
       "repo": "sysprog21/cpumemory-zhtw"
     },
     "theme-default": {
       "showLevel": false
     }
-  },
-  "links": {
-    "sidebar": { "cpumemory-zhtw" : "https://github.com/sysprog21/cpumemory-zhtw" }
   }
 }
