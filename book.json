@@ -9,6 +9,7 @@
     "github-issue-feedback",
     "-highlight",
     "prism",
+    "splitter",
     "theme-comscore"
   ],
   "pluginsConfig": {
