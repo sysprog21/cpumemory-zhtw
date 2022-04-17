@@ -40,7 +40,7 @@
     * [4.4. 虛擬化的影響](virtual-memory/impact-of-virtualization.md)
 * [5. NUMA 支援](numa-support.md)
     * [5.1. NUMA 硬體](numa-support/numa-hardware.md)
-    * [5.2. OS 對 NUMA 的支援](numa-support/os-support-for-numa.md)
+    * [5.2.作業系統對 NUMA 的支援](numa-support/os-support-for-numa.md)
     * [5.3. 被發布的資訊](numa-support/published-information.md)
     * [5.4. 遠端存取成本](numa-support/remote-access-costs.md)
 * [6. 程式開發者能做些什麼？](what-programmers-can-do.md)

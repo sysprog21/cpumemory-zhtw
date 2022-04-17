@@ -9,7 +9,7 @@ The number of eight to sixteen separate streams therefore is quickly reduced.
 
 預取有個大弱點：它無法跨越分頁邊界。理解到 CPU 支援需求分頁（demand paging）時，原因應該很明顯。若是預取被允許橫跨分頁邊界，存取可能會觸發一個事件，以令分頁能夠被取得。這本身可能很糟，尤其是對效能而言。更糟的是預取器並不知道程式或作業系統本身的語義（semantic）。它可能因此預取實際上永遠不會被請求的分頁。
 That means the prefetcher would run past the end of the memory region the processor accessed in a recognizable pattern before.
-這不只可能，而且非常有可能。若是處理器––作為一次預取的一個副作用––觸發對這樣的分頁的請求，OS 甚至可能會在這種請求永遠也不會發生時完全扔掉它的追蹤紀錄。
+這不只可能，而且非常有可能。若是處理器––作為一次預取的一個副作用––觸發對這樣的分頁的請求，作業系統甚至可能會在這種請求永遠也不會發生時完全扔掉它的追蹤紀錄。
 
 因此重要的是認識到，無論預取器在預測模式上有多厲害，程式也會在分頁邊界上歷經快取錯失，除非它明確地從新的分頁預取或是讀取。這是如 6.2 節描述的最佳化資料佈局、以藉由將不相關的資料排除在外來最小化快取污染的另一個理由。
 
