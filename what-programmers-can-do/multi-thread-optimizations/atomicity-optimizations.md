@@ -92,7 +92,7 @@ The big differentiators are x86 and x86-64, where we have the atomic operations 
   <tr>
     <th>執行緒 #1</th>
     <th>執行緒 #2</th>
-    <th><code>var</code> 快取狀態</th>
+    <th>var 快取狀態</th>
   </tr>
   <tr>
     <td><code>v = var</code></td>
