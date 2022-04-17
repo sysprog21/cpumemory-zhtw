@@ -58,7 +58,7 @@
         * [6.3.5. 直接快取存取](what-programmers-can-do/prefetching/direct-cache-access.md)
     * [6.4. 多執行緒最佳化](what-programmers-can-do/multi-thread-optimizations.md)
         * [6.4.1. 並行最佳化](what-programmers-can-do/multi-thread-optimizations/concurrency-optimizations.md)
-        * [6.4.2. 原子性最佳化](what-programmers-can-do/multi-thread-optimizations/atomicity-optimizations.md)
+        * [6.4.2. 最小操作的最佳化](what-programmers-can-do/multi-thread-optimizations/atomicity-optimizations.md)
         * [6.4.3. 頻寬考量](what-programmers-can-do/multi-thread-optimizations/bandwidth-considerations.md)
     * [6.5. NUMA 程式設計](what-programmers-can-do/numa-programming.md)
         * [6.5.1. 記憶體策略](what-programmers-can-do/numa-programming/memory-policy.md)
