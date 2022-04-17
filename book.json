@@ -12,7 +12,8 @@
     "prism",
     "splitter",
     "theme-comscore",
-    "hide-element"
+    "hide-element",
+    "alerts"
   ],
   "pluginsConfig": {
     "github-buttons": {
