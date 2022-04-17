@@ -18,5 +18,8 @@
     "theme-default": {
       "showLevel": false
     }
+  },
+  "links": {
+    "sidebar": { "cpumemory-zhtw" : "https://github.com/sysprog21/cpumemory-zhtw" }
   }
 }
