@@ -3,8 +3,8 @@
   "plugins": [
     "-lunr",
     "-search",
+    "search-pro",
     "-sharing",
-    "sharing-plus",
     "katex",
     "github-buttons",
     "github-issue-feedback",
