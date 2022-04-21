@@ -5,7 +5,7 @@
   <figcaption>圖 2.4：6-T 靜態 RAM</figcaption>
 </figure>
 
-圖 2.4 展示了一個 6 電晶體（transistor）SRAM 記憶單元（cell）的結構。這個記憶單元的核心由四個電晶體 $$ \mathbf{M_{1}} $$ 到 $$ \mathbf{M_{4}} $$ 所構成，其形成兩個交叉耦合（cross-coupled）的反相器（inverter）。它們有兩個穩定狀態，分別表示 0 與 1。只要 $$ \mathbf{V_{dd}} $$ 維持通電，狀態就是穩定的。
+圖 2.4 展示了一組由 6 個電晶體 (transistor) 構成的 SRAM 記憶單元（cell）的結構。這個記憶單元的中心是四個電晶體 $$ \mathbf{M_{1}} $$ 到 $$ \mathbf{M_{4}} $$，其形成兩個交叉耦合（cross-coupled）的反相器（inverter）。它們有兩個穩定狀態，分別表示 0 與 1。只要 $$ \mathbf{V_{dd}} $$ 維持通電，狀態就是穩定的。
 
 若是需要存取記憶單元的狀態，就提高字組存取線路（word access line）$$ \mathbf{WL} $$ 的電位。若是必須複寫記憶單元的狀態，則要先將 $$ \mathbf{BL} $$ 與 $$ \overline{\mathbf{BL}} $$ 線路設為想要的值，然後再提高 $$ \mathbf{WL} $$ 的電位。由於外部的驅動者（driver）強於四個電晶體（$$ \mathbf{M_{1}} $$ 到 $$ \mathbf{M_{4}} $$），這使得舊的狀態得以被覆寫。
 
