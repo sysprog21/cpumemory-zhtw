@@ -282,10 +282,7 @@ struct order {
   <figcaption>圖 6.6：AMD 上 L1d 的 Bank 位址</figcaption>
 </figure>
 
-如果執行這種最佳化，另一個相關的最佳化也是可能的。AMD 的處理器––至少––將 L1d 實作為多個獨立的 bank。
-The L1d can receive two data words per cycle but only if both words are stored in different banks or in a bank with the same index.
-bank 位址是以虛擬位址的低位元編碼的，如圖 6.6 所示。
-If variables which are used together are also stored together the likelihood that they are in different banks or the same bank with the same index is high.
+如果執行這種最佳化，另一個相關的最佳化也是可能的。AMD 的處理器––至少––將 L1d 實作為多個獨立的 bank。只有當兩個資料字組儲存在不同的 bank 中或儲存在同一索引（index）下相同的 bank 中，L1d 快取才能在每一個週期裡拿到兩個字組。bank 位址是以虛擬位址的低位元編碼的，如圖 6.6 所示。假若會共同使用的變數也儲存在一起，則它們也會有高可能性在不同的 bank 中或在同一索引下相同的 bank 中。
 
 
 

@@ -4,7 +4,7 @@
 
 由記憶體控制器個別定址（address）記憶體位置是極為不切實際的：4GB 的 RAM 會需要 2<sup>32</sup> 條位址線。作為替代，位址會使用較小的一組位址線，編碼成二進位數值傳遞。以這種方式傳遞到 DRAM 晶片的位址必須先被解多工（demultiplex）。有 $$ N $$ 條位址線的解多工器（demultiplexer）將會有 2<sup>$$ N $$</sup> 條輸出線（output line）。這些輸出線能被用以選擇記憶單元。對於小容量的晶片而言，使用這種直接的方法是沒什麼大問題的。
 
-但假如記憶單元的數量增加，這個方法就不再合適。一個 1Gbit[^6] 容量的晶片將會需要 30 條位址線以及 2<sup>30</sup> 選擇線（select line）。在不犧牲速度的前提下，解多工器的大小會隨著輸入線（input line）的數量以指數成長。用於 30 條位址線的解多工器需要大量的晶片空間，外加解多工器的（尺寸與時間）複雜度。更重要的是，同時在位址線上傳輸 30 個脈衝（impulse）比「只」傳輸 15 個脈衝還要難得多。Fewer lines have to be laid out at exactly the same length or timed appropriately.[^7]
+但假如記憶單元的數量增加，這個方法就不再合適。一個 1Gbit[^6] 容量的晶片將會需要 30 條位址線以及 2<sup>30</sup> 選擇線（select line）。在不犧牲速度的前提下，解多工器的大小會隨著輸入線（input line）的數量以指數成長。用於 30 條位址線的解多工器需要大量的晶片空間，外加解多工器的（尺寸與時間）複雜度。更重要的是，同時在位址線上傳輸 30 個脈衝（impulse）比「只」傳輸 15 個脈衝還要難得多。只有少數的位址線能夠以長度完全相同或適當安排時間的方式排版。[^7]
 
 <figure>
   <img src="../../assets/figure-2.7.png" alt="圖 2.7：動態 RAM 示意圖">
@@ -21,7 +21,7 @@
 
 [^6]: 我厭惡這些 [SI 前綴（prefix）](https://www.nist.gov/pml/weights-and-measures/metric-si-prefixes)。對我來說一個 giga-bit 永遠是 2<sup>30</sup> 而非 10<sup>9</sup> 位元。
 
-[^7]: Modern DRAM types like DDR3 can automatically adjust the timing but there is a limit as to what can be tolerated.
+[^7]: 現代 DRAM 類型（如 DDR3）可以自動調整時序，但可以容忍的範圍有限。
 
 [^8]: 多工器與解多工器是對等的，並且這裡的多工器在寫入時需要如解多工器一般運作。所以從現在開始我們要忽略其差異。
 

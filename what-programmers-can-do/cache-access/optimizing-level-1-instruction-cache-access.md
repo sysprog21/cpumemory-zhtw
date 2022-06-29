@@ -108,7 +108,7 @@ if (likely(a > 1))
 
 對齊每條單一指令沒有任何意義。目標是令指令流為連續的。所以對齊僅在戰略要地上才有意義。為了決定要在何處加上對齊，理解能有什麼好處是必要的。有條在一個快取行開頭的指令[^32]代表快取行的預取是最大化的。對指令而言，這也代表著解碼器是更有效的。很容易看出，若是執行一條在快取行結尾的指令，處理器就必須準備讀取一個新的快取行、並對指令解碼。有些事情可能會出錯（像是快取行錯失），代表平均而言，一條在快取行結尾的指令執行起來並不跟在開頭的指令一樣有效。
 
-Combine this with the follow-up deduction that the problem is most severe if control was just transferred to the instruction in question (and hence prefetching is not effective) and we arrive at our final conclusion where alignment of code is most useful:
+如果控制權剛轉移到在快取行結尾的指令（因此預取無效），則情況最為嚴重。將以上推論結合後，我們得出對齊程式碼最有用的地方：
 
 * 在函式的開頭；
 * 在僅會通過跳躍到達的基礎區塊的開頭；
