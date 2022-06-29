@@ -52,7 +52,7 @@ start f2
 end f2</code></pre></td>
     </tr>
   </table>
-  <figcaption>表 6.3：行內展開 Vs 不行內展開</figcaption>
+  <figcaption>表 6.3：行內展開 Vs 沒有行內展開</figcaption>
 </figure>
 
 表 6.3 顯示在兩個函式中沒有行內展開與行內展開的情況下，產生的程式碼看起來會怎麼樣。若是函式 `inlcand` 在 `f1` 與 `f2` 中被行內展開，產生的程式碼的大小為 size `f1` + size `f2` + $$ 2 \times $$ size `inlcand`。如果沒有進行行內展開的話，總大小減少 size `inlcand`。這即是在 `f1` 與 `f2` 相互在不久後呼叫的話，L1i 與 L2 快取額外所需的量。再加上：若是 `inlcand` 沒被行內展開，程式碼可能仍在 L1i 中，而它就不必被再次解碼。再加上：分支預測單元或許能更好地預測跳躍，因為它已經看過這段程式。如果對程式而言，被行內展開的函式大小上限的編譯器預設值並不是最好的，它應該要被降低。
@@ -108,7 +108,7 @@ if (likely(a > 1))
 
 對齊每條單一指令沒有任何意義。目標是令指令流為連續的。所以對齊僅在戰略要地上才有意義。為了決定要在何處加上對齊，理解能有什麼好處是必要的。有條在一個快取行開頭的指令[^32]代表快取行的預取是最大化的。對指令而言，這也代表著解碼器是更有效的。很容易看出，若是執行一條在快取行結尾的指令，處理器就必須準備讀取一個新的快取行、並對指令解碼。有些事情可能會出錯（像是快取行錯失），代表平均而言，一條在快取行結尾的指令執行起來並不跟在開頭的指令一樣有效。
 
-Combine this with the follow-up deduction that the problem is most severe if control was just transferred to the instruction in question (and hence prefetching is not effective) and we arrive at our final conclusion where alignment of code is most useful:
+如果控制權剛轉移到在快取行結尾的指令（因此預取無效），則情況最為嚴重。將以上推論結合後，我們得出對齊程式碼最有用的地方：
 
 * 在函式的開頭；
 * 在僅會通過跳躍到達的基礎區塊的開頭；
