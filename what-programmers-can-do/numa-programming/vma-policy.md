@@ -25,7 +25,7 @@ long mbind(void *start, unsigned long len,
     <dd>系統核心將會試著移動位址範圍中、任何分配在一個不在由 <code>nodemask</code> 指定的集合中的節點上的分頁。預設情況下，僅有被目前行程的分頁表專用的分頁會被移動。</dd>
 
     <dt><code>MPOL_MF_MOVEALL</code></dt>
-    <dd>如同 <code>MPOL_MF_MOVE</code>，但系統核心會試著移動所有分頁，而非僅有那些獨自被目前行程的分頁表使用的分頁。這個操作具有系統層面的影響，因為它也影響其它––可能不是由相同使用者所擁有的––行程的記憶體存取。因此 <code>MPOL_MF_MOVEALL</code> 是個特權操作（需要 <code>CAP_NICE</code> 的能力）。</dd>
+    <dd>如同 <code>MPOL_MF_MOVE</code>，但系統核心會試著移動所有分頁，而非僅有那些獨自被目前行程的分頁表使用的分頁。這個操作具有系統層面的影響，因為它也影響其它 –– 可能不是由相同使用者所擁有的 –– 行程的記憶體存取。因此 <code>MPOL_MF_MOVEALL</code> 是個特權操作（需要 <code>CAP_NICE</code> 的能力）。</dd>
 </dl>
 
 注意到針對 `MPOL_MF_MOVE` 與 `MPOL_MF_MOVEALL` 的支援僅在 2.6.16 Linux 系統核心中才被加入。
