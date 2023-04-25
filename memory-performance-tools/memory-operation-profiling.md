@@ -93,9 +93,3 @@ int getrusage(__rusage_who_t who, struct rusage *usage)
 `RUSAGE_CHILDREN` 兩個有被定義。資源使用的狀況計算到當每個子進程截至終止為止的加總。而非個別使用情況。為了要能夠允許存取特定一個線程的資料，未來可能會新增 `RUSAGE_THREAD` 來處理單一個別的計算。`rusage` 結構定義了包括執行時間、發送和使用的 IPC 訊息數量以及頁面錯誤數在內的各項計算值。頁面錯誤的資訊可在 `ru_minflt` 和`ru_majflt` 中獲得。
 
 對於想要透過減少頁面錯誤來增加程式效能的設計師可以常常查看這些資訊，收集分析並做出比較。從系統面來看，如果使用者擁有足夠系統權限權限，也可以透過 `/proc/<PID>/stat` 看到相關資訊。其中 `<PID>` 是想查看的進程ID，頁面錯誤的數值則位在第十到第十四欄。分別是進程及其子進程的累進次要和主要頁面錯誤數。
-
-
-<figure>
-  <img src="../assets/figure-7.5.png" alt="圖 7.5：快取存取統計結果">
-  <figcaption>圖 7.5：快取存取統計結果</figcaption>
-</figure>

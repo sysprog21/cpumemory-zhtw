@@ -71,6 +71,7 @@
         * [6.5.8. 利用所有頻寬](what-programmers-can-do/numa-programming/utilizing-all-bandwidth.md)
 * [7. 記憶體性能量測工具](memory-performance-tools.md)
     * [7.1. 記憶體操作分析](memory-performance-tools/memory-operation-profiling.md)
+    * [7.2. 模擬處理器快取行為](memory-performance-tools/simulating-cpu-caches.md)
 * [A. 範例與基準測試程式](examples-and-benchmark-programs.md)
     * [A.1 矩陣乘法](examples-and-benchmark-programs/matrix-multiplication.md)
 * [參考書目](bibliography.md)
