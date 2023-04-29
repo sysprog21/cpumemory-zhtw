@@ -74,6 +74,7 @@
     * [7.2. 模擬處理器快取行為](memory-performance-tools/simulating-cpu-caches.md)
     * [7.3. 計算記憶體使用](memory-performance-tools/measuring-memory-usage.md)
     * [7.4. 改善分支預測](memory-performance-tools/improving-branch-prediction.md)
+    * [7.5. 頁面錯誤最佳化](memory-performance-tools/page-fault-optimization.md)
 * [A. 範例與基準測試程式](examples-and-benchmark-programs.md)
     * [A.1 矩陣乘法](examples-and-benchmark-programs/matrix-multiplication.md)
 * [參考書目](bibliography.md)
