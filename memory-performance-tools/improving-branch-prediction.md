@@ -6,7 +6,7 @@
 
 雖然如此仍有一個簡單的方法可使用。A.2 節的程式碼另外定義了 `likely` 和 `unlikely` 兩個巨集，可在程式執行階段主動測量靜態預測是否正確。且使用者或測試人員可就檢查結果進行調整。但測量不會考量程式的性能，只會測試程式設計師所做的靜態假設。詳細內容以及程式碼可在先前的章節中找到。
 
-[PGO](https://www.intel.com/content/www/us/en/docs/cpp-compiler/developer-guide-reference/2021-8/profile-guided-optimization-pgo.html) 對 [gcc](https://www.man7.org/linux/man-pages/man1/gcc.1.html) 來說相當容易使用。只需要三個步驟，但須滿足某些先決條件。首先所有來源檔案都須使用額外 [`-fprofile-generate`](https://gcc.gnu.org/onlinedocs/gcc-11.2.0/gcc/Instrumentation-Options.html) 選項進行編譯。這個選項必須被傳遞到所有編譯器運行的程式或連結該程式的命令中。雖然可混合使用已啟用和未啟用此選項的檔案，但對沒有啟用此選項的目標檔案，PGO 不會被觸發。
+[PGO](https://www.intel.com/content/www/us/en/docs/cpp-compiler/developer-guide-reference/2021-8/profile-guided-optimization-pgo.html) 對 [gcc](https://www.man7.org/linux/man-pages/man1/gcc.1.html) 而言相當容易使用。只需三個步驟，但須滿足某些先決條件。首先所有來源檔案都須使用額外 [`-fprofile-generate`](https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html) 選項進行編譯。這個選項必須被傳遞到所有編譯器運行的程式或連結該程式的命令中。雖然可混合使用已啟用和未啟用此選項的檔案，但對沒有啟用此選項的目標檔案，PGO 不會被觸發。
 
 開啟 PGO 後，除了編譯時間大幅增加外，編譯器產生的二進位檔案與尋常檔案無異，因為檔案記錄（和儲存）有關分支是否被採用等等相關資訊。編譯器還為每個輸入的檔案新增一個名為 `.gcno` 的擴增檔案。這個檔案包含與程式碼中分支相關的資訊。這個檔案須保留以便後續使用。
 
@@ -14,6 +14,6 @@
 
 執行一組代表性測試後，就可重新編譯應用程式。編譯器必須能夠在包含來源檔案的同一目錄中找到 `.gcda` 檔。千萬不能移動這些檔案，否則編譯器會找不到，嵌入的檔案校驗也無法匹配。重新編譯時，要將 `-fprofile-generate` 參數替換為 `-fprofile-use` 。但原始碼更改有些限制。更改空格和注釋沒問題，但加上更多分支或基本程式碼區塊會使收集的資料無效，導致編譯失敗。
 
-這些就是程式開發者該有的準備，不難吧？最重要是選擇最適合的工具來進行測量。如果測試工作不適合程式實際使用方式，執行結果可能會更糟。也因為如此，使用 PGO 來進行函式庫最佳化非常困難。函式庫可在許多情境下使用，除非使用案例相似，否則最好使用 `__builtin_expect` 的靜態分支預測。
+這些就是程式開發者該有的準備，不難吧？最重要是選擇最適合的工具來進行測量。如果測試工作不適合程式實際使用方式，執行結果可能會更糟。也因為如此使用 PGO 來進行函式庫最佳化非常困難。函式庫可在許多情境下使用，除非使用案例相似，否則最好使用 `__builtin_expect` 的靜態分支預測。
 
 而對 `.gcno` 和 `.gcda` 兩個檔案而言，有幾點需要注意。這些二進位檔案不能直接用來檢查。但可使用 gcc 套件中的 [gcov](https://www.man7.org/linux/man-pages/man1/gcov.1.html) 工具來進行檢視。這個工具主要用於覆蓋分析（因此得名），使用檔案格式與 PGO 相同。 gcov 工具為每個包含執行程式碼的來源檔案（可能包括系統標頭）生成 `.gcov` 擴增檔案。這些檔案依據給定的 gcov 參數，對原始程式碼標注 (annotate) 分支計數器和程式碼執行的機率等資訊。
