@@ -84,16 +84,17 @@ $ time ls /etc
 
 對頁面錯誤影響最大階段在程式啟動階段。使用每個頁面都會產生頁面錯誤；特別是 GUI 應用程式，使用的頁面越多，程式運作所需的時間與準備時間就越長。在 7.5 節中，我們會介紹一個專門用於測量初始化時間的工具。
 
-time 透過 `rusage` 來運作。`wait4` 系統呼叫在親代行程等待子行程終止時會寫入 `strcut rusage` ; 正好符合 time 的需求。但行程仍可獲取自身資源使用資訊（正是 `rusage` 命名由來）或已終止子行程的資源使用資訊。
+time 透過 [`rusage`](https://www.gnu.org/software/libc/manual/html_node/Resource-Usage.html) 來運作。[`wait4`](https://man7.org/linux/man-pages/man2/wait4.2.html) 系統呼叫在親代行程等待子行程終止時會寫入 `strcut rusage` ; 正好符合 time 的需求。但行程仍可獲取自身資源使用資訊（正是 `rusage` 命名由來）或已終止子行程的資源使用資訊。
 
 ```c
 #include <sys/resource.h>
 int getrusage(__rusage_who_t who, struct rusage *usage)
 ```
 
-參數 `who` 明確表示哪個行程要求資訊。目前只有 `RUSAGE_SELF` 和 
-`RUSAGE_CHILDREN` 兩個變數有定義。資源使用狀況計算到當每個子行程截至終止的加總。而非個別使用情況。為了能夠允許存取特定執行緒的資料，未來可能會新增 `RUSAGE_THREAD` 來處理單一個別執行緒計算。`rusage` 結構定義了包括執行時間、發送和使用的 IPC 訊息數量以及頁面錯誤數在內的各項計算值。頁面錯誤資訊可在 `ru_minflt` 和`ru_majflt` 中獲得。
+[`getrusage`](https://man7.org/linux/man-pages/man2/getrusage.2.html)透過參數 `who` 明確表示哪個行程要求資訊。目前只有 `RUSAGE_SELF` 和 
+`RUSAGE_CHILDREN` 兩個變數有定義。資源使用狀況計算到當每個子行程截至終止的加總，而非個別使用情況。為了能夠允許存取特定執行緒的資料，未來可能會新增 `RUSAGE_THREAD` 來處理單一個別執行緒計算。`rusage` 結構定義了包括執行時間、發送和使用行程間通訊（IPC）數量及頁面錯誤數在內的各項計算值。頁面錯誤資訊可在 `ru_minflt` 和`ru_majflt` 中獲得。
 
-對於想透過減少頁面錯誤來增加程式效能的程式開發者可查看這些資訊，收集分析並做出比較。以系統面而言，如果使用者擁有足夠系統權限，也可透過 `/proc/<PID>/stat` 看到相關資訊。其中 `<PID>` 是欲查看的行程 ID ，頁面錯誤的數值則位在第 10 到第 14 欄。分別是行程及其子程的累進次要和主要頁面錯誤數。
+對於想透過減少頁面錯誤來增加程式效能的程式開發者可查看這些資訊，收集分析並做出比較。以系統面而言，如果使用者擁有足夠系統權限，也可透過 [`/proc/<PID>/stat`](https://www.kernel.org/doc/html/latest/filesystems/proc.html) 看到相關資訊。其中 `<PID>` 是欲查看的行程 ID ，頁面錯誤的數值則位在第 10 到第 14 欄。分別是行程及其子程的累進次要和主要頁面錯誤數。
+
 [^譯註1]: 在 x86 家族的微處理器，稱為 instruction pointer，或簡稱 IP，詳細可見 [Program counter](https://en.wikipedia.org/wiki/Program_counter)。
 [^譯註2]: x86 家族微處理器的指令延遲可見: https://www.agner.org/optimize/instruction_tables.pdf。

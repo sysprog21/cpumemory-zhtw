@@ -40,7 +40,7 @@ valgrind --tool=cachegrind \
 
 模擬 8MB 的 L2 快取大小並支援 8 路組 (8-way set) , 每個快取行的大小為 64 位元。 注意 `--L2` 需要放在 `command arg` 的前面。
 
-此外cachegrind 還提供更多功能。在行程結束之前會產生一個 `cachegrind.out.XXXXX` 檔，其中 `XXXXX` 是行程的 `PID` 。這個檔案包含程式中每個函式和原始程式碼中快取使用的摘要和詳細內容。可使用 [`cg annotate`](https://man7.org/linux/man-pages/man1/cg_annotate.1.html) 來查看這些資料。
+此外 `cachegrind` 還提供更多功能。在行程結束之前會產生一個 `cachegrind.out.XXXXX` 檔，其中 `XXXXX` 是行程的 `PID` 。這個檔案包含程式中每個函式和原始程式碼中快取使用的摘要和詳細內容。可使用 [`cg annotate`](https://man7.org/linux/man-pages/man1/cg_annotate.1.html) 來查看這些資料。
 
 程式所產生的結果包含快取使用摘要，以及每個函式對快取使用的詳細摘要。要獲得資料需要 `cg annotate` 將記憶體位置與函式做配對，這表示最好要有除錯相關的資訊。雖然檔案可提供一些幫助，但由於內部符號 (internal symbol) 沒有列在動態符號表中，因此結果不夠完整。圖 7.6 顯示了與圖 7.5 相同的程式運行的部分結果。
 
@@ -67,6 +67,6 @@ valgrind --tool=cachegrind \
 
 `Ir` 、`Dr` 和 `Dw` 這幾個欄位顯示的是總快取使用量，而非快取未命中數，這些未命中次數會在後面兩欄顯示。這些數據可用於辨識出發生最多快取未命中的程式碼。首先可先關注 `L2` 的快取未命中，再延伸處理 `L1i/L1d` 快取未命中。
 
-`cg annotate` 可提供更詳細的資料。如果有特別指定某一個檔案，甚至可逐行顯示出對應的快取命中數和未命中數。這些資訊可讓程式開發者深入到確切行數，雖然使用介面粗糙。我在寫這篇文章時，cachegrind 資料檔案和原始檔必須在同一個目錄中。
+`cg annotate` 可提供更詳細的資料。如果有特別指定某一個檔案，甚至可逐行顯示出對應的快取命中數和未命中數。這些資訊可讓程式開發者深入到確切行數，雖然使用介面粗糙。本文書寫之際，cachegrind 資料檔案和原始檔必須在同一個目錄中。
 
 再次強調，`cachegrind` 是模擬器，不會使用來自處理器的測量數據。因此與處理器中實際的快取實作方式很可能會非常不同。`cachegrind` 使用[最近最少使用 (LRU) 策略](https://en.wikipedia.org/wiki/Cache_replacement_policies)，但對具高關聯性的高速快取而言，這會造成額外的成本。除此之外，模擬器並沒有考慮上下文交換 (context switch) 和系統呼叫 (system call)的成本。這兩者都可能破壞大部分 L2 快取且必須更新 L1i 和 L1d 的快取內容。會導致模擬結果的總快取未命中數低於實際的狀況。儘管如此，`cachegrind` 仍是一個很好的工具，可了解程式的記憶體使用情況以及其相關的問題。
