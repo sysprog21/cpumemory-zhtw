@@ -8,7 +8,8 @@
 
 大容量儲存裝置的效能問題主要藉由軟體技術解決：作業系統 (operating system) 將最常使用 (且最有可能使用) 的資料保存在主記憶體 (main memory) 中，
 其存取速度比硬碟 (hard disk) 快了幾個數量級。
-此外，快取也添加到儲存裝置中，以提升效能，這不需要對作業系統進行任何改變。[^1]由於偏離本文的主旨，我們不會深入探討有關大型儲存裝置存取的軟體最佳化細節。
+此外，快取也加到儲存裝置中，以提升效能，這不需要對作業系統進行任何改變[^1]。
+由於偏離本文的主旨，我們不會深入探討有關大型儲存裝置存取的軟體最佳化細節。
 
 相較於儲存子系統，解決主記憶體的瓶頸被證實更加困難，因為幾乎所有的解決方法都需要改變硬體。
 目前有以下主要方式來改善主記憶體的效能：
@@ -68,5 +69,4 @@
 本文標題〈What Every Programmer Should Know About Memory〉向 David Goldberg 的經典論文〈[What Every Computer Scientist Should Know About Floating-Point Arithmetic](https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html)〉致敬。
 這篇論文鮮少人知，然而它實闡述任何致力於嚴謹地撰寫程式的人的先備知識。
 
-[^1]: 然而，為了保證使用儲存裝置快取時的資料完整性 (data integrity)，改變是必要的。
-
+[^1]: 然而，為確保在使用儲存裝置快取時的資料完整性 (data integrity)，必須進行相應的改變。
