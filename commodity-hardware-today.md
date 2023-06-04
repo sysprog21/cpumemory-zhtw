@@ -98,6 +98,6 @@ Intel 也從 Nehalem 微處理器架構開始，支援通用系統介面 (Common
 [^2]: 超執行緒 (HT) 使得一顆處理器核僅需少量的額外硬體，就能被用來同時處理 2 個或多個任務。
 [^3]: 我們不會在本文討論多埠 RAM，因為這種 RAM 在商用硬體中並不常見，至少不在尋常程式開發者可存取的範圍內。多埠 RAM 主要用於依賴極限速度的專用硬體，例如網路路由器等設備中。
 [^4]: 完整起見，這裡需要提到一下，這類記憶體控制器佈局可以被用於其它用途，像是「記憶體 RAID」，它很適合與熱插拔（hotplug）記憶體組合使用。
-[^譯註1]: 這句的原文是 "the standard system in the data center will have up to 64 virtual processors"，注意到本文發表的時間點在 2007 年，本句是 Red Hat 公司之前的推論，64 個虛擬處理器核意味著 4 個插槽、HT (即 2 個硬體執行緒)，和每個 CPU 要有 8 核，不過這樣的硬體配置要到 2014 年的 [POWER8](https://en.wikipedia.org/wiki/POWER8) 才出現，後者的每個 CPU 可有 6 或 12 核。
+[^譯註1]: 這句的原文是 "the standard system in the data center will have up to 64 virtual processors"，注意到本文發表的時間點在 2007 年，本句是 Red Hat 公司之前的推論，64 個虛擬處理器核意味著 4 個插槽、HT (即 2 個硬體執行緒)，和每個 CPU 要有 8 核，不過這樣的硬體配置要到 2014 年的 [POWER8](https://en.wikipedia.org/wiki/POWER8) 才出現，後者的每個 CPU 可有 6 或 12 核。原文作者 Ulrich Drepper 撰寫文章時，任職於 Red Hat 公司，這也是為何文中提及 Red Hat，後來他一度在高盛服務，並於 2017 年回歸。
 [^譯註2]: 這陳述不成立，如今 SMP 架構廣為個人電腦、移動裝置，甚至是嵌入式系統所採納，但 NUMA 仍只在部分 SMP 系統存在。
 [^譯註3]: 為了區分 (OS) kernel 和 (processor) core，本文將前者稱為「核心」(例如 Linux 核心)，而將後者稱為「核」(例如處理器核)。
