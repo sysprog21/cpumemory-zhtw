@@ -67,6 +67,6 @@
 ## 關於本文
 
 本文標題〈What Every Programmer Should Know About Memory〉向 David Goldberg 的經典論文〈[What Every Computer Scientist Should Know About Floating-Point Arithmetic](https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html)〉致敬。
-這篇論文鮮少人知，然而它實闡述任何致力於嚴謹地撰寫程式的人的先備知識。
+儘管該論文鮮少人知，然而它闡述任何致力於嚴謹地撰寫程式的人的先備知識。
 
 [^1]: 然而，為確保在使用儲存裝置快取時的資料完整性 (data integrity)，必須進行相應的改變。
