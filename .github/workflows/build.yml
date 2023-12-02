@@ -12,12 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     env:
       MY_SECRET   : ${{secrets.GH_ACCESS_TOKEN}}
-      USER_NAME   : jserv
-      USER_EMAIL  : jserv.tw@gmail.com
+      USER_NAME   : ${{secrets.GH_USERNAME}}
+      USER_EMAIL  : ${{secrets.GH_EMAIL}}
       BOOK_DIR    : .
 
     steps:
     - name: Checkout 🛎️
-      uses: actions/checkout@v3.0.1
+      uses: actions/checkout@v4
     - name: Build and Deploy 🚀
-      uses: onejar99/gitbook-build-publish-action@v1.0.2
+      uses: onejar99/gitbook-build-publish-action@v1.0.3
