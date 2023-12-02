@@ -4,7 +4,7 @@
 
 `/sys/devices/system/cpu/cpu*/cache`
 
-在 6.2.1 節，我們會看到能用來查詢不同快取大小的介面。這裡重要的是快取的拓樸。上面的目錄包含了列出 CPU 擁有的不同快取資訊的子目錄（叫做 `index*`）。檔案 `type`、`level`、與 `shared_cpu_map` 是在這些目錄中與拓樸有關的重要檔案。一個 Intel Core 2 QX6700 的資訊看起來就如表 5.1。
+在 6.2.1 節，我們會看到能用來查詢不同快取大小的介面。這裡重要的是快取的拓樸。上面的目錄包含列出 CPU 擁有的不同快取資訊的子目錄（叫做 `index*`）。檔案 `type`、`level`、與 `shared_cpu_map` 是在這些目錄中與拓樸有關的重要檔案。一個 Intel Core 2 QX6700 的資訊看起來就如表 5.1。
 
 <figure>
   <table>
