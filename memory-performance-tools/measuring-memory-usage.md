@@ -12,7 +12,7 @@ valgrind --tool=massif command arg
   <figcaption>圖 7.7： massif 統計結果</figcaption>
 </figure>
 
-在行程終止前，massif 會新增兩個檔案分別為：`massif.XXXXX.txt` 與 `massif.XXXXX.ps` ，其中 `XXXXX` 是行程的 `PID`。`.txt` 檔案是行程所有呼叫點的記憶體使用摘要，而 `.ps` 檔案內容如圖 7.7 。
+在行程終止前，massif 會新增二個檔案分別為：`massif.XXXXX.txt` 與 `massif.XXXXX.ps` ，其中 `XXXXX` 是行程的 `PID`。`.txt` 檔案是行程所有呼叫點的記憶體使用摘要，而 `.ps` 檔案內容如圖 7.7 。
 
 massif 還可記錄程式堆疊的使用情況，可用來確定應用程式的總記憶體使用量，但並不適用於所有狀況。在某些情況下（執行緒的堆疊或使用 [signaltstack](https://man7.org/linux/man-pages/man2/sigaltstack.2.html) 時），`valgrind` 無法知道堆疊的使用限制，在這個例子就不會把這些堆疊數字加到總和中。還有一些情況，同樣也無法準確紀錄堆疊。如果程式屬於這些情況，可在開始運行 massif 時將參數設定 `--stacks=no` 。要注意是這些 `valgrind` 的使用參數，必須加在觀察程式之前。
 
