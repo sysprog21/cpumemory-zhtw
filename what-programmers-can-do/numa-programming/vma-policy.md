@@ -11,7 +11,7 @@ long mbind(void *start, unsigned long len,
            unsigned flags);
 ```
 
-這個介面為位址範圍 [`start`, `start` + `len`) 註冊一個新的 VMA 策略。由於記憶體管理是在分頁上操作，所以起始位址必須是對齊分頁的。`len` 值會被無條件進位至下一個分頁大小。
+這個介面為位址範圍 [`start`, `start` + `len`) 註冊一個新的 VMA 策略。由於記憶體管理是在分頁上操作，所以起始位址必須是對齊分頁的。`len` 值會被無條件進位至下一個分頁容量。
 
 `mode` 參數再次指定策略；這個值必須從 6.5.1 節的清單中挑選。與使用 `set_mempolicy` 相同，`nodemask` 參數只會用在某些策略上。它的處理是一樣的。
 

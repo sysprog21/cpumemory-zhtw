@@ -8,7 +8,7 @@ Oprofile 提供簡單的界面，即便選擇 GUI 仍可運行於裝置底層。
 
 針對這個問題首先避免觀測單一計數器的絕對值，可將多個計數器的數值一同納入參考。處理器一次可監控不只一個事件；再來可計算所有收集數據的比值。可能可獲得更好比較的結果。計算時通常以處理時間 (process time) 作除數，例如時脈週期數 (clock cycles) 或指令數。以程式性能的初步測試而言，這二個數字具有參考的價值。
 
-圖 7.1 為對一個簡單隨機「跟隨」測試資料進行量測的結果，縱軸為 CPI（Cycles Per Instruction）數值，橫軸則為工作集 (working set) 大小。在大多數 Intel 處理器上紀錄這個事件的變數名稱為 [`CPU_CLK_UNHALTED`](https://www.intel.com/content/dam/develop/external/us/en/documents/tuningguide-intelxeonprocessor-scalablefamily-2ndgen-181827.pdf) 和 [`INST_RETIRED`](https://www.intel.com/content/dam/develop/external/us/en/documents/tuningguide-intelxeonprocessor-scalablefamily-2ndgen-181827.pdf) 。從縮寫大概可猜到，前者計算 cpu 的時脈週期，後者則計算指令數。我們看到類似於每個元素的週期量測的圖片。對小工作集 (working set) ，比值為 1.0 有時甚至更低。這些計算結果皆在 Intel Core 2 處理器上進行，此處理器具有多純量 (multi-scalar) 特性，可同時處理多個指令。對於不受記憶體頻寬限制的程式，比率可顯著低於 1.0 ，但以此案例來說，1.0 的結果已經非常好了。
+圖 7.1 為對一個簡單隨機「跟隨」測試資料進行量測的結果，縱軸為 CPI（Cycles Per Instruction）數值，橫軸則為工作集 (working set) 容量。在大多數 Intel 處理器上紀錄這個事件的變數名稱為 [`CPU_CLK_UNHALTED`](https://www.intel.com/content/dam/develop/external/us/en/documents/tuningguide-intelxeonprocessor-scalablefamily-2ndgen-181827.pdf) 和 [`INST_RETIRED`](https://www.intel.com/content/dam/develop/external/us/en/documents/tuningguide-intelxeonprocessor-scalablefamily-2ndgen-181827.pdf) 。從縮寫大概可猜到，前者計算 cpu 的時脈週期，後者則計算指令數。我們看到類似於每個元素的週期量測的圖片。對小工作集 (working set) ，比值為 1.0 有時甚至更低。這些計算結果皆在 Intel Core 2 處理器上進行，此處理器具有多純量 (multi-scalar) 特性，可同時處理多個指令。對於不受記憶體頻寬限制的程式，比率可顯著低於 1.0 ，但以此案例來說，1.0 的結果已經非常好了。
 
 <figure>
   <img src="../assets/figure-7.1.png" alt="圖 7.1：時脈指令數">
@@ -23,14 +23,14 @@ Oprofile 提供簡單的界面，即便選擇 GUI 仍可運行於裝置底層。
 
 所有比值結果都是使用除役 (retired) 指令（`INST_RETIRED`）的數量計算。因此要計算快取未命中率，還必須從 `INST_RETIRED` 中減去所有讀取資料和儲存資料的指令，使得記憶體操作的實際快取未命中率比圖中顯示的數字更高。
 
-其中 L1d 的快取未命中占大多數，對 Intel 處理器而言由於使用包含快取（inclusive caches），代表可能會出現 L1d 快取未命中的情況。該處理器具有 32k 大小的 L1d 快取，因此可看到，如同預期，L1d 未命中率從零開始上升到將近工作集的大小（除了列表資料集外，還可能有其他原因觸發快取，因此增加集中在 16k 和 32k 之間 。硬體預取可將 L1d 快取未命中率保持在約 1％，直到工作集超過 64k 之後，L1d 未命中率急劇上升。
+其中 L1d 的快取未命中占大多數，對 Intel 處理器而言由於使用包含快取（inclusive caches），代表可能會出現 L1d 快取未命中的情況。該處理器具有 32k 容量的 L1d 快取，因此可看到，如同預期，L1d 未命中率從零開始上升到將近工作集的容量（除了列表資料集外，還可能有其他原因觸發快取，因此增加集中在 16k 和 32k 之間 。硬體預取可將 L1d 快取未命中率保持在約 1％，直到工作集超過 64k 之後，L1d 未命中率急劇上升。
 
 <figure>
   <img src="../assets/figure-7.2.png" alt="圖 7.2：快取未命中率 (隨機版本「跟隨」)">
   <figcaption>圖 7.2：快取未命中率 (隨機版本「跟隨」)</figcaption>
 </figure>
 
-L2 快取未命中率一直保持為零，直到 L2 快取完全用盡為止。其他原因造成的 L2 快取未命中可姑且忽略不計，一旦超過 L2 快取大小（221位元），未命中率就會上升。另一件值得注意的部份為 L2 快取需求未命中率並非為零。表示硬體預取器沒有加載後續指令所需的所有高速快取內容。隨機存取會影響指令預取的效果。可跟圖 7.3 循序非隨機讀取的測試版本一起比較。
+L2 快取未命中率一直保持為零，直到 L2 快取完全用盡為止。其他原因造成的 L2 快取未命中可姑且忽略不計，一旦超過 L2 快取容量（221位元），未命中率就會上升。另一件值得注意的部份為 L2 快取需求未命中率並非為零。表示硬體預取器沒有加載後續指令所需的所有高速快取內容。隨機存取會影響指令預取的效果。可跟圖 7.3 循序非隨機讀取的測試版本一起比較。
 
 <figure>
   <img src="../assets/figure-7.3.png" alt="圖 7.3：快取未命中率 (循序版本「跟隨」)">
@@ -48,7 +48,7 @@ L2 快取未命中率一直保持為零，直到 L2 快取完全用盡為止。�
 有用的 NTA 預取 | 2.84%
 延遲的 NTA 預取 | 2.56%
 
-[NTA](https://gcc.gnu.org/projects/prefetch.html)（非時間對齊）預取比率表示有多少的預取指令已被執行，因此不需要額外的功夫來處理。這表示處理器必須浪費額外的時間來解譯預取的指令並到快取尋找相關內容。因此軟體的表現很大程度取決於所使用的處理器快取大小；以及硬體預取器的效能。
+[NTA](https://gcc.gnu.org/projects/prefetch.html)（非時間對齊）預取比率表示有多少的預取指令已被執行，因此不需要額外的功夫來處理。這表示處理器必須浪費額外的時間來解譯預取的指令並到快取尋找相關內容。因此軟體的表現很大程度取決於所使用的處理器快取容量；以及硬體預取器的效能。
 
 若是只看 NTA 預取比值不太準確。因為比值表示所有預取指令中有 2.65％ 產生延遲無法發揮效益。這些預取指令在執行之前需要將相關的資料從快取中取出。因此從數值來看只有 2.84％ + 2.65％ = 5.5％ 的預取指令有用。以所有有用的 NTA 預取指令來看 48％ 沒有及時完成。由此得知程式碼還有改進的空間如下：
 
