@@ -20,4 +20,4 @@ jobs:
     - name: Checkout 🛎️
       uses: actions/checkout@v4
     - name: Build and Deploy 🚀
-      uses: onejar99/gitbook-build-publish-action@v1.0.3
+      uses: LawrenceHwang/gitbook-build-publish-action@bugfix
