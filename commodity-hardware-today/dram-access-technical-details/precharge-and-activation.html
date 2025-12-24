@@ -1,0 +1,1418 @@
+
+<!DOCTYPE HTML>
+<html lang="zh-tw" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>2.2.2. 預充電與有效化 · 每位程式開發者都該有的記憶體知識</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-search-pro/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-katex/katex.min.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-prism/prism.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-splitter/splitter.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-alerts/style.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-theme-comscore/test.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+        <link rel="stylesheet" href="../../styles/website.css">
+        
+    
+
+        
+    
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="recharging.html" />
+    
+    
+    <link rel="prev" href="read-access-protocol.html" />
+    
+
+    <style>
+    @media only screen and (max-width: 640px) {
+        .book-header .hidden-mobile {
+            display: none;
+        }
+    }
+    </style>
+    <script>
+        window["gitbook-plugin-github-buttons"] = {"buttons":[{"user":"sysprog21","repo":"cpumemory-zhtw","type":"star","size":"small"}]};
+    </script>
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="輸入並搜尋" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../../">
+            
+                <a href="../../">
+            
+                    
+                    關於
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../../introduction.html">
+            
+                <a href="../../introduction.html">
+            
+                    
+                    1. 引言
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../../commodity-hardware-today.html">
+            
+                <a href="../../commodity-hardware-today.html">
+            
+                    
+                    2. 現代商用硬體
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="../ram-types.html">
+            
+                <a href="../ram-types.html">
+            
+                    
+                    2.1. RAM 的種類
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1.1" data-path="../ram-types/static-ram.html">
+            
+                <a href="../ram-types/static-ram.html">
+            
+                    
+                    2.1.1. 靜態 RAM
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.1.2" data-path="../ram-types/dynamic-ram.html">
+            
+                <a href="../ram-types/dynamic-ram.html">
+            
+                    
+                    2.1.2. 動態 RAM
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.1.3" data-path="../ram-types/dram-access.html">
+            
+                <a href="../ram-types/dram-access.html">
+            
+                    
+                    2.1.3. DRAM 存取
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.1.4" data-path="../ram-types/conclusions.html">
+            
+                <a href="../ram-types/conclusions.html">
+            
+                    
+                    2.1.4. 結論
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="../dram-access-technical-details.html">
+            
+                <a href="../dram-access-technical-details.html">
+            
+                    
+                    2.2. DRAM 存取技術細節
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.2.1" data-path="read-access-protocol.html">
+            
+                <a href="read-access-protocol.html">
+            
+                    
+                    2.2.1. 讀取協定
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.3.2.2" data-path="precharge-and-activation.html">
+            
+                <a href="precharge-and-activation.html">
+            
+                    
+                    2.2.2. 預充電與有效化
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2.3" data-path="recharging.html">
+            
+                <a href="recharging.html">
+            
+                    
+                    2.2.3. 再充電
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2.4" data-path="memory-types.html">
+            
+                <a href="memory-types.html">
+            
+                    
+                    2.2.4. 記憶體類型
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2.5" data-path="conclusions.html">
+            
+                <a href="conclusions.html">
+            
+                    
+                    2.2.5. 結論
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="../other-main-memory-users.html">
+            
+                <a href="../other-main-memory-users.html">
+            
+                    
+                    2.3. 其它主記憶體使用者
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../../cpu-caches.html">
+            
+                <a href="../../cpu-caches.html">
+            
+                    
+                    3. CPU 快取
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../../cpu-caches/cpu-caches-in-the-big-picture.html">
+            
+                <a href="../../cpu-caches/cpu-caches-in-the-big-picture.html">
+            
+                    
+                    3.1. 概觀 CPU 快取
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../../cpu-caches/cache-operation-at-high-level.html">
+            
+                <a href="../../cpu-caches/cache-operation-at-high-level.html">
+            
+                    
+                    3.2. 高階快取操作
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../../cpu-caches/cpu-cache-implementation-details.html">
+            
+                <a href="../../cpu-caches/cpu-cache-implementation-details.html">
+            
+                    
+                    3.3. CPU 快取實作細節
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.3.1" data-path="../../cpu-caches/cpu-cache-implementation-details/associativity.html">
+            
+                <a href="../../cpu-caches/cpu-cache-implementation-details/associativity.html">
+            
+                    
+                    3.3.1. 關聯度
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3.2" data-path="../../cpu-caches/cpu-cache-implementation-details/measurements-of-cache-effects.html">
+            
+                <a href="../../cpu-caches/cpu-cache-implementation-details/measurements-of-cache-effects.html">
+            
+                    
+                    3.3.2. 快取影響的量測
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3.3" data-path="../../cpu-caches/cpu-cache-implementation-details/write-behavior.html">
+            
+                <a href="../../cpu-caches/cpu-cache-implementation-details/write-behavior.html">
+            
+                    
+                    3.3.3. 寫入行為
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3.4" data-path="../../cpu-caches/cpu-cache-implementation-details/multi-processor-support.html">
+            
+                <a href="../../cpu-caches/cpu-cache-implementation-details/multi-processor-support.html">
+            
+                    
+                    3.3.4. 多處理器支援
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3.5" data-path="../../cpu-caches/cpu-cache-implementation-details/other-details.html">
+            
+                <a href="../../cpu-caches/cpu-cache-implementation-details/other-details.html">
+            
+                    
+                    3.3.5. 其它細節
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="../../cpu-caches/instruction-cache.html">
+            
+                <a href="../../cpu-caches/instruction-cache.html">
+            
+                    
+                    3.4. 指令快取
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.4.1" data-path="../../cpu-caches/instruction-cache/self-modifying-code.html">
+            
+                <a href="../../cpu-caches/instruction-cache/self-modifying-code.html">
+            
+                    
+                    3.4.1. 自我修改的程式碼
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="../../cpu-caches/cache-miss-factors.html">
+            
+                <a href="../../cpu-caches/cache-miss-factors.html">
+            
+                    
+                    3.5. 快取錯失的因素
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.5.1" data-path="../../cpu-caches/cache-miss-factors/cache-and-memory-bandwidth.html">
+            
+                <a href="../../cpu-caches/cache-miss-factors/cache-and-memory-bandwidth.html">
+            
+                    
+                    3.5.1. 快取與記憶體頻寬
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5.2" data-path="../../cpu-caches/cache-miss-factors/critical-word-load.html">
+            
+                <a href="../../cpu-caches/cache-miss-factors/critical-word-load.html">
+            
+                    
+                    3.5.2. 關鍵字組的載入
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5.3" data-path="../../cpu-caches/cache-miss-factors/cache-placement.html">
+            
+                <a href="../../cpu-caches/cache-miss-factors/cache-placement.html">
+            
+                    
+                    3.5.3. 快取的配置
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5.4" data-path="../../cpu-caches/cache-miss-factors/fsb-influence.html">
+            
+                <a href="../../cpu-caches/cache-miss-factors/fsb-influence.html">
+            
+                    
+                    3.5.4. FSB 的影響
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../../virtual-memory.html">
+            
+                <a href="../../virtual-memory.html">
+            
+                    
+                    4. 虛擬記憶體
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="../../virtual-memory/simplest-address-translation.html">
+            
+                <a href="../../virtual-memory/simplest-address-translation.html">
+            
+                    
+                    4.1. 最簡單的位址轉譯
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="../../virtual-memory/multi-level-page-tables.html">
+            
+                <a href="../../virtual-memory/multi-level-page-tables.html">
+            
+                    
+                    4.2. 多層級分頁表
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="../../virtual-memory/optimizing-page-table-access.html">
+            
+                <a href="../../virtual-memory/optimizing-page-table-access.html">
+            
+                    
+                    4.3. 最佳化分頁表存取
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.3.1" data-path="../../virtual-memory/optimizing-page-table-access/caveats-of-using-a-tlb.html">
+            
+                <a href="../../virtual-memory/optimizing-page-table-access/caveats-of-using-a-tlb.html">
+            
+                    
+                    4.3.1. 使用 TLB 的預警
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3.2" data-path="../../virtual-memory/optimizing-page-table-access/influencing-tlb-performance.html">
+            
+                <a href="../../virtual-memory/optimizing-page-table-access/influencing-tlb-performance.html">
+            
+                    
+                    4.3.2. 影響 TLB 效能
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4" data-path="../../virtual-memory/impact-of-virtualization.html">
+            
+                <a href="../../virtual-memory/impact-of-virtualization.html">
+            
+                    
+                    4.4. 虛擬化的影響
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="../../numa-support.html">
+            
+                <a href="../../numa-support.html">
+            
+                    
+                    5. NUMA 支援
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="../../numa-support/numa-hardware.html">
+            
+                <a href="../../numa-support/numa-hardware.html">
+            
+                    
+                    5.1. NUMA 硬體
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="../../numa-support/os-support-for-numa.html">
+            
+                <a href="../../numa-support/os-support-for-numa.html">
+            
+                    
+                    5.2. 作業系統對 NUMA 的支援
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.3" data-path="../../numa-support/published-information.html">
+            
+                <a href="../../numa-support/published-information.html">
+            
+                    
+                    5.3. 被發布的資訊
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.4" data-path="../../numa-support/remote-access-costs.html">
+            
+                <a href="../../numa-support/remote-access-costs.html">
+            
+                    
+                    5.4. 遠端存取成本
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="../../what-programmers-can-do.html">
+            
+                <a href="../../what-programmers-can-do.html">
+            
+                    
+                    6. 程式開發者能做些什麼？
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.1" data-path="../../what-programmers-can-do/bypassing-the-cache.html">
+            
+                <a href="../../what-programmers-can-do/bypassing-the-cache.html">
+            
+                    
+                    6.1. 繞過快取
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.2" data-path="../../what-programmers-can-do/cache-access.html">
+            
+                <a href="../../what-programmers-can-do/cache-access.html">
+            
+                    
+                    6.2. 快取存取
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.2.1" data-path="../../what-programmers-can-do/cache-access/optimizing-level-1-data-cache-access.html">
+            
+                <a href="../../what-programmers-can-do/cache-access/optimizing-level-1-data-cache-access.html">
+            
+                    
+                    6.2.1. 最佳化一階資料快取存取
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.2.2" data-path="../../what-programmers-can-do/cache-access/optimizing-level-1-instruction-cache-access.html">
+            
+                <a href="../../what-programmers-can-do/cache-access/optimizing-level-1-instruction-cache-access.html">
+            
+                    
+                    6.2.2. 最佳化一階指令快取存取
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.2.3" data-path="../../what-programmers-can-do/cache-access/optimizing-level-2-and-higher-cache-access.html">
+            
+                <a href="../../what-programmers-can-do/cache-access/optimizing-level-2-and-higher-cache-access.html">
+            
+                    
+                    6.2.3. 最佳化二階與更高階快取存取
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.2.4" data-path="../../what-programmers-can-do/cache-access/optimizing-tlb-usage.html">
+            
+                <a href="../../what-programmers-can-do/cache-access/optimizing-tlb-usage.html">
+            
+                    
+                    6.2.4. 最佳化 TLB 使用
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3" data-path="../../what-programmers-can-do/prefetching.html">
+            
+                <a href="../../what-programmers-can-do/prefetching.html">
+            
+                    
+                    6.3. 預取
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.3.1" data-path="../../what-programmers-can-do/prefetching/hardware-prefetching.html">
+            
+                <a href="../../what-programmers-can-do/prefetching/hardware-prefetching.html">
+            
+                    
+                    6.3.1. 硬體預取
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3.2" data-path="../../what-programmers-can-do/prefetching/software-prefetching.html">
+            
+                <a href="../../what-programmers-can-do/prefetching/software-prefetching.html">
+            
+                    
+                    6.3.2. 軟體預取
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3.3" data-path="../../what-programmers-can-do/prefetching/special-kind-of-prefetch-speculation.html">
+            
+                <a href="../../what-programmers-can-do/prefetching/special-kind-of-prefetch-speculation.html">
+            
+                    
+                    6.3.3. 特殊的預取類型：猜測
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3.4" data-path="../../what-programmers-can-do/prefetching/helper-threads.html">
+            
+                <a href="../../what-programmers-can-do/prefetching/helper-threads.html">
+            
+                    
+                    6.3.4. 輔助執行緒
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3.5" data-path="../../what-programmers-can-do/prefetching/direct-cache-access.html">
+            
+                <a href="../../what-programmers-can-do/prefetching/direct-cache-access.html">
+            
+                    
+                    6.3.5. 直接快取存取
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.4" data-path="../../what-programmers-can-do/multi-thread-optimizations.html">
+            
+                <a href="../../what-programmers-can-do/multi-thread-optimizations.html">
+            
+                    
+                    6.4. 多執行緒最佳化
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.4.1" data-path="../../what-programmers-can-do/multi-thread-optimizations/concurrency-optimizations.html">
+            
+                <a href="../../what-programmers-can-do/multi-thread-optimizations/concurrency-optimizations.html">
+            
+                    
+                    6.4.1. 並行最佳化
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.4.2" data-path="../../what-programmers-can-do/multi-thread-optimizations/atomicity-optimizations.html">
+            
+                <a href="../../what-programmers-can-do/multi-thread-optimizations/atomicity-optimizations.html">
+            
+                    
+                    6.4.2. 最小操作的最佳化
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.4.3" data-path="../../what-programmers-can-do/multi-thread-optimizations/bandwidth-considerations.html">
+            
+                <a href="../../what-programmers-can-do/multi-thread-optimizations/bandwidth-considerations.html">
+            
+                    
+                    6.4.3. 頻寬考量
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5" data-path="../../what-programmers-can-do/numa-programming.html">
+            
+                <a href="../../what-programmers-can-do/numa-programming.html">
+            
+                    
+                    6.5. NUMA 程式設計
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.5.1" data-path="../../what-programmers-can-do/numa-programming/memory-policy.html">
+            
+                <a href="../../what-programmers-can-do/numa-programming/memory-policy.html">
+            
+                    
+                    6.5.1. 記憶體策略
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.2" data-path="../../what-programmers-can-do/numa-programming/specifying-policies.html">
+            
+                <a href="../../what-programmers-can-do/numa-programming/specifying-policies.html">
+            
+                    
+                    6.5.2. 指定策略
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.3" data-path="../../what-programmers-can-do/numa-programming/swapping-and-policies.html">
+            
+                <a href="../../what-programmers-can-do/numa-programming/swapping-and-policies.html">
+            
+                    
+                    6.5.3. 置換與策略
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.4" data-path="../../what-programmers-can-do/numa-programming/vma-policy.html">
+            
+                <a href="../../what-programmers-can-do/numa-programming/vma-policy.html">
+            
+                    
+                    6.5.4. VMA 策略
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.5" data-path="../../what-programmers-can-do/numa-programming/querying-node-information.html">
+            
+                <a href="../../what-programmers-can-do/numa-programming/querying-node-information.html">
+            
+                    
+                    6.5.5. 查詢節點資訊
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.6" data-path="../../what-programmers-can-do/numa-programming/cpu-and-node-sets.html">
+            
+                <a href="../../what-programmers-can-do/numa-programming/cpu-and-node-sets.html">
+            
+                    
+                    6.5.6. CPU 與節點集合
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.7" data-path="../../what-programmers-can-do/numa-programming/explicit-numa-optimizations.html">
+            
+                <a href="../../what-programmers-can-do/numa-programming/explicit-numa-optimizations.html">
+            
+                    
+                    6.5.7. 明確的 NUMA 最佳化
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.8" data-path="../../what-programmers-can-do/numa-programming/utilizing-all-bandwidth.html">
+            
+                <a href="../../what-programmers-can-do/numa-programming/utilizing-all-bandwidth.html">
+            
+                    
+                    6.5.8. 利用所有頻寬
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="../../memory-performance-tools.html">
+            
+                <a href="../../memory-performance-tools.html">
+            
+                    
+                    7. 記憶體性能量測工具
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.8.1" data-path="../../memory-performance-tools/memory-operation-profiling.html">
+            
+                <a href="../../memory-performance-tools/memory-operation-profiling.html">
+            
+                    
+                    7.1. 記憶體操作分析
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.2" data-path="../../memory-performance-tools/simulating-cpu-caches.html">
+            
+                <a href="../../memory-performance-tools/simulating-cpu-caches.html">
+            
+                    
+                    7.2. 模擬處理器快取行為
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.3" data-path="../../memory-performance-tools/measuring-memory-usage.html">
+            
+                <a href="../../memory-performance-tools/measuring-memory-usage.html">
+            
+                    
+                    7.3. 計算記憶體使用
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.4" data-path="../../memory-performance-tools/improving-branch-prediction.html">
+            
+                <a href="../../memory-performance-tools/improving-branch-prediction.html">
+            
+                    
+                    7.4. 改善分支預測
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.5" data-path="../../memory-performance-tools/page-fault-optimization.html">
+            
+                <a href="../../memory-performance-tools/page-fault-optimization.html">
+            
+                    
+                    7.5. 分頁錯誤最佳化
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="../../examples-and-benchmark-programs.html">
+            
+                <a href="../../examples-and-benchmark-programs.html">
+            
+                    
+                    A. 範例與基準測試程式
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.1" data-path="../../examples-and-benchmark-programs/matrix-multiplication.html">
+            
+                <a href="../../examples-and-benchmark-programs/matrix-multiplication.html">
+            
+                    
+                    A.1 矩陣乘法
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="../../bibliography.html">
+            
+                <a href="../../bibliography.html">
+            
+                    
+                    參考書目
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            本書使用 GitBook 釋出
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../.." >2.2.2. 預充電與有效化</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="222-&#x9810;&#x5145;&#x96FB;&#x8207;&#x6709;&#x6548;&#x5316;">2.2.2. &#x9810;&#x5145;&#x96FB;&#x8207;&#x6709;&#x6548;&#x5316;</h1>
+<p>&#x5716; 2.8 &#x672A;&#x6DB5;&#x84CB;&#x6574;&#x500B;&#x9031;&#x671F;&#x3002;&#x5B83;&#x53EA;&#x986F;&#x793A;&#x51FA;&#x5B58;&#x53D6; DRAM &#x7684;&#x5B8C;&#x6574;&#x5FAA;&#x74B0;&#x7684;&#x4E00;&#x90E8;&#x5206;&#x3002;&#x5728;&#x80FD;&#x5920;&#x767C;&#x9001;&#x65B0;&#x7684; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mtext><mi mathvariant="normal">R</mi><mi mathvariant="normal">A</mi><mi mathvariant="normal">S</mi></mtext></mrow><mo stretchy="true">&#x203E;</mo></mover></mrow><annotation encoding="application/x-tex"> \overline{\text{RAS}} </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8833300000000001em;"></span><span class="strut bottom" style="height:0.8833300000000001em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord overline"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="mord textstyle cramped"><span class="mord text textstyle cramped"><span class="mord mathrm">RAS</span></span></span></span><span style="top:-0.80333em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="reset-textstyle textstyle uncramped overline-line"></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span>&#x200B;</span></span></span></span></span></span> &#x8A0A;&#x865F;&#x4E4B;&#x524D;&#xFF0C;&#x5FC5;&#x9808;&#x7121;&#x6548;&#x5316;&#xFF08;deactivate&#xFF09;&#x76EE;&#x524D;&#x9396;&#x4E0A;&#x7684;&#x5217;&#xFF0C;&#x4E26;&#x5C0D;&#x65B0;&#x7684;&#x5217;&#x9810;&#x5145;&#x96FB;&#xFF08;precharge&#xFF09;&#x3002;&#x9019;&#x88E1;&#x6211;&#x5011;&#x50C5;&#x805A;&#x7126;&#x5728;&#x85C9;&#x7531;&#x660E;&#x78BA;&#x547D;&#x4EE4;&#x4F86;&#x57F7;&#x884C;&#x7684;&#x60C5;&#x6CC1;&#x3002;&#x6709;&#x4E9B;&#x5354;&#x5B9A;&#x4E0A;&#x7684;&#x6539;&#x9032; &#x2500;&#x2500; &#x5728;&#x67D0;&#x4E9B;&#x60C5;&#x6CC1;&#x4E0B; &#x2500;&#x2500; &#x80FD;&#x5920;&#x907F;&#x514D;&#x9019;&#x500B;&#x984D;&#x5916;&#x6B65;&#x9A5F;&#x3002;&#x4E0D;&#x904E;&#x7531;&#x9810;&#x5145;&#x96FB;&#x5F15;&#x5165;&#x7684;&#x5EF6;&#x9072;&#x4ECD;&#x7136;&#x6703;&#x5F71;&#x97FF;&#x64CD;&#x4F5C;&#x3002;</p>
+<figure>
+  <img src="../../assets/figure-2.9.png" alt="&#x5716; 2.9&#xFF1A;SDRAM &#x9810;&#x5145;&#x96FB;&#x8207;&#x6709;&#x6548;&#x5316;">
+  <figcaption>&#x5716; 2.9&#xFF1A;SDRAM &#x9810;&#x5145;&#x96FB;&#x8207;&#x6709;&#x6548;&#x5316;</figcaption>
+</figure>
+
+<p>&#x5716; 2.9 &#x793A;&#x610F;&#x5F9E; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mtext><mi mathvariant="normal">C</mi><mi mathvariant="normal">A</mi><mi mathvariant="normal">S</mi></mtext></mrow><mo stretchy="true">&#x203E;</mo></mover></mrow><annotation encoding="application/x-tex"> \overline{\text{CAS}} </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8833300000000001em;"></span><span class="strut bottom" style="height:0.8833300000000001em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord overline"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="mord textstyle cramped"><span class="mord text textstyle cramped"><span class="mord mathrm">CAS</span></span></span></span><span style="top:-0.80333em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="reset-textstyle textstyle uncramped overline-line"></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span>&#x200B;</span></span></span></span></span></span> &#x8A0A;&#x865F;&#x958B;&#x59CB;&#x3001;&#x5230;&#x53E6;&#x4E00;&#x5217;&#x7684; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mtext><mi mathvariant="normal">C</mi><mi mathvariant="normal">A</mi><mi mathvariant="normal">S</mi></mtext></mrow><mo stretchy="true">&#x203E;</mo></mover></mrow><annotation encoding="application/x-tex"> \overline{\text{CAS}} </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8833300000000001em;"></span><span class="strut bottom" style="height:0.8833300000000001em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord overline"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="mord textstyle cramped"><span class="mord text textstyle cramped"><span class="mord mathrm">CAS</span></span></span></span><span style="top:-0.80333em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="reset-textstyle textstyle uncramped overline-line"></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span>&#x200B;</span></span></span></span></span></span> &#x8A0A;&#x865F;&#x70BA;&#x6B62;&#x7684;&#x6D3B;&#x52D5;&#x3002;&#x8207;&#x5148;&#x524D;&#x4E00;&#x6A23;&#xFF0C;&#x7D93;&#x904E; CL &#x9031;&#x671F;&#x5F8C;&#xFF0C;&#x4FBF;&#x80FD;&#x5920;&#x53D6;&#x5F97;&#x4EE5;&#x7B2C;&#x4E00;&#x500B; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mtext><mi mathvariant="normal">C</mi><mi mathvariant="normal">A</mi><mi mathvariant="normal">S</mi></mtext></mrow><mo stretchy="true">&#x203E;</mo></mover></mrow><annotation encoding="application/x-tex"> \overline{\text{CAS}} </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8833300000000001em;"></span><span class="strut bottom" style="height:0.8833300000000001em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord overline"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="mord textstyle cramped"><span class="mord text textstyle cramped"><span class="mord mathrm">CAS</span></span></span></span><span style="top:-0.80333em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="reset-textstyle textstyle uncramped overline-line"></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span>&#x200B;</span></span></span></span></span></span> &#x8A0A;&#x865F;&#x8ACB;&#x6C42;&#x7684;&#x8CC7;&#x6599;&#x3002;&#x5728;&#x9019;&#x500B;&#x4F8B;&#x5B50;&#x4E2D;&#xFF0C;&#x8ACB;&#x6C42;&#x4E8C;&#x500B;&#x5B57;&#x7D44;&#xFF0C;&#x5176; &#x2500;&#x2500; &#x5728;&#x4E00;&#x500B;&#x7C21;&#x6613;&#x7684; SDRAM &#x4E0A; &#x2500;&#x2500; &#x82B1;&#x4E86;&#x4E8C;&#x500B;&#x9031;&#x671F;&#x4F86;&#x50B3;&#x8F38;&#x3002;&#x4E5F;&#x53EF;&#x4EE5;&#x60F3;&#x50CF;&#x6210;&#x662F;&#x5728;&#x4E00;&#x5F35; DDR &#x6676;&#x7247;&#x4E0A;&#x50B3;&#x8F38;&#x56DB;&#x500B;&#x5B57;&#x7D44;&#x3002;</p>
+<p>&#x5373;&#x4F7F;&#x5728;&#x547D;&#x4EE4;&#x901F;&#x7387;&#x70BA; 1 &#x7684; DRAM &#x6A21;&#x7D44;&#x4E0A;&#xFF0C;&#x4E5F;&#x7121;&#x6CD5;&#x7ACB;&#x5373;&#x767C;&#x51FA;&#x9810;&#x5145;&#x96FB;&#x547D;&#x4EE4;&#x3002;&#x5B83;&#x5FC5;&#x9808;&#x7B49;&#x5F85;&#x8207;&#x50B3;&#x8F38;&#x8CC7;&#x6599;&#x4E00;&#x6A23;&#x9577;&#x7684;&#x6642;&#x9593;&#x3002;&#x5728;&#x9019;&#x500B;&#x4F8B;&#x5B50;&#x4E2D;&#xFF0C;&#x5B83;&#x82B1;&#x4E86;&#x4E8C;&#x500B;&#x5FAA;&#x74B0;&#x3002;&#x96D6;&#x7136;&#x8207; CL &#x76F8;&#x540C;&#xFF0C;&#x4F46;&#x9019;&#x53EA;&#x662F;&#x5DE7;&#x5408;&#x3002;&#x9810;&#x5145;&#x96FB;&#x8A0A;&#x865F;&#x6C92;&#x6709;&#x5C08;&#x7528;&#x7684;&#x7DDA;&#x8DEF;&#xFF1B;&#x6709;&#x4E9B;&#x5BE6;&#x4F5C;&#x662F;&#x85C9;&#x7531;&#x540C;&#x6642;&#x964D;&#x4F4E;&#x5141;&#x5BEB;&#xFF08;Write Enable&#xFF0C;<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mtext><mi mathvariant="normal">W</mi><mi mathvariant="normal">E</mi></mtext></mrow><mo stretchy="true">&#x203E;</mo></mover></mrow><annotation encoding="application/x-tex"> \overline{\text{WE}} </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8833300000000001em;"></span><span class="strut bottom" style="height:0.8833300000000001em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord overline"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="mord textstyle cramped"><span class="mord text textstyle cramped"><span class="mord mathrm">WE</span></span></span></span><span style="top:-0.80333em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="reset-textstyle textstyle uncramped overline-line"></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span>&#x200B;</span></span></span></span></span></span>&#xFF09;&#x8207; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mtext><mi mathvariant="normal">R</mi><mi mathvariant="normal">A</mi><mi mathvariant="normal">S</mi></mtext></mrow><mo stretchy="true">&#x203E;</mo></mover></mrow><annotation encoding="application/x-tex"> \overline{\text{RAS}} </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8833300000000001em;"></span><span class="strut bottom" style="height:0.8833300000000001em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord overline"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="mord textstyle cramped"><span class="mord text textstyle cramped"><span class="mord mathrm">RAS</span></span></span></span><span style="top:-0.80333em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="reset-textstyle textstyle uncramped overline-line"></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span>&#x200B;</span></span></span></span></span></span> &#x7684;&#x96FB;&#x4F4D;&#x4F86;&#x767C;&#x51FA;&#x9019;&#x500B;&#x547D;&#x4EE4;&#x3002;&#x9019;&#x500B;&#x7D44;&#x5408;&#x672C;&#x8EAB;&#x6C92;&#x4EC0;&#x9EBC;&#x7279;&#x5225;&#x610F;&#x7FA9;&#xFF08;&#x7DE8;&#x78BC;&#x7D30;&#x7BC0;&#x898B; [18]&#xFF09;&#x3002;</p>
+<p>&#x4E00;&#x65E6;&#x767C;&#x51FA;&#x9810;&#x5145;&#x96FB;&#x547D;&#x4EE4;&#xFF0C;&#x5B83;&#x6703;&#x82B1;&#x8CBB; t<sub>RP</sub>&#xFF08;&#x5217;&#x9810;&#x5145;&#x96FB;&#x6642;&#x9593;&#xFF09;&#x500B;&#x9031;&#x671F;&#xFF0C;&#x76F4;&#x5230;&#x5217;&#x80FD;&#x88AB;&#x9078;&#x53D6;&#x70BA;&#x6B62;&#x3002;&#x5728;&#x5716; 2.9 &#x4E2D;&#xFF0C;&#x5927;&#x90E8;&#x5206;&#x7684;&#x6642;&#x9593;&#xFF08;&#x4EE5;&#x7D2B;&#x8272;&#x6A19;&#x793A;&#xFF09;&#x8207;&#x8A18;&#x61B6;&#x9AD4;&#x50B3;&#x8F38;&#x6642;&#x9593;&#xFF08;&#x6DFA;&#x85CD;&#xFF09;&#x91CD;&#x758A;&#x3002;&#x9019;&#x6EFF;&#x597D;&#x7684;&#xFF01;&#x4F46; t<sub>RP</sub> &#x6BD4;&#x50B3;&#x8F38;&#x6642;&#x9593;&#x9084;&#x9577;&#xFF0C;&#x6240;&#x4EE5;&#x4E0B;&#x4E00;&#x500B; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mtext><mi mathvariant="normal">R</mi><mi mathvariant="normal">A</mi><mi mathvariant="normal">S</mi></mtext></mrow><mo stretchy="true">&#x203E;</mo></mover></mrow><annotation encoding="application/x-tex"> \overline{\text{RAS}} </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8833300000000001em;"></span><span class="strut bottom" style="height:0.8833300000000001em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord overline"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="mord textstyle cramped"><span class="mord text textstyle cramped"><span class="mord mathrm">RAS</span></span></span></span><span style="top:-0.80333em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="reset-textstyle textstyle uncramped overline-line"></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span>&#x200B;</span></span></span></span></span></span> &#x8A0A;&#x865F;&#x6703;&#x88AB;&#x5EF6;&#x8AA4;&#x4E00;&#x500B;&#x9031;&#x671F;&#x3002;</p>
+<p>&#x5047;&#x4F7F;&#x6211;&#x5011;&#x5EF6;&#x4F38;&#x5716;&#x8868;&#x7684;&#x6642;&#x9593;&#x8EF8;&#xFF0C;&#x6211;&#x5011;&#x6703;&#x767C;&#x73FE;&#x4E0B;&#x4E00;&#x6B21;&#x8CC7;&#x6599;&#x50B3;&#x8F38;&#x767C;&#x751F;&#x5728;&#x524D;&#x4E00;&#x6B21;&#x505C;&#x6B62;&#x7684; 5 &#x500B;&#x9031;&#x671F;&#x4E4B;&#x5F8C;&#x3002;&#x9019;&#x8868;&#x793A;&#x5728;&#x4E03;&#x500B;&#x9031;&#x671F;&#x4E2D;&#xFF0C;&#x53EA;&#x6709;&#x4E8C;&#x500B;&#x9031;&#x671F;&#x6709;&#x7528;&#x5230;&#x8CC7;&#x6599;&#x532F;&#x6D41;&#x6392;&#x3002;&#x5C07;&#x9019;&#x4E58;&#x4E0A; FSB &#x7684;&#x901F;&#x5EA6;&#xFF0C;&#x5C0D; 800MHz &#x532F;&#x6D41;&#x6392;&#x800C;&#x8A00;&#xFF0C;&#x7406;&#x8AD6;&#x4E0A;&#x7684; 6.4GB/s &#x5C31;&#x8B8A;&#x6210; 1.8GB/s&#x3002;&#x9019;&#x592A;&#x7CDF;&#xFF0C;&#x800C;&#x4E14;&#x5FC5;&#x9808;&#x907F;&#x514D;&#x3002;&#x5728;&#x7B2C;&#x516D;&#x7BC0;&#x63CF;&#x8FF0;&#x7684;&#x6280;&#x8853;&#x80FD;&#x5E6B;&#x5FD9;&#x63D0;&#x5347;&#x9019;&#x500B;&#x6578;&#x5B57;&#x3002;&#x7A0B;&#x5F0F;&#x958B;&#x767C;&#x8005;&#x901A;&#x5E38;&#x4E5F;&#x5F97;&#x76E1;&#x4E00;&#x4EFD;&#x529B;&#x3002;</p>
+<p>&#x5C0D;&#x65BC; SDRAM &#x6A21;&#x7D44;&#xFF0C;&#x9084;&#x6709;&#x4E00;&#x4E9B;&#x6C92;&#x6709;&#x8A0E;&#x8AD6;&#x904E;&#x7684;&#x6642;&#x9593;&#x503C;&#x3002;&#x5728;&#x5716; 2.9 &#x4E2D;&#xFF0C;&#x9810;&#x5145;&#x96FB;&#x547D;&#x4EE4;&#x53D7;&#x9650;&#x65BC;&#x8CC7;&#x6599;&#x50B3;&#x8F38;&#x6642;&#x9593;&#x3002;&#x53E6;&#x4E00;&#x500B;&#x9650;&#x5236;&#x662F;&#xFF0C;&#x5728; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mtext><mi mathvariant="normal">R</mi><mi mathvariant="normal">A</mi><mi mathvariant="normal">S</mi></mtext></mrow><mo stretchy="true">&#x203E;</mo></mover></mrow><annotation encoding="application/x-tex"> \overline{\text{RAS}} </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8833300000000001em;"></span><span class="strut bottom" style="height:0.8833300000000001em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord overline"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="mord textstyle cramped"><span class="mord text textstyle cramped"><span class="mord mathrm">RAS</span></span></span></span><span style="top:-0.80333em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="reset-textstyle textstyle uncramped overline-line"></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span>&#x200B;</span></span></span></span></span></span> &#x8A0A;&#x865F;&#x4E4B;&#x5F8C;&#xFF0C;SDRAM &#x6A21;&#x7D44;&#x9700;&#x8981;&#x4E00;&#x4E9B;&#x6642;&#x9593;&#x624D;&#x80FD;&#x5920;&#x70BA;&#x53E6;&#x4E00;&#x5217;&#x9810;&#x5145;&#x96FB;&#xFF08;&#x8A18;&#x4F5C; t<sub>RAS</sub>&#xFF09;&#x3002;&#x9019;&#x500B;&#x6578;&#x5B57;&#x901A;&#x5E38;&#x975E;&#x5E38;&#x5927;&#xFF0C;&#x70BA; t<sub>RP</sub> &#x503C;&#x7684;&#x4E8C;&#x5230;&#x4E09;&#x500D;&#x3002;&#x5047;&#x5982; &#x2500;&#x2500; &#x5728; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mtext><mi mathvariant="normal">R</mi><mi mathvariant="normal">A</mi><mi mathvariant="normal">S</mi></mtext></mrow><mo stretchy="true">&#x203E;</mo></mover></mrow><annotation encoding="application/x-tex"> \overline{\text{RAS}} </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8833300000000001em;"></span><span class="strut bottom" style="height:0.8833300000000001em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord overline"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="mord textstyle cramped"><span class="mord text textstyle cramped"><span class="mord mathrm">RAS</span></span></span></span><span style="top:-0.80333em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="reset-textstyle textstyle uncramped overline-line"></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span>&#x200B;</span></span></span></span></span></span> &#x8A0A;&#x865F;&#x4E4B;&#x5F8C; &#x2500;&#x2500; &#x53EA;&#x6709;&#x4E00;&#x500B; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mtext><mi mathvariant="normal">C</mi><mi mathvariant="normal">A</mi><mi mathvariant="normal">S</mi></mtext></mrow><mo stretchy="true">&#x203E;</mo></mover></mrow><annotation encoding="application/x-tex"> \overline{\text{CAS}} </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8833300000000001em;"></span><span class="strut bottom" style="height:0.8833300000000001em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord overline"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="mord textstyle cramped"><span class="mord text textstyle cramped"><span class="mord mathrm">CAS</span></span></span></span><span style="top:-0.80333em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="reset-textstyle textstyle uncramped overline-line"></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span>&#x200B;</span></span></span></span></span></span> &#x8A0A;&#x865F;&#xFF0C;&#x4E26;&#x4E14;&#x8CC7;&#x6599;&#x50B3;&#x8F38;&#x5728;&#x5C11;&#x6578;&#x5E7E;&#x500B;&#x9031;&#x671F;&#x5167;&#x5C31;&#x5B8C;&#x6210;&#xFF0C;&#x9019;&#x5C31;&#x662F;&#x554F;&#x984C;&#x3002;&#x5047;&#x8A2D;&#x5728;&#x5716; 2.9 &#x4E2D;&#xFF0C;&#x8D77;&#x59CB;&#x7684; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mtext><mi mathvariant="normal">C</mi><mi mathvariant="normal">A</mi><mi mathvariant="normal">S</mi></mtext></mrow><mo stretchy="true">&#x203E;</mo></mover></mrow><annotation encoding="application/x-tex"> \overline{\text{CAS}} </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8833300000000001em;"></span><span class="strut bottom" style="height:0.8833300000000001em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord overline"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="mord textstyle cramped"><span class="mord text textstyle cramped"><span class="mord mathrm">CAS</span></span></span></span><span style="top:-0.80333em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="reset-textstyle textstyle uncramped overline-line"></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span>&#x200B;</span></span></span></span></span></span> &#x8A0A;&#x865F;&#x662F;&#x76F4;&#x63A5;&#x63A5;&#x5728; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mtext><mi mathvariant="normal">R</mi><mi mathvariant="normal">A</mi><mi mathvariant="normal">S</mi></mtext></mrow><mo stretchy="true">&#x203E;</mo></mover></mrow><annotation encoding="application/x-tex"> \overline{\text{RAS}} </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8833300000000001em;"></span><span class="strut bottom" style="height:0.8833300000000001em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord overline"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="mord textstyle cramped"><span class="mord text textstyle cramped"><span class="mord mathrm">RAS</span></span></span></span><span style="top:-0.80333em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="reset-textstyle textstyle uncramped overline-line"></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span>&#x200B;</span></span></span></span></span></span> &#x8A0A;&#x865F;&#x4E4B;&#x5F8C;&#xFF0C;&#x4E26;&#x4E14; t<sub>RAS</sub> &#x70BA; 8 &#x500B;&#x9031;&#x671F;&#x3002;&#x9810;&#x5145;&#x96FB;&#x547D;&#x4EE4;&#x5C31;&#x5FC5;&#x9808;&#x8981;&#x5EF6;&#x9072;&#x4E00;&#x500B;&#x984D;&#x5916;&#x7684;&#x9031;&#x671F;&#xFF0C;&#x56E0;&#x70BA; t<sub>RCD</sub>&#x3001;CL&#x3001;&#x8207; t<sub>RP</sub>&#xFF08;&#x56E0;&#x70BA;&#x5B83;&#x6BD4;&#x8CC7;&#x6599;&#x50B3;&#x8F38;&#x6642;&#x9593;&#x9084;&#x9577;&#xFF09;&#x7684;&#x7E3D;&#x548C;&#x53EA;&#x6709; 7 &#x500B;&#x9031;&#x671F;&#x3002;</p>
+<p>DDR &#x6A21;&#x7D44;&#x7D93;&#x5E38;&#x4EE5;&#x4E00;&#x7A2E;&#x7279;&#x6B8A;&#x7684;&#x6A19;&#x8A18;&#x6CD5;&#x63CF;&#x8FF0;&#xFF1A;w-x-y-z-T&#x3002;&#x8209;&#x4F8B;&#x4F86;&#x8AAA;&#xFF1A;2-3-2-8-T1&#x3002;&#x9019;&#x4EE3;&#x8868;&#xFF1A;</p>
+<p><table>
+  <tr>
+    <td>w</td>
+    <td>2</td>
+    <td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mtext><mi mathvariant="normal">C</mi><mi mathvariant="normal">A</mi><mi mathvariant="normal">S</mi></mtext></mrow><mo stretchy="true">&#x203E;</mo></mover></mrow><annotation encoding="application/x-tex"> \overline{\text{CAS}} </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8833300000000001em;"></span><span class="strut bottom" style="height:0.8833300000000001em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord overline"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="mord textstyle cramped"><span class="mord text textstyle cramped"><span class="mord mathrm">CAS</span></span></span></span><span style="top:-0.80333em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="reset-textstyle textstyle uncramped overline-line"></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span>&#x200B;</span></span></span></span></span></span> &#x7B49;&#x5F85;&#x6642;&#x9593;&#xFF08;CL&#xFF09;</td>
+  </tr>
+  <tr>
+    <td>x</td>
+    <td>3</td>
+    <td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mtext><mi mathvariant="normal">R</mi><mi mathvariant="normal">A</mi><mi mathvariant="normal">S</mi></mtext></mrow><mo stretchy="true">&#x203E;</mo></mover></mrow><annotation encoding="application/x-tex"> \overline{\text{RAS}} </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8833300000000001em;"></span><span class="strut bottom" style="height:0.8833300000000001em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord overline"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="mord textstyle cramped"><span class="mord text textstyle cramped"><span class="mord mathrm">RAS</span></span></span></span><span style="top:-0.80333em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="reset-textstyle textstyle uncramped overline-line"></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span>&#x200B;</span></span></span></span></span></span> &#x81F3; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mtext><mi mathvariant="normal">C</mi><mi mathvariant="normal">A</mi><mi mathvariant="normal">S</mi></mtext></mrow><mo stretchy="true">&#x203E;</mo></mover></mrow><annotation encoding="application/x-tex"> \overline{\text{CAS}} </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8833300000000001em;"></span><span class="strut bottom" style="height:0.8833300000000001em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord overline"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="mord textstyle cramped"><span class="mord text textstyle cramped"><span class="mord mathrm">CAS</span></span></span></span><span style="top:-0.80333em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="reset-textstyle textstyle uncramped overline-line"></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span>&#x200B;</span></span></span></span></span></span> &#x7B49;&#x5F85;&#x6642;&#x9593;&#xFF08;t<sub>RCD</sub>&#xFF09;</td>
+  </tr>
+  <tr>
+    <td>y</td>
+    <td>2</td>
+    <td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mtext><mi mathvariant="normal">R</mi><mi mathvariant="normal">A</mi><mi mathvariant="normal">S</mi></mtext></mrow><mo stretchy="true">&#x203E;</mo></mover></mrow><annotation encoding="application/x-tex"> \overline{\text{RAS}} </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8833300000000001em;"></span><span class="strut bottom" style="height:0.8833300000000001em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord overline"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="mord textstyle cramped"><span class="mord text textstyle cramped"><span class="mord mathrm">RAS</span></span></span></span><span style="top:-0.80333em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span><span class="reset-textstyle textstyle uncramped overline-line"></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">&#x200B;</span></span>&#x200B;</span></span></span></span></span></span> &#x9810;&#x5145;&#x96FB;&#xFF08;t<sub>RP</sub>&#xFF09;</td>
+  </tr>
+  <tr>
+    <td>z</td>
+    <td>8</td>
+    <td>&#x6709;&#x6548;&#x5316;&#x81F3;&#x9810;&#x5145;&#x96FB;&#x5EF6;&#x9072;&#xFF08;t<sub>RAS</sub>&#xFF09;</td>
+  </tr>
+  <tr>
+    <td>T</td>
+    <td>T1</td>
+    <td>&#x547D;&#x4EE4;&#x901F;&#x7387;</td>
+  </tr></table></p>
+<table>
+
+<p>&#x9084;&#x6709;&#x8A31;&#x591A;&#x5176;&#x5B83;&#x6703;&#x5F71;&#x97FF;&#x547D;&#x4EE4;&#x7684;&#x767C;&#x9001;&#x6216;&#x8655;&#x7406;&#x65B9;&#x5F0F;&#x7684;&#x6642;&#x9593;&#x5E38;&#x6578;&#x3002;&#x4E0D;&#x904E;&#x5728;&#x5BE6;&#x52D9;&#x4E0A;&#xFF0C;&#x9019;&#x4E94;&#x500B;&#x5E38;&#x6578;&#x5C31;&#x8DB3;&#x4EE5;&#x5224;&#x5B9A;&#x6A21;&#x7D44;&#x7684;&#x6548;&#x80FD;&#x3002;</p>
+<p>&#x77E5;&#x9053;&#x9019;&#x4E9B;&#x95DC;&#x65BC;&#x96FB;&#x8166;&#x7684;&#x8CC7;&#x8A0A;&#xFF0C;&#x6709;&#x6642;&#x6709;&#x52A9;&#x65BC;&#x89E3;&#x91CB;&#x67D0;&#x4E9B;&#x91CF;&#x6E2C;&#x7D50;&#x679C;&#x3002;&#x8CFC;&#x8CB7;&#x96FB;&#x8166;&#x7684;&#x6642;&#x5019;&#xFF0C;&#x77E5;&#x9053;&#x9019;&#x4E9B;&#x7D30;&#x7BC0;&#x986F;&#x7136;&#x662F;&#x6709;&#x7528;&#x7684;&#xFF0C;&#x56E0;&#x70BA;&#x5B83;&#x5011; &#x2500;&#x2500; &#x4EE5;&#x53CA; FSB &#x8207; SDRAM &#x6A21;&#x7D44;&#x7684;&#x901F;&#x5EA6; &#x2500;&#x2500; &#x662F;&#x6C7A;&#x5B9A;&#x4E00;&#x53F0;&#x96FB;&#x8166;&#x901F;&#x5EA6;&#x7684;&#x6700;&#x91CD;&#x8981;&#x56E0;&#x7D20;&#x3002;</p>
+<p>&#x975E;&#x5E38;&#x5927;&#x81BD;&#x7684;&#x8B80;&#x8005;&#x4E5F;&#x53EF;&#x4EE5;&#x8A66;&#x8457;&#x8ABF;&#x6821;&#xFF08;tweak&#xFF09;&#x7CFB;&#x7D71;&#x3002;&#x6709;&#x6642;&#x5019; BIOS &#x5141;&#x8A31;&#x4FEE;&#x6539;&#x67D0;&#x4E9B;&#x6216;&#x8005;&#x5168;&#x90E8;&#x7684;&#x503C;&#x3002;SDRAM &#x6A21;&#x7D44;&#x64C1;&#x6709;&#x80FD;&#x5920;&#x8A2D;&#x5B9A;&#x9019;&#x4E9B;&#x503C;&#x7684;&#x53EF;&#x7A0B;&#x5F0F;&#x5316;&#x66AB;&#x5B58;&#x5668;&#xFF08;register&#xFF09;&#x3002;&#x901A;&#x5E38; BIOS &#x6703;&#x6311;&#x9078;&#x6700;&#x4F73;&#x7684;&#x9810;&#x8A2D;&#x503C;&#x3002;&#x5982;&#x679C; RAM &#x6A21;&#x7D44;&#x7684;&#x54C1;&#x8CEA;&#x5F88;&#x597D;&#xFF0C;&#x53EF;&#x80FD;&#x53EF;&#x4EE5;&#x5728;&#x4E0D;&#x5F71;&#x97FF;&#x96FB;&#x8166;&#x7A69;&#x5B9A;&#x6027;&#x7684;&#x524D;&#x63D0;&#x4E0B;&#x964D;&#x4F4E;&#x67D0;&#x4E9B;&#x5EF6;&#x9072;&#x3002;&#x7DB2;&#x8DEF;&#x4E0A;&#x773E;&#x591A;&#x7684;&#x8D85;&#x983B;&#x7DB2;&#x7AD9;&#x63D0;&#x4F9B;&#x5927;&#x91CF;&#x7684;&#x76F8;&#x95DC;&#x6587;&#x4EF6;&#x3002;&#x5118;&#x7BA1;&#x5982;&#x6B64;&#xFF0C;&#x8ACB;&#x81EA;&#x884C;&#x627F;&#x64D4;&#x98A8;&#x96AA;&#xFF0C;&#x53EF;&#x5225;&#x8AAA;&#x4F60;&#x6C92;&#x88AB;&#x8B66;&#x544A;&#x904E;&#x3002;</p>
+</table>
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="read-access-protocol.html" class="navigation navigation-prev " aria-label="Previous page: 2.2.1. 讀取協定">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="recharging.html" class="navigation navigation-next " aria-label="Next page: 2.2.3. 再充電">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"2.2.2. 預充電與有效化","level":"1.3.2.2","depth":3,"next":{"title":"2.2.3. 再充電","level":"1.3.2.3","depth":3,"path":"commodity-hardware-today/dram-access-technical-details/recharging.md","ref":"commodity-hardware-today/dram-access-technical-details/recharging.md","articles":[]},"previous":{"title":"2.2.1. 讀取協定","level":"1.3.2.1","depth":3,"path":"commodity-hardware-today/dram-access-technical-details/read-access-protocol.md","ref":"commodity-hardware-today/dram-access-technical-details/read-access-protocol.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-lunr","-search","search-pro","-sharing","katex","github-buttons","github-issue-feedback","-highlight","prism","splitter","theme-comscore","hide-element","alerts"],"styles":{"pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css","website":"styles/website.css"},"pluginsConfig":{"prism":{},"github-issue-feedback":{"repo":"sysprog21/cpumemory-zhtw"},"splitter":{},"search-pro":{},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-comscore":{},"alerts":{},"github-buttons":{"buttons":[{"user":"sysprog21","repo":"cpumemory-zhtw","type":"star","size":"small"}]},"theme-default":{"styles":{"pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css","website":"styles/website.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"每位程式開發者都該有的記憶體知識","language":"zh-tw","gitbook":">=3.0.0","description":"本文解釋用於現代電腦硬體的記憶體子系統的結構、闡述 CPU 快取發展的考量、它們如何運作，以及程式該如何針對記憶體操作調整，從而達到最佳的效能。"},"file":{"path":"commodity-hardware-today/dram-access-technical-details/precharge-and-activation.md","mtime":"2025-12-24T07:41:31.216Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2025-12-24T07:42:11.361Z"},"basePath":"../..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../../gitbook/gitbook.js"></script>
+    <script src="../../gitbook/theme.js"></script>
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search-pro/search.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-github-buttons/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-github-issue-feedback/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-splitter/splitter.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-hide-element/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-alerts/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-theme-comscore/test.js"></script>
+        
+    
+
+    </body>
+</html>
+

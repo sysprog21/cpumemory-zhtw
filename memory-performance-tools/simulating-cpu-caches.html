@@ -1,0 +1,1427 @@
+
+<!DOCTYPE HTML>
+<html lang="zh-tw" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>7.2. 模擬處理器快取行為 · 每位程式開發者都該有的記憶體知識</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search-pro/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-katex/katex.min.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-prism/prism.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-splitter/splitter.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-alerts/style.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-theme-comscore/test.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+        <link rel="stylesheet" href="../styles/website.css">
+        
+    
+
+        
+    
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="measuring-memory-usage.html" />
+    
+    
+    <link rel="prev" href="memory-operation-profiling.html" />
+    
+
+    <style>
+    @media only screen and (max-width: 640px) {
+        .book-header .hidden-mobile {
+            display: none;
+        }
+    }
+    </style>
+    <script>
+        window["gitbook-plugin-github-buttons"] = {"buttons":[{"user":"sysprog21","repo":"cpumemory-zhtw","type":"star","size":"small"}]};
+    </script>
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="輸入並搜尋" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    關於
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../introduction.html">
+            
+                <a href="../introduction.html">
+            
+                    
+                    1. 引言
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../commodity-hardware-today.html">
+            
+                <a href="../commodity-hardware-today.html">
+            
+                    
+                    2. 現代商用硬體
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="../commodity-hardware-today/ram-types.html">
+            
+                <a href="../commodity-hardware-today/ram-types.html">
+            
+                    
+                    2.1. RAM 的種類
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1.1" data-path="../commodity-hardware-today/ram-types/static-ram.html">
+            
+                <a href="../commodity-hardware-today/ram-types/static-ram.html">
+            
+                    
+                    2.1.1. 靜態 RAM
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.1.2" data-path="../commodity-hardware-today/ram-types/dynamic-ram.html">
+            
+                <a href="../commodity-hardware-today/ram-types/dynamic-ram.html">
+            
+                    
+                    2.1.2. 動態 RAM
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.1.3" data-path="../commodity-hardware-today/ram-types/dram-access.html">
+            
+                <a href="../commodity-hardware-today/ram-types/dram-access.html">
+            
+                    
+                    2.1.3. DRAM 存取
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.1.4" data-path="../commodity-hardware-today/ram-types/conclusions.html">
+            
+                <a href="../commodity-hardware-today/ram-types/conclusions.html">
+            
+                    
+                    2.1.4. 結論
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="../commodity-hardware-today/dram-access-technical-details.html">
+            
+                <a href="../commodity-hardware-today/dram-access-technical-details.html">
+            
+                    
+                    2.2. DRAM 存取技術細節
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.2.1" data-path="../commodity-hardware-today/dram-access-technical-details/read-access-protocol.html">
+            
+                <a href="../commodity-hardware-today/dram-access-technical-details/read-access-protocol.html">
+            
+                    
+                    2.2.1. 讀取協定
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2.2" data-path="../commodity-hardware-today/dram-access-technical-details/precharge-and-activation.html">
+            
+                <a href="../commodity-hardware-today/dram-access-technical-details/precharge-and-activation.html">
+            
+                    
+                    2.2.2. 預充電與有效化
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2.3" data-path="../commodity-hardware-today/dram-access-technical-details/recharging.html">
+            
+                <a href="../commodity-hardware-today/dram-access-technical-details/recharging.html">
+            
+                    
+                    2.2.3. 再充電
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2.4" data-path="../commodity-hardware-today/dram-access-technical-details/memory-types.html">
+            
+                <a href="../commodity-hardware-today/dram-access-technical-details/memory-types.html">
+            
+                    
+                    2.2.4. 記憶體類型
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2.5" data-path="../commodity-hardware-today/dram-access-technical-details/conclusions.html">
+            
+                <a href="../commodity-hardware-today/dram-access-technical-details/conclusions.html">
+            
+                    
+                    2.2.5. 結論
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="../commodity-hardware-today/other-main-memory-users.html">
+            
+                <a href="../commodity-hardware-today/other-main-memory-users.html">
+            
+                    
+                    2.3. 其它主記憶體使用者
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../cpu-caches.html">
+            
+                <a href="../cpu-caches.html">
+            
+                    
+                    3. CPU 快取
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../cpu-caches/cpu-caches-in-the-big-picture.html">
+            
+                <a href="../cpu-caches/cpu-caches-in-the-big-picture.html">
+            
+                    
+                    3.1. 概觀 CPU 快取
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../cpu-caches/cache-operation-at-high-level.html">
+            
+                <a href="../cpu-caches/cache-operation-at-high-level.html">
+            
+                    
+                    3.2. 高階快取操作
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../cpu-caches/cpu-cache-implementation-details.html">
+            
+                <a href="../cpu-caches/cpu-cache-implementation-details.html">
+            
+                    
+                    3.3. CPU 快取實作細節
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.3.1" data-path="../cpu-caches/cpu-cache-implementation-details/associativity.html">
+            
+                <a href="../cpu-caches/cpu-cache-implementation-details/associativity.html">
+            
+                    
+                    3.3.1. 關聯度
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3.2" data-path="../cpu-caches/cpu-cache-implementation-details/measurements-of-cache-effects.html">
+            
+                <a href="../cpu-caches/cpu-cache-implementation-details/measurements-of-cache-effects.html">
+            
+                    
+                    3.3.2. 快取影響的量測
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3.3" data-path="../cpu-caches/cpu-cache-implementation-details/write-behavior.html">
+            
+                <a href="../cpu-caches/cpu-cache-implementation-details/write-behavior.html">
+            
+                    
+                    3.3.3. 寫入行為
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3.4" data-path="../cpu-caches/cpu-cache-implementation-details/multi-processor-support.html">
+            
+                <a href="../cpu-caches/cpu-cache-implementation-details/multi-processor-support.html">
+            
+                    
+                    3.3.4. 多處理器支援
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3.5" data-path="../cpu-caches/cpu-cache-implementation-details/other-details.html">
+            
+                <a href="../cpu-caches/cpu-cache-implementation-details/other-details.html">
+            
+                    
+                    3.3.5. 其它細節
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="../cpu-caches/instruction-cache.html">
+            
+                <a href="../cpu-caches/instruction-cache.html">
+            
+                    
+                    3.4. 指令快取
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.4.1" data-path="../cpu-caches/instruction-cache/self-modifying-code.html">
+            
+                <a href="../cpu-caches/instruction-cache/self-modifying-code.html">
+            
+                    
+                    3.4.1. 自我修改的程式碼
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="../cpu-caches/cache-miss-factors.html">
+            
+                <a href="../cpu-caches/cache-miss-factors.html">
+            
+                    
+                    3.5. 快取錯失的因素
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.5.1" data-path="../cpu-caches/cache-miss-factors/cache-and-memory-bandwidth.html">
+            
+                <a href="../cpu-caches/cache-miss-factors/cache-and-memory-bandwidth.html">
+            
+                    
+                    3.5.1. 快取與記憶體頻寬
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5.2" data-path="../cpu-caches/cache-miss-factors/critical-word-load.html">
+            
+                <a href="../cpu-caches/cache-miss-factors/critical-word-load.html">
+            
+                    
+                    3.5.2. 關鍵字組的載入
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5.3" data-path="../cpu-caches/cache-miss-factors/cache-placement.html">
+            
+                <a href="../cpu-caches/cache-miss-factors/cache-placement.html">
+            
+                    
+                    3.5.3. 快取的配置
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5.4" data-path="../cpu-caches/cache-miss-factors/fsb-influence.html">
+            
+                <a href="../cpu-caches/cache-miss-factors/fsb-influence.html">
+            
+                    
+                    3.5.4. FSB 的影響
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../virtual-memory.html">
+            
+                <a href="../virtual-memory.html">
+            
+                    
+                    4. 虛擬記憶體
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="../virtual-memory/simplest-address-translation.html">
+            
+                <a href="../virtual-memory/simplest-address-translation.html">
+            
+                    
+                    4.1. 最簡單的位址轉譯
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="../virtual-memory/multi-level-page-tables.html">
+            
+                <a href="../virtual-memory/multi-level-page-tables.html">
+            
+                    
+                    4.2. 多層級分頁表
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="../virtual-memory/optimizing-page-table-access.html">
+            
+                <a href="../virtual-memory/optimizing-page-table-access.html">
+            
+                    
+                    4.3. 最佳化分頁表存取
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.3.1" data-path="../virtual-memory/optimizing-page-table-access/caveats-of-using-a-tlb.html">
+            
+                <a href="../virtual-memory/optimizing-page-table-access/caveats-of-using-a-tlb.html">
+            
+                    
+                    4.3.1. 使用 TLB 的預警
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3.2" data-path="../virtual-memory/optimizing-page-table-access/influencing-tlb-performance.html">
+            
+                <a href="../virtual-memory/optimizing-page-table-access/influencing-tlb-performance.html">
+            
+                    
+                    4.3.2. 影響 TLB 效能
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4" data-path="../virtual-memory/impact-of-virtualization.html">
+            
+                <a href="../virtual-memory/impact-of-virtualization.html">
+            
+                    
+                    4.4. 虛擬化的影響
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="../numa-support.html">
+            
+                <a href="../numa-support.html">
+            
+                    
+                    5. NUMA 支援
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="../numa-support/numa-hardware.html">
+            
+                <a href="../numa-support/numa-hardware.html">
+            
+                    
+                    5.1. NUMA 硬體
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="../numa-support/os-support-for-numa.html">
+            
+                <a href="../numa-support/os-support-for-numa.html">
+            
+                    
+                    5.2. 作業系統對 NUMA 的支援
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.3" data-path="../numa-support/published-information.html">
+            
+                <a href="../numa-support/published-information.html">
+            
+                    
+                    5.3. 被發布的資訊
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.4" data-path="../numa-support/remote-access-costs.html">
+            
+                <a href="../numa-support/remote-access-costs.html">
+            
+                    
+                    5.4. 遠端存取成本
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="../what-programmers-can-do.html">
+            
+                <a href="../what-programmers-can-do.html">
+            
+                    
+                    6. 程式開發者能做些什麼？
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.1" data-path="../what-programmers-can-do/bypassing-the-cache.html">
+            
+                <a href="../what-programmers-can-do/bypassing-the-cache.html">
+            
+                    
+                    6.1. 繞過快取
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.2" data-path="../what-programmers-can-do/cache-access.html">
+            
+                <a href="../what-programmers-can-do/cache-access.html">
+            
+                    
+                    6.2. 快取存取
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.2.1" data-path="../what-programmers-can-do/cache-access/optimizing-level-1-data-cache-access.html">
+            
+                <a href="../what-programmers-can-do/cache-access/optimizing-level-1-data-cache-access.html">
+            
+                    
+                    6.2.1. 最佳化一階資料快取存取
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.2.2" data-path="../what-programmers-can-do/cache-access/optimizing-level-1-instruction-cache-access.html">
+            
+                <a href="../what-programmers-can-do/cache-access/optimizing-level-1-instruction-cache-access.html">
+            
+                    
+                    6.2.2. 最佳化一階指令快取存取
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.2.3" data-path="../what-programmers-can-do/cache-access/optimizing-level-2-and-higher-cache-access.html">
+            
+                <a href="../what-programmers-can-do/cache-access/optimizing-level-2-and-higher-cache-access.html">
+            
+                    
+                    6.2.3. 最佳化二階與更高階快取存取
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.2.4" data-path="../what-programmers-can-do/cache-access/optimizing-tlb-usage.html">
+            
+                <a href="../what-programmers-can-do/cache-access/optimizing-tlb-usage.html">
+            
+                    
+                    6.2.4. 最佳化 TLB 使用
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3" data-path="../what-programmers-can-do/prefetching.html">
+            
+                <a href="../what-programmers-can-do/prefetching.html">
+            
+                    
+                    6.3. 預取
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.3.1" data-path="../what-programmers-can-do/prefetching/hardware-prefetching.html">
+            
+                <a href="../what-programmers-can-do/prefetching/hardware-prefetching.html">
+            
+                    
+                    6.3.1. 硬體預取
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3.2" data-path="../what-programmers-can-do/prefetching/software-prefetching.html">
+            
+                <a href="../what-programmers-can-do/prefetching/software-prefetching.html">
+            
+                    
+                    6.3.2. 軟體預取
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3.3" data-path="../what-programmers-can-do/prefetching/special-kind-of-prefetch-speculation.html">
+            
+                <a href="../what-programmers-can-do/prefetching/special-kind-of-prefetch-speculation.html">
+            
+                    
+                    6.3.3. 特殊的預取類型：猜測
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3.4" data-path="../what-programmers-can-do/prefetching/helper-threads.html">
+            
+                <a href="../what-programmers-can-do/prefetching/helper-threads.html">
+            
+                    
+                    6.3.4. 輔助執行緒
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3.5" data-path="../what-programmers-can-do/prefetching/direct-cache-access.html">
+            
+                <a href="../what-programmers-can-do/prefetching/direct-cache-access.html">
+            
+                    
+                    6.3.5. 直接快取存取
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.4" data-path="../what-programmers-can-do/multi-thread-optimizations.html">
+            
+                <a href="../what-programmers-can-do/multi-thread-optimizations.html">
+            
+                    
+                    6.4. 多執行緒最佳化
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.4.1" data-path="../what-programmers-can-do/multi-thread-optimizations/concurrency-optimizations.html">
+            
+                <a href="../what-programmers-can-do/multi-thread-optimizations/concurrency-optimizations.html">
+            
+                    
+                    6.4.1. 並行最佳化
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.4.2" data-path="../what-programmers-can-do/multi-thread-optimizations/atomicity-optimizations.html">
+            
+                <a href="../what-programmers-can-do/multi-thread-optimizations/atomicity-optimizations.html">
+            
+                    
+                    6.4.2. 最小操作的最佳化
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.4.3" data-path="../what-programmers-can-do/multi-thread-optimizations/bandwidth-considerations.html">
+            
+                <a href="../what-programmers-can-do/multi-thread-optimizations/bandwidth-considerations.html">
+            
+                    
+                    6.4.3. 頻寬考量
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5" data-path="../what-programmers-can-do/numa-programming.html">
+            
+                <a href="../what-programmers-can-do/numa-programming.html">
+            
+                    
+                    6.5. NUMA 程式設計
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.5.1" data-path="../what-programmers-can-do/numa-programming/memory-policy.html">
+            
+                <a href="../what-programmers-can-do/numa-programming/memory-policy.html">
+            
+                    
+                    6.5.1. 記憶體策略
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.2" data-path="../what-programmers-can-do/numa-programming/specifying-policies.html">
+            
+                <a href="../what-programmers-can-do/numa-programming/specifying-policies.html">
+            
+                    
+                    6.5.2. 指定策略
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.3" data-path="../what-programmers-can-do/numa-programming/swapping-and-policies.html">
+            
+                <a href="../what-programmers-can-do/numa-programming/swapping-and-policies.html">
+            
+                    
+                    6.5.3. 置換與策略
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.4" data-path="../what-programmers-can-do/numa-programming/vma-policy.html">
+            
+                <a href="../what-programmers-can-do/numa-programming/vma-policy.html">
+            
+                    
+                    6.5.4. VMA 策略
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.5" data-path="../what-programmers-can-do/numa-programming/querying-node-information.html">
+            
+                <a href="../what-programmers-can-do/numa-programming/querying-node-information.html">
+            
+                    
+                    6.5.5. 查詢節點資訊
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.6" data-path="../what-programmers-can-do/numa-programming/cpu-and-node-sets.html">
+            
+                <a href="../what-programmers-can-do/numa-programming/cpu-and-node-sets.html">
+            
+                    
+                    6.5.6. CPU 與節點集合
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.7" data-path="../what-programmers-can-do/numa-programming/explicit-numa-optimizations.html">
+            
+                <a href="../what-programmers-can-do/numa-programming/explicit-numa-optimizations.html">
+            
+                    
+                    6.5.7. 明確的 NUMA 最佳化
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.8" data-path="../what-programmers-can-do/numa-programming/utilizing-all-bandwidth.html">
+            
+                <a href="../what-programmers-can-do/numa-programming/utilizing-all-bandwidth.html">
+            
+                    
+                    6.5.8. 利用所有頻寬
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="../memory-performance-tools.html">
+            
+                <a href="../memory-performance-tools.html">
+            
+                    
+                    7. 記憶體性能量測工具
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.8.1" data-path="memory-operation-profiling.html">
+            
+                <a href="memory-operation-profiling.html">
+            
+                    
+                    7.1. 記憶體操作分析
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.8.2" data-path="simulating-cpu-caches.html">
+            
+                <a href="simulating-cpu-caches.html">
+            
+                    
+                    7.2. 模擬處理器快取行為
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.3" data-path="measuring-memory-usage.html">
+            
+                <a href="measuring-memory-usage.html">
+            
+                    
+                    7.3. 計算記憶體使用
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.4" data-path="improving-branch-prediction.html">
+            
+                <a href="improving-branch-prediction.html">
+            
+                    
+                    7.4. 改善分支預測
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.5" data-path="page-fault-optimization.html">
+            
+                <a href="page-fault-optimization.html">
+            
+                    
+                    7.5. 分頁錯誤最佳化
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="../examples-and-benchmark-programs.html">
+            
+                <a href="../examples-and-benchmark-programs.html">
+            
+                    
+                    A. 範例與基準測試程式
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.1" data-path="../examples-and-benchmark-programs/matrix-multiplication.html">
+            
+                <a href="../examples-and-benchmark-programs/matrix-multiplication.html">
+            
+                    
+                    A.1 矩陣乘法
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="../bibliography.html">
+            
+                <a href="../bibliography.html">
+            
+                    
+                    參考書目
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            本書使用 GitBook 釋出
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >7.2. 模擬處理器快取行為</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="72-&#x6A21;&#x64EC;&#x8655;&#x7406;&#x5668;&#x5FEB;&#x53D6;&#x884C;&#x70BA;">7.2 &#x6A21;&#x64EC;&#x8655;&#x7406;&#x5668;&#x5FEB;&#x53D6;&#x884C;&#x70BA;</h1>
+<p>&#x5C31;&#x7B97;&#x5FEB;&#x53D6;&#x7684;&#x904B;&#x4F5C;&#x539F;&#x7406;&#x76F8;&#x7576;&#x5BB9;&#x6613;&#x7406;&#x89E3;&#xFF0C;&#x4F46;&#x5BE6;&#x969B;&#x7A0B;&#x5F0F;&#x7A76;&#x7ADF;&#x5982;&#x4F55;&#x8207;&#x5FEB;&#x53D6;&#x4E92;&#x52D5;&#x4E26;&#x4E0D;&#x5BB9;&#x6613;&#x89C0;&#x5BDF;&#x3002;&#x5176;&#x5BE6;&#x7A0B;&#x5F0F;&#x958B;&#x767C;&#x8005;&#x4E26;&#x4E0D;&#x5728;&#x4E4E;&#x8CC7;&#x6599;&#x6240;&#x5728;&#x7684;&#x8A18;&#x61B6;&#x9AD4;&#x4F4D;&#x7F6E;&#x3002;&#x8A18;&#x61B6;&#x9AD4;&#x4F4D;&#x5740;&#x7522;&#x751F;&#x662F;&#x7531;&#x9023;&#x7D50;&#x5668; (linker) &#x6216;&#x904B;&#x884C;&#x7576;&#x4E0B;&#x7531;&#x52D5;&#x614B;&#x9023;&#x7D50;&#x5668;&#x8207;&#x4F5C;&#x696D;&#x7CFB;&#x7D71;&#x6C7A;&#x5B9A;&#x3002;&#x7522;&#x751F;&#x7684;&#x7D44;&#x5408;&#x8A9E;&#x8A00;&#x80FD;&#x5920;&#x8655;&#x7406;&#x6240;&#x6709;&#x53EF;&#x80FD;&#x7684;&#x8A18;&#x61B6;&#x9AD4;&#x5B9A;&#x5740;&#x3002;&#x56E0;&#x6B64;&#x7A0B;&#x5F0F;&#x78BC;&#x4E2D;&#x751A;&#x81F3;&#x770B;&#x4E0D;&#x5230;&#x4EFB;&#x4F55;&#x95DC;&#x65BC;&#x8A18;&#x61B6;&#x9AD4;&#x4F4D;&#x7F6E;&#x7684;&#x7DDA;&#x7D22;&#x3002;&#x4E5F;&#x56E0;&#x70BA;&#x5982;&#x6B64;&#x8981;&#x7406;&#x89E3;&#x7A0B;&#x5F0F;&#x5982;&#x4F55;&#x4F7F;&#x7528;&#x8A18;&#x61B6;&#x9AD4;&#x771F;&#x7684;&#x975E;&#x5E38;&#x56F0;&#x96E3;&#x3002;</p>
+<p>&#x6211;&#x5011;&#x5728; 7.1 &#x7BC0;&#x6240;&#x63D0;&#x5230;&#x7684; cpu &#x5C64;&#x9762;&#x7684;&#x5206;&#x6790;&#x5DE5;&#x5177;&#x50CF; oprofile &#x6709;&#x52A9;&#x65BC;&#x6211;&#x5011;&#x4E86;&#x89E3;&#x5FEB;&#x53D6;&#x7684;&#x4F7F;&#x7528;&#x60C5;&#x6CC1;&#x3002;&#x6240;&#x6709;&#x6578;&#x64DA;&#x90FD;&#x76F4;&#x63A5;&#x7531;&#x786C;&#x9AD4;&#x6536;&#x96C6;&#xFF0C;&#x5728;&#x4E0D;&#x8FFD;&#x6C42;&#x9AD8;&#x7CBE;&#x5EA6;&#x7684;&#x72C0;&#x6CC1;&#x4E0B;&#x5341;&#x5206;&#x597D;&#x7528;&#x3002;&#x4E00;&#x65E6;&#x727D;&#x6D89;&#x9AD8;&#x7CBE;&#x5EA6;&#x9700;&#x6C42;&#x7684;&#x8CC7;&#x6599;&#x6642;&#xFF0C;oprofile &#x5C31;&#x4E0D;&#x9069;&#x7528;&#xFF1B;&#x56E0;&#x70BA;&#x57F7;&#x884C;&#x7DD2;&#x53EF;&#x80FD;&#x6703;&#x88AB;&#x4E2D;&#x65B7;&#x975E;&#x5E38;&#x591A;&#x6B21;&#x3002;&#x56E0;&#x6B64;&#x82E5;&#x8981;&#x67E5;&#x770B;&#x7A0B;&#x5F0F;&#x5728;&#x4E0D;&#x540C;&#x8655;&#x7406;&#x5668;&#x4E0A;&#x7684;&#x8A18;&#x61B6;&#x9AD4;&#x4F7F;&#x7528;&#x884C;&#x70BA;&#xFF0C;&#x5BE6;&#x969B;&#x4E0A;&#x5FC5;&#x9808;&#x6E4A;&#x9F4A;&#x9019;&#x4E9B;&#x4E0D;&#x540C;&#x7684;&#x6A5F;&#x53F0;&#x4E26;&#x76F4;&#x63A5;&#x5728;&#x4E0A;&#x9762;&#x505A;&#x5BE6;&#x9A57;&#xFF0C;&#x4F46;&#x5F80;&#x5F80;&#x7A92;&#x7919;&#x96E3;&#x884C;&#x3002;&#x50CF;&#x5716; 3.8 &#x7684;&#x6578;&#x64DA;&#x3002;&#x82E5;&#x662F;&#x8981;&#x4F7F;&#x7528; oprofile &#x6536;&#x96C6;&#x9019;&#x4E9B;&#x8CC7;&#x6599;&#xFF0C;&#x5FC5;&#x9808;&#x8981;&#x6709; 24 &#x53F0;&#x4E0D;&#x540C;&#x7684;&#x6A5F;&#x5668;&#xFF0C;&#x4F46;&#x5176;&#x4E2D;&#x8A31;&#x591A;&#x6A5F;&#x5668;&#x6839;&#x672C;&#x4E0D;&#x5B58;&#x5728;&#x3002;</p>
+<pre class="language-"><code class="lang-c"><span class="token operator">==</span><span class="token number">19645</span><span class="token operator">==</span> I   refs<span class="token operator">:</span>   <span class="token number">152</span><span class="token punctuation">,</span><span class="token number">653</span><span class="token punctuation">,</span><span class="token number">497</span>
+<span class="token operator">==</span><span class="token number">19645</span><span class="token operator">==</span> I1  misses<span class="token operator">:</span>      <span class="token number">25</span><span class="token punctuation">,</span><span class="token number">833</span>
+<span class="token operator">==</span><span class="token number">19645</span><span class="token operator">==</span> L2i misses<span class="token operator">:</span>       <span class="token number">2</span><span class="token punctuation">,</span><span class="token number">475</span>
+<span class="token operator">==</span><span class="token number">19645</span><span class="token operator">==</span> I1  miss rate<span class="token operator">:</span>     <span class="token number">0.01</span><span class="token operator">%</span>
+<span class="token operator">==</span><span class="token number">19645</span><span class="token operator">==</span> L2i miss rate<span class="token operator">:</span>     <span class="token number">0.00</span><span class="token operator">%</span>
+<span class="token operator">==</span><span class="token number">19645</span><span class="token operator">==</span>
+<span class="token operator">==</span><span class="token number">19645</span><span class="token operator">==</span> D   refs<span class="token operator">:</span>    <span class="token number">56</span><span class="token punctuation">,</span><span class="token number">857</span><span class="token punctuation">,</span><span class="token number">129</span>  <span class="token punctuation">(</span><span class="token number">35</span><span class="token punctuation">,</span><span class="token number">838</span><span class="token punctuation">,</span><span class="token number">721</span> rd <span class="token operator">+</span> <span class="token number">21</span><span class="token punctuation">,</span><span class="token number">018</span><span class="token punctuation">,</span><span class="token number">408</span> wr<span class="token punctuation">)</span>
+<span class="token operator">==</span><span class="token number">19645</span><span class="token operator">==</span> D1  misses<span class="token operator">:</span>      <span class="token number">14</span><span class="token punctuation">,</span><span class="token number">187</span>  <span class="token punctuation">(</span>    <span class="token number">12</span><span class="token punctuation">,</span><span class="token number">451</span> rd <span class="token operator">+</span>      <span class="token number">1</span><span class="token punctuation">,</span><span class="token number">736</span> wr<span class="token punctuation">)</span>
+<span class="token operator">==</span><span class="token number">19645</span><span class="token operator">==</span> L2d misses<span class="token operator">:</span>       <span class="token number">7</span><span class="token punctuation">,</span><span class="token number">701</span>  <span class="token punctuation">(</span>     <span class="token number">6</span><span class="token punctuation">,</span><span class="token number">325</span> rd <span class="token operator">+</span>      <span class="token number">1</span><span class="token punctuation">,</span><span class="token number">376</span> wr<span class="token punctuation">)</span>
+<span class="token operator">==</span><span class="token number">19645</span><span class="token operator">==</span> D1  miss rate<span class="token operator">:</span>      <span class="token number">0.0</span><span class="token operator">%</span> <span class="token punctuation">(</span>       <span class="token number">0.0</span><span class="token operator">%</span>   <span class="token operator">+</span>        <span class="token number">0.0</span><span class="token operator">%</span>  <span class="token punctuation">)</span>
+<span class="token operator">==</span><span class="token number">19645</span><span class="token operator">==</span> L2d miss rate<span class="token operator">:</span>      <span class="token number">0.0</span><span class="token operator">%</span> <span class="token punctuation">(</span>       <span class="token number">0.0</span><span class="token operator">%</span>   <span class="token operator">+</span>        <span class="token number">0.0</span><span class="token operator">%</span>  <span class="token punctuation">)</span>
+<span class="token operator">==</span><span class="token number">19645</span><span class="token operator">==</span>
+<span class="token operator">==</span><span class="token number">19645</span><span class="token operator">==</span> L2  refs<span class="token operator">:</span>        <span class="token number">40</span><span class="token punctuation">,</span><span class="token number">020</span>  <span class="token punctuation">(</span>    <span class="token number">38</span><span class="token punctuation">,</span><span class="token number">284</span> rd <span class="token operator">+</span>      <span class="token number">1</span><span class="token punctuation">,</span><span class="token number">736</span> wr<span class="token punctuation">)</span>
+<span class="token operator">==</span><span class="token number">19645</span><span class="token operator">==</span> L2  misses<span class="token operator">:</span>      <span class="token number">10</span><span class="token punctuation">,</span><span class="token number">176</span>  <span class="token punctuation">(</span>     <span class="token number">8</span><span class="token punctuation">,</span><span class="token number">800</span> rd <span class="token operator">+</span>      <span class="token number">1</span><span class="token punctuation">,</span><span class="token number">376</span> wr<span class="token punctuation">)</span>
+<span class="token operator">==</span><span class="token number">19645</span><span class="token operator">==</span> L2  miss rate<span class="token operator">:</span>      <span class="token number">0.0</span><span class="token operator">%</span> <span class="token punctuation">(</span>       <span class="token number">0.0</span><span class="token operator">%</span>   <span class="token operator">+</span>        <span class="token number">0.0</span><span class="token operator">%</span>  <span class="token punctuation">)</span>
+</code></pre>
+<p>&#x5716; 7.5&#xFF1A;cachegrind &#x7D71;&#x8A08;&#x7D50;&#x679C;</p>
+<p>&#x5716;&#x4E2D;&#x662F;&#x4F7F;&#x7528;&#x5FEB;&#x53D6;&#x6A21;&#x64EC;&#x5668;&#x6240;&#x5F97;&#x5230;&#x7684;&#x7D50;&#x679C;&#x3002;<a href="https://valgrind.org/docs/manual/cg-manual.html" target="_blank"><code>cachegrind</code></a> &#x4F7F;&#x7528; <code>valgrind</code> &#x6846;&#x67B6;&#x662F;&#x70BA;&#x4E86;&#x6AA2;&#x67E5;&#x7A0B;&#x5F0F;&#x4E2D;&#x7684;&#x8A18;&#x61B6;&#x9AD4;&#x904B;&#x7528;&#x76F8;&#x95DC;&#x554F;&#x984C;&#x6240;&#x958B;&#x767C;&#x3002;<code>valgrind</code> &#x6A21;&#x64EC;&#x7A0B;&#x5F0F;&#x57F7;&#x884C;&#x904E;&#x7A0B;&#x4E26;&#x5728;&#x57F7;&#x884C;&#x671F;&#x9593;&#x53EF;&#x4F7F;&#x7528;&#x5404;&#x7A2E;&#x64F4;&#x5145;&#x529F;&#x80FD;&#xFF0C;&#x4F8B;&#x5982; <code>cachegrind</code> &#x53EF;&#x7AC4;&#x5165;&#x57F7;&#x884C;&#x6846;&#x67B6;&#x3002;<code>cachegrind</code> &#x5229;&#x7528;&#x9019;&#x500B;&#x529F;&#x80FD;&#x4F86;&#x6514;&#x622A;&#x7D00;&#x9304;&#x6240;&#x6709;&#x8A18;&#x61B6;&#x9AD4;&#x5730;&#x5740;&#x7684;&#x4F7F;&#x7528;&#x72C0;&#x6CC1;&#xFF0C;&#x7136;&#x5F8C;&#x6A21;&#x64EC;&#x6240;&#x6709; <code>L1i</code> &#x3001;<code>L1d</code> &#x548C; <code>L2</code> &#x5FEB;&#x53D6;&#x5728;&#x4EFB;&#x4F55;&#x6307;&#x5B9A;&#x8CC7;&#x6599;&#x5BB9;&#x91CF;&#x7684;&#x884C;&#x70BA;&#x3002;&#x82E5;&#x8981;&#x4F7F;&#x7528;&#x9019;&#x500B;&#x529F;&#x80FD;&#xFF0C;&#x5FC5;&#x9808;&#x5728;&#x4F7F;&#x7528; <code>valgrind</code> &#x6642;&#x7D66;&#x5B9A;&#x53C3;&#x6578;&#x5982;&#x4E0B;&#xFF1A;</p>
+<pre class="language-"><code class="lang-c">valgrind <span class="token operator">--</span>tool<span class="token operator">=</span>cachegrind command arg
+</code></pre>
+<p>&#x4E0A;&#x5716;&#x7684;&#x7BC4;&#x4F8B;&#x540C;&#x6642;&#x6A21;&#x64EC;&#x4E09;&#x500B;&#x5FEB;&#x53D6;&#x4EE5;&#x53CA;&#x5C0D;&#x61C9;&#x7684;&#x8CC7;&#x6599;&#x5BB9;&#x91CF;&#x8207;&#x8655;&#x7406;&#x5668;&#x3002;&#x7576;&#x7A0B;&#x5F0F;&#x5728;&#x904B;&#x884C;&#x6642;&#xFF0C;&#x90E8;&#x5206;&#x7D50;&#x679C;&#x6703;&#x5BEB;&#x5165;&#x5230;&#x6A19;&#x6E96;&#x932F;&#x8AA4;&#xFF08;stderr&#xFF09;&#xFF0C;&#x5176;&#x4E2D;&#x5305;&#x542B;&#x5FEB;&#x53D6;&#x7E3D;&#x4F7F;&#x7528;&#x91CF;&#x7684;&#x7D71;&#x8A08;&#x7D50;&#x679C;&#xFF0C;&#x5982;&#x5716; 7.5 &#x6240;&#x793A;&#x3002;&#x5716;&#x4E2D;&#x986F;&#x793A;&#x6307;&#x4EE4;&#x548C;&#x8A18;&#x61B6;&#x9AD4;&#x4F4D;&#x7F6E;&#x53C3;&#x8003;&#x7684;&#x7E3D;&#x6578;&#x4EE5;&#x53CA; <code>L1i/L1d</code> &#x548C; <code>L2</code> &#x5FEB;&#x53D6;&#x7522;&#x751F;&#x7684;&#x672A;&#x547D;&#x4E2D;&#x6B21;&#x6578;&#x3001;&#x672A;&#x547D;&#x4E2D;&#x7387;&#x7B49;&#x7B49;&#x3002;&#x8A72;&#x5DE5;&#x5177;&#x751A;&#x81F3;&#x53EF;&#x5C07; <code>L2</code> &#x5B58;&#x53D6;&#x7D30;&#x5206;&#x70BA;&#x6307;&#x4EE4;&#x5B58;&#x53D6;&#x548C;&#x8CC7;&#x6599;&#x5B58;&#x53D6;&#xFF0C;&#x6240;&#x6709;&#x8CC7;&#x6599;&#x5FEB;&#x53D6;&#x90FD;&#x5340;&#x5206;&#x70BA;&#x8B80;&#x53D6;&#x548C;&#x5BEB;&#x5165;&#x4E8C;&#x7A2E;&#x4E0D;&#x540C;&#x884C;&#x70BA;&#x3002;</p>
+<p>&#x6709;&#x4E86;&#x57FA;&#x790E;&#x7684;&#x8A8D;&#x77E5;&#x5F8C;&#x6211;&#x5011;&#x53EF;&#x900F;&#x904E;&#x8F38;&#x5165;&#x4E0D;&#x540C;&#x7684;&#x53C3;&#x6578;&#x4F86;&#x9032;&#x884C;&#x66F4;&#x8907;&#x96DC;&#x7684;&#x64CD;&#x4F5C;&#x3002;&#x4F7F;&#x7528; <code>--I1</code> &#x3001; <code>--D1</code> &#x548C; <code>--L2</code> &#x53C3;&#x6578;&#xFF0C; <code>cachegrind</code> &#x53EF;&#x5FFD;&#x7565;&#x5BE6;&#x9AD4;&#x8655;&#x7406;&#x5668;&#x7684;&#x5FEB;&#x53D6;&#x7D50;&#x69CB;&#xFF0C;&#x6A21;&#x64EC;&#x53C3;&#x6578;&#x6240;&#x6307;&#x5B9A;&#x7684;&#x7D50;&#x69CB;&#x3002; &#x5982;&#x4E0B;&#x9762;&#x7684;&#x547D;&#x4EE4;&#xFF1A;</p>
+<pre class="language-"><code class="lang-c">valgrind <span class="token operator">--</span>tool<span class="token operator">=</span>cachegrind \
+<span class="token operator">--</span>L2<span class="token operator">=</span><span class="token number">8388608</span><span class="token punctuation">,</span><span class="token number">8</span><span class="token punctuation">,</span><span class="token number">64</span> command arg
+</code></pre>
+<p>&#x6A21;&#x64EC; 8MB &#x7684; L2 &#x5FEB;&#x53D6;&#x5BB9;&#x91CF;&#x4E26;&#x652F;&#x63F4; 8 &#x8DEF;&#x7D44; (8-way set)&#xFF0C;&#x6BCF;&#x500B;&#x5FEB;&#x53D6;&#x884C;&#x7684;&#x5BB9;&#x91CF;&#x70BA; 64 &#x4F4D;&#x5143;&#x3002; &#x6CE8;&#x610F; <code>--L2</code> &#x9700;&#x8981;&#x653E;&#x5728; <code>command arg</code> &#x7684;&#x524D;&#x9762;&#x3002;</p>
+<p>&#x6B64;&#x5916; <code>cachegrind</code> &#x9084;&#x63D0;&#x4F9B;&#x66F4;&#x591A;&#x529F;&#x80FD;&#x3002;&#x5728;&#x884C;&#x7A0B;&#x7D50;&#x675F;&#x4E4B;&#x524D;&#x6703;&#x7522;&#x751F;&#x4E00;&#x500B; <code>cachegrind.out.XXXXX</code> &#x6A94;&#xFF0C;&#x5176;&#x4E2D; <code>XXXXX</code> &#x662F;&#x884C;&#x7A0B;&#x7684; <code>PID</code> &#x3002;&#x9019;&#x500B;&#x6A94;&#x6848;&#x5305;&#x542B;&#x7A0B;&#x5F0F;&#x4E2D;&#x6BCF;&#x500B;&#x51FD;&#x5F0F;&#x548C;&#x539F;&#x59CB;&#x7A0B;&#x5F0F;&#x78BC;&#x4E2D;&#x5FEB;&#x53D6;&#x4F7F;&#x7528;&#x7684;&#x6458;&#x8981;&#x548C;&#x8A73;&#x7D30;&#x5167;&#x5BB9;&#x3002;&#x53EF;&#x4F7F;&#x7528; <a href="https://man7.org/linux/man-pages/man1/cg_annotate.1.html" target="_blank"><code>cg annotate</code></a> &#x4F86;&#x67E5;&#x770B;&#x9019;&#x4E9B;&#x8CC7;&#x6599;&#x3002;</p>
+<p>&#x7A0B;&#x5F0F;&#x6240;&#x7522;&#x751F;&#x7684;&#x7D50;&#x679C;&#x5305;&#x542B;&#x5FEB;&#x53D6;&#x4F7F;&#x7528;&#x6458;&#x8981;&#xFF0C;&#x4EE5;&#x53CA;&#x6BCF;&#x500B;&#x51FD;&#x5F0F;&#x5C0D;&#x5FEB;&#x53D6;&#x4F7F;&#x7528;&#x7684;&#x8A73;&#x7D30;&#x6458;&#x8981;&#x3002;&#x8981;&#x7372;&#x5F97;&#x8CC7;&#x6599;&#x9700;&#x8981; <code>cg annotate</code> &#x5C07;&#x8A18;&#x61B6;&#x9AD4;&#x4F4D;&#x7F6E;&#x8207;&#x51FD;&#x5F0F;&#x505A;&#x914D;&#x5C0D;&#xFF0C;&#x9019;&#x8868;&#x793A;&#x6700;&#x597D;&#x8981;&#x6709;&#x9664;&#x932F;&#x76F8;&#x95DC;&#x7684;&#x8CC7;&#x8A0A;&#x3002;&#x96D6;&#x7136;&#x6A94;&#x6848;&#x53EF;&#x63D0;&#x4F9B;&#x4E00;&#x4E9B;&#x5E6B;&#x52A9;&#xFF0C;&#x4F46;&#x7531;&#x65BC;&#x5167;&#x90E8;&#x7B26;&#x865F; (internal symbol) &#x6C92;&#x6709;&#x5217;&#x5728;&#x52D5;&#x614B;&#x7B26;&#x865F;&#x8868;&#x4E2D;&#xFF0C;&#x56E0;&#x6B64;&#x7D50;&#x679C;&#x4E0D;&#x5920;&#x5B8C;&#x6574;&#x3002;&#x5716; 7.6 &#x986F;&#x793A;&#x4E86;&#x8207;&#x5716; 7.5 &#x76F8;&#x540C;&#x7684;&#x7A0B;&#x5F0F;&#x904B;&#x884C;&#x7684;&#x90E8;&#x5206;&#x7D50;&#x679C;&#x3002;</p>
+<pre class="language-"><code class="lang-c"><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span>
+        Ir  I1mr I2mr         Dr  D1mr D2mr        Dw D1mw D2mw  file<span class="token operator">:</span>function
+<span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span>
+<span class="token number">53</span><span class="token punctuation">,</span><span class="token number">684</span><span class="token punctuation">,</span><span class="token number">905</span>     <span class="token number">9</span>    <span class="token number">8</span>  <span class="token number">9</span><span class="token punctuation">,</span><span class="token number">589</span><span class="token punctuation">,</span><span class="token number">531</span>    <span class="token number">13</span>    <span class="token number">3</span> <span class="token number">5</span><span class="token punctuation">,</span><span class="token number">820</span><span class="token punctuation">,</span><span class="token number">373</span>   <span class="token number">14</span>    <span class="token number">0</span>  <span class="token operator">?</span><span class="token operator">?</span><span class="token operator">?</span><span class="token operator">:</span>_IO_file_xsputn@@GLIBC_2<span class="token punctuation">.</span><span class="token number">2.5</span>
+<span class="token number">36</span><span class="token punctuation">,</span><span class="token number">925</span><span class="token punctuation">,</span><span class="token number">729</span> <span class="token number">6</span><span class="token punctuation">,</span><span class="token number">267</span>  <span class="token number">114</span> <span class="token number">11</span><span class="token punctuation">,</span><span class="token number">205</span><span class="token punctuation">,</span><span class="token number">241</span>    <span class="token number">74</span>   <span class="token number">18</span> <span class="token number">7</span><span class="token punctuation">,</span><span class="token number">123</span><span class="token punctuation">,</span><span class="token number">370</span>   <span class="token number">22</span>    <span class="token number">0</span>  <span class="token operator">?</span><span class="token operator">?</span><span class="token operator">?</span><span class="token operator">:</span>vfprintf
+<span class="token number">11</span><span class="token punctuation">,</span><span class="token number">845</span><span class="token punctuation">,</span><span class="token number">373</span>    <span class="token number">22</span>    <span class="token number">2</span>  <span class="token number">3</span><span class="token punctuation">,</span><span class="token number">126</span><span class="token punctuation">,</span><span class="token number">914</span>    <span class="token number">46</span>   <span class="token number">22</span> <span class="token number">1</span><span class="token punctuation">,</span><span class="token number">563</span><span class="token punctuation">,</span><span class="token number">457</span>    <span class="token number">0</span>    <span class="token number">0</span>  <span class="token operator">?</span><span class="token operator">?</span><span class="token operator">?</span><span class="token operator">:</span>__find_specmb
+ <span class="token number">6</span><span class="token punctuation">,</span><span class="token number">004</span><span class="token punctuation">,</span><span class="token number">482</span>    <span class="token number">40</span>   <span class="token number">10</span>    <span class="token number">697</span><span class="token punctuation">,</span><span class="token number">872</span> <span class="token number">1</span><span class="token punctuation">,</span><span class="token number">744</span>  <span class="token number">484</span>         <span class="token number">0</span>    <span class="token number">0</span>    <span class="token number">0</span>  <span class="token operator">?</span><span class="token operator">?</span><span class="token operator">?</span><span class="token operator">:</span>strlen
+ <span class="token number">5</span><span class="token punctuation">,</span><span class="token number">008</span><span class="token punctuation">,</span><span class="token number">448</span>     <span class="token number">3</span>    <span class="token number">2</span>  <span class="token number">1</span><span class="token punctuation">,</span><span class="token number">450</span><span class="token punctuation">,</span><span class="token number">093</span>   <span class="token number">370</span>  <span class="token number">118</span>         <span class="token number">0</span>    <span class="token number">0</span>    <span class="token number">0</span>  <span class="token operator">?</span><span class="token operator">?</span><span class="token operator">?</span><span class="token operator">:</span>strcmp
+ <span class="token number">3</span><span class="token punctuation">,</span><span class="token number">316</span><span class="token punctuation">,</span><span class="token number">589</span>    <span class="token number">24</span>    <span class="token number">4</span>    <span class="token number">757</span><span class="token punctuation">,</span><span class="token number">523</span>     <span class="token number">0</span>    <span class="token number">0</span>   <span class="token number">540</span><span class="token punctuation">,</span><span class="token number">952</span>    <span class="token number">0</span>    <span class="token number">0</span>  <span class="token operator">?</span><span class="token operator">?</span><span class="token operator">?</span><span class="token operator">:</span>_IO_padn
+ <span class="token number">2</span><span class="token punctuation">,</span><span class="token number">825</span><span class="token punctuation">,</span><span class="token number">541</span>     <span class="token number">3</span>    <span class="token number">3</span>    <span class="token number">290</span><span class="token punctuation">,</span><span class="token number">222</span>     <span class="token number">5</span>    <span class="token number">1</span>   <span class="token number">216</span><span class="token punctuation">,</span><span class="token number">403</span>    <span class="token number">0</span>    <span class="token number">0</span>  <span class="token operator">?</span><span class="token operator">?</span><span class="token operator">?</span><span class="token operator">:</span>_itoa_word
+ <span class="token number">2</span><span class="token punctuation">,</span><span class="token number">628</span><span class="token punctuation">,</span><span class="token number">466</span>     <span class="token number">9</span>    <span class="token number">6</span>    <span class="token number">730</span><span class="token punctuation">,</span><span class="token number">059</span>     <span class="token number">0</span>    <span class="token number">0</span>   <span class="token number">358</span><span class="token punctuation">,</span><span class="token number">215</span>    <span class="token number">0</span>    <span class="token number">0</span>  <span class="token operator">?</span><span class="token operator">?</span><span class="token operator">?</span><span class="token operator">:</span>_IO_file_overflow@@GLIBC_2<span class="token punctuation">.</span><span class="token number">2.5</span>
+ <span class="token number">2</span><span class="token punctuation">,</span><span class="token number">504</span><span class="token punctuation">,</span><span class="token number">211</span>     <span class="token number">4</span>    <span class="token number">4</span>    <span class="token number">762</span><span class="token punctuation">,</span><span class="token number">151</span>     <span class="token number">2</span>    <span class="token number">0</span>   <span class="token number">598</span><span class="token punctuation">,</span><span class="token number">833</span>    <span class="token number">3</span>    <span class="token number">0</span>  <span class="token operator">?</span><span class="token operator">?</span><span class="token operator">?</span><span class="token operator">:</span>_IO_do_write@@GLIBC_2<span class="token punctuation">.</span><span class="token number">2.5</span>
+ <span class="token number">2</span><span class="token punctuation">,</span><span class="token number">296</span><span class="token punctuation">,</span><span class="token number">142</span>    <span class="token number">32</span>    <span class="token number">7</span>    <span class="token number">616</span><span class="token punctuation">,</span><span class="token number">490</span>    <span class="token number">88</span>    <span class="token number">0</span>   <span class="token number">321</span><span class="token punctuation">,</span><span class="token number">848</span>    <span class="token number">0</span>    <span class="token number">0</span>  dwarf_child<span class="token punctuation">.</span>c<span class="token operator">:</span>__libdw_find_attr
+ <span class="token number">2</span><span class="token punctuation">,</span><span class="token number">184</span><span class="token punctuation">,</span><span class="token number">153</span> <span class="token number">2</span><span class="token punctuation">,</span><span class="token number">876</span>   <span class="token number">20</span>    <span class="token number">503</span><span class="token punctuation">,</span><span class="token number">805</span>    <span class="token number">67</span>    <span class="token number">0</span>   <span class="token number">435</span><span class="token punctuation">,</span><span class="token number">562</span>    <span class="token number">0</span>    <span class="token number">0</span>  <span class="token operator">?</span><span class="token operator">?</span><span class="token operator">?</span><span class="token operator">:</span>__dcigettext
+ <span class="token number">2</span><span class="token punctuation">,</span><span class="token number">014</span><span class="token punctuation">,</span><span class="token number">243</span>     <span class="token number">3</span>    <span class="token number">3</span>    <span class="token number">435</span><span class="token punctuation">,</span><span class="token number">512</span>     <span class="token number">1</span>    <span class="token number">1</span>   <span class="token number">272</span><span class="token punctuation">,</span><span class="token number">195</span>    <span class="token number">4</span>    <span class="token number">0</span>  <span class="token operator">?</span><span class="token operator">?</span><span class="token operator">?</span><span class="token operator">:</span>_IO_file_write@@GLIBC_2<span class="token punctuation">.</span><span class="token number">2.5</span>
+ <span class="token number">1</span><span class="token punctuation">,</span><span class="token number">988</span><span class="token punctuation">,</span><span class="token number">697</span> <span class="token number">2</span><span class="token punctuation">,</span><span class="token number">804</span>    <span class="token number">4</span>    <span class="token number">656</span><span class="token punctuation">,</span><span class="token number">112</span>   <span class="token number">380</span>    <span class="token number">0</span>    <span class="token number">47</span><span class="token punctuation">,</span><span class="token number">847</span>    <span class="token number">1</span>    <span class="token number">1</span>  <span class="token operator">?</span><span class="token operator">?</span><span class="token operator">?</span><span class="token operator">:</span>getenv
+ <span class="token number">1</span><span class="token punctuation">,</span><span class="token number">973</span><span class="token punctuation">,</span><span class="token number">463</span>    <span class="token number">27</span>    <span class="token number">6</span>    <span class="token number">597</span><span class="token punctuation">,</span><span class="token number">768</span>    <span class="token number">15</span>    <span class="token number">0</span>   <span class="token number">420</span><span class="token punctuation">,</span><span class="token number">805</span>    <span class="token number">0</span>    <span class="token number">0</span>  dwarf_getattrs<span class="token punctuation">.</span>c<span class="token operator">:</span>dwarf_getattrs
+</code></pre>
+<p>&#x5716; 7.6&#xFF1A;cg annotate &#x7D50;&#x679C;</p>
+<p><code>Ir</code> &#x3001;<code>Dr</code> &#x548C; <code>Dw</code> &#x9019;&#x5E7E;&#x500B;&#x6B04;&#x4F4D;&#x986F;&#x793A;&#x7684;&#x662F;&#x7E3D;&#x5FEB;&#x53D6;&#x4F7F;&#x7528;&#x91CF;&#xFF0C;&#x800C;&#x975E;&#x5FEB;&#x53D6;&#x672A;&#x547D;&#x4E2D;&#x6578;&#xFF0C;&#x9019;&#x4E9B;&#x672A;&#x547D;&#x4E2D;&#x6B21;&#x6578;&#x6703;&#x5728;&#x5F8C;&#x9762;&#x4E8C;&#x6B04;&#x986F;&#x793A;&#x3002;&#x9019;&#x4E9B;&#x6578;&#x64DA;&#x53EF;&#x7528;&#x65BC;&#x8FA8;&#x8B58;&#x51FA;&#x767C;&#x751F;&#x6700;&#x591A;&#x5FEB;&#x53D6;&#x672A;&#x547D;&#x4E2D;&#x7684;&#x7A0B;&#x5F0F;&#x78BC;&#x3002;&#x9996;&#x5148;&#x53EF;&#x5148;&#x95DC;&#x6CE8; <code>L2</code> &#x7684;&#x5FEB;&#x53D6;&#x672A;&#x547D;&#x4E2D;&#xFF0C;&#x518D;&#x5EF6;&#x4F38;&#x8655;&#x7406; <code>L1i/L1d</code> &#x5FEB;&#x53D6;&#x672A;&#x547D;&#x4E2D;&#x3002;</p>
+<p><code>cg annotate</code> &#x53EF;&#x63D0;&#x4F9B;&#x66F4;&#x8A73;&#x7D30;&#x7684;&#x8CC7;&#x6599;&#x3002;&#x5982;&#x679C;&#x6709;&#x7279;&#x5225;&#x6307;&#x5B9A;&#x67D0;&#x4E00;&#x500B;&#x6A94;&#x6848;&#xFF0C;&#x751A;&#x81F3;&#x53EF;&#x9010;&#x884C;&#x986F;&#x793A;&#x51FA;&#x5C0D;&#x61C9;&#x7684;&#x5FEB;&#x53D6;&#x547D;&#x4E2D;&#x6578;&#x548C;&#x672A;&#x547D;&#x4E2D;&#x6578;&#x3002;&#x9019;&#x4E9B;&#x8CC7;&#x8A0A;&#x53EF;&#x8B93;&#x7A0B;&#x5F0F;&#x958B;&#x767C;&#x8005;&#x6DF1;&#x5165;&#x5230;&#x78BA;&#x5207;&#x884C;&#x6578;&#xFF0C;&#x96D6;&#x7136;&#x4F7F;&#x7528;&#x4ECB;&#x9762;&#x7C97;&#x7CD9;&#x3002;&#x672C;&#x6587;&#x66F8;&#x5BEB;&#x4E4B;&#x969B;&#xFF0C;cachegrind &#x8CC7;&#x6599;&#x6A94;&#x6848;&#x548C;&#x539F;&#x59CB;&#x6A94;&#x5FC5;&#x9808;&#x5728;&#x540C;&#x4E00;&#x500B;&#x76EE;&#x9304;&#x4E2D;&#x3002;</p>
+<p>&#x518D;&#x6B21;&#x5F37;&#x8ABF;&#xFF0C;<code>cachegrind</code> &#x662F;&#x6A21;&#x64EC;&#x5668;&#xFF0C;&#x4E0D;&#x6703;&#x4F7F;&#x7528;&#x4F86;&#x81EA;&#x8655;&#x7406;&#x5668;&#x7684;&#x6E2C;&#x91CF;&#x6578;&#x64DA;&#x3002;&#x56E0;&#x6B64;&#x8207;&#x8655;&#x7406;&#x5668;&#x4E2D;&#x5BE6;&#x969B;&#x7684;&#x5FEB;&#x53D6;&#x5BE6;&#x4F5C;&#x65B9;&#x5F0F;&#x5F88;&#x53EF;&#x80FD;&#x6703;&#x975E;&#x5E38;&#x4E0D;&#x540C;&#x3002;<code>cachegrind</code> &#x4F7F;&#x7528;<a href="https://en.wikipedia.org/wiki/Cache_replacement_policies" target="_blank">&#x6700;&#x8FD1;&#x6700;&#x5C11;&#x4F7F;&#x7528; (LRU) &#x7B56;&#x7565;</a>&#xFF0C;&#x4F46;&#x5C0D;&#x5177;&#x9AD8;&#x95DC;&#x806F;&#x6027;&#x7684;&#x9AD8;&#x901F;&#x5FEB;&#x53D6;&#x800C;&#x8A00;&#xFF0C;&#x9019;&#x6703;&#x9020;&#x6210;&#x984D;&#x5916;&#x7684;&#x6210;&#x672C;&#x3002;&#x9664;&#x6B64;&#x4E4B;&#x5916;&#xFF0C;&#x6A21;&#x64EC;&#x5668;&#x4E26;&#x6C92;&#x6709;&#x8003;&#x616E;&#x4E0A;&#x4E0B;&#x6587;&#x4EA4;&#x63DB; (context switch) &#x548C;&#x7CFB;&#x7D71;&#x547C;&#x53EB; (system call)&#x7684;&#x6210;&#x672C;&#x3002;&#x9019;&#x4E8C;&#x8005;&#x90FD;&#x53EF;&#x80FD;&#x7834;&#x58DE;&#x5927;&#x90E8;&#x5206; L2 &#x5FEB;&#x53D6;&#x4E14;&#x5FC5;&#x9808;&#x66F4;&#x65B0; L1i &#x548C; L1d &#x7684;&#x5FEB;&#x53D6;&#x5167;&#x5BB9;&#x3002;&#x6703;&#x5C0E;&#x81F4;&#x6A21;&#x64EC;&#x7D50;&#x679C;&#x7684;&#x7E3D;&#x5FEB;&#x53D6;&#x672A;&#x547D;&#x4E2D;&#x6578;&#x4F4E;&#x65BC;&#x5BE6;&#x969B;&#x7684;&#x72C0;&#x6CC1;&#x3002;&#x5118;&#x7BA1;&#x5982;&#x6B64;&#xFF0C;<code>cachegrind</code> &#x4ECD;&#x662F;&#x4E00;&#x500B;&#x5F88;&#x597D;&#x7684;&#x5DE5;&#x5177;&#xFF0C;&#x53EF;&#x4E86;&#x89E3;&#x7A0B;&#x5F0F;&#x7684;&#x8A18;&#x61B6;&#x9AD4;&#x4F7F;&#x7528;&#x60C5;&#x6CC1;&#x4EE5;&#x53CA;&#x5176;&#x76F8;&#x95DC;&#x7684;&#x554F;&#x984C;&#x3002;</p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="memory-operation-profiling.html" class="navigation navigation-prev " aria-label="Previous page: 7.1. 記憶體操作分析">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="measuring-memory-usage.html" class="navigation navigation-next " aria-label="Next page: 7.3. 計算記憶體使用">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"7.2. 模擬處理器快取行為","level":"1.8.2","depth":2,"next":{"title":"7.3. 計算記憶體使用","level":"1.8.3","depth":2,"path":"memory-performance-tools/measuring-memory-usage.md","ref":"memory-performance-tools/measuring-memory-usage.md","articles":[]},"previous":{"title":"7.1. 記憶體操作分析","level":"1.8.1","depth":2,"path":"memory-performance-tools/memory-operation-profiling.md","ref":"memory-performance-tools/memory-operation-profiling.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-lunr","-search","search-pro","-sharing","katex","github-buttons","github-issue-feedback","-highlight","prism","splitter","theme-comscore","hide-element","alerts"],"styles":{"pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css","website":"styles/website.css"},"pluginsConfig":{"prism":{},"github-issue-feedback":{"repo":"sysprog21/cpumemory-zhtw"},"splitter":{},"search-pro":{},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-comscore":{},"alerts":{},"github-buttons":{"buttons":[{"user":"sysprog21","repo":"cpumemory-zhtw","type":"star","size":"small"}]},"theme-default":{"styles":{"pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css","website":"styles/website.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"每位程式開發者都該有的記憶體知識","language":"zh-tw","gitbook":">=3.0.0","description":"本文解釋用於現代電腦硬體的記憶體子系統的結構、闡述 CPU 快取發展的考量、它們如何運作，以及程式該如何針對記憶體操作調整，從而達到最佳的效能。"},"file":{"path":"memory-performance-tools/simulating-cpu-caches.md","mtime":"2025-12-24T07:41:31.219Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2025-12-24T07:42:11.361Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-pro/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-github-buttons/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-github-issue-feedback/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-splitter/splitter.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-hide-element/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-alerts/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-theme-comscore/test.js"></script>
+        
+    
+
+    </body>
+</html>
+

@@ -1,0 +1,1453 @@
+
+<!DOCTYPE HTML>
+<html lang="zh-tw" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>7.5. 分頁錯誤最佳化 · 每位程式開發者都該有的記憶體知識</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search-pro/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-katex/katex.min.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-prism/prism.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-splitter/splitter.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-alerts/style.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-theme-comscore/test.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+        <link rel="stylesheet" href="../styles/website.css">
+        
+    
+
+        
+    
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="../examples-and-benchmark-programs.html" />
+    
+    
+    <link rel="prev" href="improving-branch-prediction.html" />
+    
+
+    <style>
+    @media only screen and (max-width: 640px) {
+        .book-header .hidden-mobile {
+            display: none;
+        }
+    }
+    </style>
+    <script>
+        window["gitbook-plugin-github-buttons"] = {"buttons":[{"user":"sysprog21","repo":"cpumemory-zhtw","type":"star","size":"small"}]};
+    </script>
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="輸入並搜尋" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    關於
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../introduction.html">
+            
+                <a href="../introduction.html">
+            
+                    
+                    1. 引言
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../commodity-hardware-today.html">
+            
+                <a href="../commodity-hardware-today.html">
+            
+                    
+                    2. 現代商用硬體
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="../commodity-hardware-today/ram-types.html">
+            
+                <a href="../commodity-hardware-today/ram-types.html">
+            
+                    
+                    2.1. RAM 的種類
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1.1" data-path="../commodity-hardware-today/ram-types/static-ram.html">
+            
+                <a href="../commodity-hardware-today/ram-types/static-ram.html">
+            
+                    
+                    2.1.1. 靜態 RAM
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.1.2" data-path="../commodity-hardware-today/ram-types/dynamic-ram.html">
+            
+                <a href="../commodity-hardware-today/ram-types/dynamic-ram.html">
+            
+                    
+                    2.1.2. 動態 RAM
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.1.3" data-path="../commodity-hardware-today/ram-types/dram-access.html">
+            
+                <a href="../commodity-hardware-today/ram-types/dram-access.html">
+            
+                    
+                    2.1.3. DRAM 存取
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.1.4" data-path="../commodity-hardware-today/ram-types/conclusions.html">
+            
+                <a href="../commodity-hardware-today/ram-types/conclusions.html">
+            
+                    
+                    2.1.4. 結論
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="../commodity-hardware-today/dram-access-technical-details.html">
+            
+                <a href="../commodity-hardware-today/dram-access-technical-details.html">
+            
+                    
+                    2.2. DRAM 存取技術細節
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.2.1" data-path="../commodity-hardware-today/dram-access-technical-details/read-access-protocol.html">
+            
+                <a href="../commodity-hardware-today/dram-access-technical-details/read-access-protocol.html">
+            
+                    
+                    2.2.1. 讀取協定
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2.2" data-path="../commodity-hardware-today/dram-access-technical-details/precharge-and-activation.html">
+            
+                <a href="../commodity-hardware-today/dram-access-technical-details/precharge-and-activation.html">
+            
+                    
+                    2.2.2. 預充電與有效化
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2.3" data-path="../commodity-hardware-today/dram-access-technical-details/recharging.html">
+            
+                <a href="../commodity-hardware-today/dram-access-technical-details/recharging.html">
+            
+                    
+                    2.2.3. 再充電
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2.4" data-path="../commodity-hardware-today/dram-access-technical-details/memory-types.html">
+            
+                <a href="../commodity-hardware-today/dram-access-technical-details/memory-types.html">
+            
+                    
+                    2.2.4. 記憶體類型
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2.5" data-path="../commodity-hardware-today/dram-access-technical-details/conclusions.html">
+            
+                <a href="../commodity-hardware-today/dram-access-technical-details/conclusions.html">
+            
+                    
+                    2.2.5. 結論
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="../commodity-hardware-today/other-main-memory-users.html">
+            
+                <a href="../commodity-hardware-today/other-main-memory-users.html">
+            
+                    
+                    2.3. 其它主記憶體使用者
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../cpu-caches.html">
+            
+                <a href="../cpu-caches.html">
+            
+                    
+                    3. CPU 快取
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../cpu-caches/cpu-caches-in-the-big-picture.html">
+            
+                <a href="../cpu-caches/cpu-caches-in-the-big-picture.html">
+            
+                    
+                    3.1. 概觀 CPU 快取
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../cpu-caches/cache-operation-at-high-level.html">
+            
+                <a href="../cpu-caches/cache-operation-at-high-level.html">
+            
+                    
+                    3.2. 高階快取操作
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../cpu-caches/cpu-cache-implementation-details.html">
+            
+                <a href="../cpu-caches/cpu-cache-implementation-details.html">
+            
+                    
+                    3.3. CPU 快取實作細節
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.3.1" data-path="../cpu-caches/cpu-cache-implementation-details/associativity.html">
+            
+                <a href="../cpu-caches/cpu-cache-implementation-details/associativity.html">
+            
+                    
+                    3.3.1. 關聯度
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3.2" data-path="../cpu-caches/cpu-cache-implementation-details/measurements-of-cache-effects.html">
+            
+                <a href="../cpu-caches/cpu-cache-implementation-details/measurements-of-cache-effects.html">
+            
+                    
+                    3.3.2. 快取影響的量測
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3.3" data-path="../cpu-caches/cpu-cache-implementation-details/write-behavior.html">
+            
+                <a href="../cpu-caches/cpu-cache-implementation-details/write-behavior.html">
+            
+                    
+                    3.3.3. 寫入行為
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3.4" data-path="../cpu-caches/cpu-cache-implementation-details/multi-processor-support.html">
+            
+                <a href="../cpu-caches/cpu-cache-implementation-details/multi-processor-support.html">
+            
+                    
+                    3.3.4. 多處理器支援
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3.5" data-path="../cpu-caches/cpu-cache-implementation-details/other-details.html">
+            
+                <a href="../cpu-caches/cpu-cache-implementation-details/other-details.html">
+            
+                    
+                    3.3.5. 其它細節
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="../cpu-caches/instruction-cache.html">
+            
+                <a href="../cpu-caches/instruction-cache.html">
+            
+                    
+                    3.4. 指令快取
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.4.1" data-path="../cpu-caches/instruction-cache/self-modifying-code.html">
+            
+                <a href="../cpu-caches/instruction-cache/self-modifying-code.html">
+            
+                    
+                    3.4.1. 自我修改的程式碼
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="../cpu-caches/cache-miss-factors.html">
+            
+                <a href="../cpu-caches/cache-miss-factors.html">
+            
+                    
+                    3.5. 快取錯失的因素
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.5.1" data-path="../cpu-caches/cache-miss-factors/cache-and-memory-bandwidth.html">
+            
+                <a href="../cpu-caches/cache-miss-factors/cache-and-memory-bandwidth.html">
+            
+                    
+                    3.5.1. 快取與記憶體頻寬
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5.2" data-path="../cpu-caches/cache-miss-factors/critical-word-load.html">
+            
+                <a href="../cpu-caches/cache-miss-factors/critical-word-load.html">
+            
+                    
+                    3.5.2. 關鍵字組的載入
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5.3" data-path="../cpu-caches/cache-miss-factors/cache-placement.html">
+            
+                <a href="../cpu-caches/cache-miss-factors/cache-placement.html">
+            
+                    
+                    3.5.3. 快取的配置
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5.4" data-path="../cpu-caches/cache-miss-factors/fsb-influence.html">
+            
+                <a href="../cpu-caches/cache-miss-factors/fsb-influence.html">
+            
+                    
+                    3.5.4. FSB 的影響
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../virtual-memory.html">
+            
+                <a href="../virtual-memory.html">
+            
+                    
+                    4. 虛擬記憶體
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="../virtual-memory/simplest-address-translation.html">
+            
+                <a href="../virtual-memory/simplest-address-translation.html">
+            
+                    
+                    4.1. 最簡單的位址轉譯
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="../virtual-memory/multi-level-page-tables.html">
+            
+                <a href="../virtual-memory/multi-level-page-tables.html">
+            
+                    
+                    4.2. 多層級分頁表
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="../virtual-memory/optimizing-page-table-access.html">
+            
+                <a href="../virtual-memory/optimizing-page-table-access.html">
+            
+                    
+                    4.3. 最佳化分頁表存取
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.3.1" data-path="../virtual-memory/optimizing-page-table-access/caveats-of-using-a-tlb.html">
+            
+                <a href="../virtual-memory/optimizing-page-table-access/caveats-of-using-a-tlb.html">
+            
+                    
+                    4.3.1. 使用 TLB 的預警
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3.2" data-path="../virtual-memory/optimizing-page-table-access/influencing-tlb-performance.html">
+            
+                <a href="../virtual-memory/optimizing-page-table-access/influencing-tlb-performance.html">
+            
+                    
+                    4.3.2. 影響 TLB 效能
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4" data-path="../virtual-memory/impact-of-virtualization.html">
+            
+                <a href="../virtual-memory/impact-of-virtualization.html">
+            
+                    
+                    4.4. 虛擬化的影響
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="../numa-support.html">
+            
+                <a href="../numa-support.html">
+            
+                    
+                    5. NUMA 支援
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="../numa-support/numa-hardware.html">
+            
+                <a href="../numa-support/numa-hardware.html">
+            
+                    
+                    5.1. NUMA 硬體
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="../numa-support/os-support-for-numa.html">
+            
+                <a href="../numa-support/os-support-for-numa.html">
+            
+                    
+                    5.2. 作業系統對 NUMA 的支援
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.3" data-path="../numa-support/published-information.html">
+            
+                <a href="../numa-support/published-information.html">
+            
+                    
+                    5.3. 被發布的資訊
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.4" data-path="../numa-support/remote-access-costs.html">
+            
+                <a href="../numa-support/remote-access-costs.html">
+            
+                    
+                    5.4. 遠端存取成本
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="../what-programmers-can-do.html">
+            
+                <a href="../what-programmers-can-do.html">
+            
+                    
+                    6. 程式開發者能做些什麼？
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.1" data-path="../what-programmers-can-do/bypassing-the-cache.html">
+            
+                <a href="../what-programmers-can-do/bypassing-the-cache.html">
+            
+                    
+                    6.1. 繞過快取
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.2" data-path="../what-programmers-can-do/cache-access.html">
+            
+                <a href="../what-programmers-can-do/cache-access.html">
+            
+                    
+                    6.2. 快取存取
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.2.1" data-path="../what-programmers-can-do/cache-access/optimizing-level-1-data-cache-access.html">
+            
+                <a href="../what-programmers-can-do/cache-access/optimizing-level-1-data-cache-access.html">
+            
+                    
+                    6.2.1. 最佳化一階資料快取存取
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.2.2" data-path="../what-programmers-can-do/cache-access/optimizing-level-1-instruction-cache-access.html">
+            
+                <a href="../what-programmers-can-do/cache-access/optimizing-level-1-instruction-cache-access.html">
+            
+                    
+                    6.2.2. 最佳化一階指令快取存取
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.2.3" data-path="../what-programmers-can-do/cache-access/optimizing-level-2-and-higher-cache-access.html">
+            
+                <a href="../what-programmers-can-do/cache-access/optimizing-level-2-and-higher-cache-access.html">
+            
+                    
+                    6.2.3. 最佳化二階與更高階快取存取
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.2.4" data-path="../what-programmers-can-do/cache-access/optimizing-tlb-usage.html">
+            
+                <a href="../what-programmers-can-do/cache-access/optimizing-tlb-usage.html">
+            
+                    
+                    6.2.4. 最佳化 TLB 使用
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3" data-path="../what-programmers-can-do/prefetching.html">
+            
+                <a href="../what-programmers-can-do/prefetching.html">
+            
+                    
+                    6.3. 預取
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.3.1" data-path="../what-programmers-can-do/prefetching/hardware-prefetching.html">
+            
+                <a href="../what-programmers-can-do/prefetching/hardware-prefetching.html">
+            
+                    
+                    6.3.1. 硬體預取
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3.2" data-path="../what-programmers-can-do/prefetching/software-prefetching.html">
+            
+                <a href="../what-programmers-can-do/prefetching/software-prefetching.html">
+            
+                    
+                    6.3.2. 軟體預取
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3.3" data-path="../what-programmers-can-do/prefetching/special-kind-of-prefetch-speculation.html">
+            
+                <a href="../what-programmers-can-do/prefetching/special-kind-of-prefetch-speculation.html">
+            
+                    
+                    6.3.3. 特殊的預取類型：猜測
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3.4" data-path="../what-programmers-can-do/prefetching/helper-threads.html">
+            
+                <a href="../what-programmers-can-do/prefetching/helper-threads.html">
+            
+                    
+                    6.3.4. 輔助執行緒
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3.5" data-path="../what-programmers-can-do/prefetching/direct-cache-access.html">
+            
+                <a href="../what-programmers-can-do/prefetching/direct-cache-access.html">
+            
+                    
+                    6.3.5. 直接快取存取
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.4" data-path="../what-programmers-can-do/multi-thread-optimizations.html">
+            
+                <a href="../what-programmers-can-do/multi-thread-optimizations.html">
+            
+                    
+                    6.4. 多執行緒最佳化
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.4.1" data-path="../what-programmers-can-do/multi-thread-optimizations/concurrency-optimizations.html">
+            
+                <a href="../what-programmers-can-do/multi-thread-optimizations/concurrency-optimizations.html">
+            
+                    
+                    6.4.1. 並行最佳化
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.4.2" data-path="../what-programmers-can-do/multi-thread-optimizations/atomicity-optimizations.html">
+            
+                <a href="../what-programmers-can-do/multi-thread-optimizations/atomicity-optimizations.html">
+            
+                    
+                    6.4.2. 最小操作的最佳化
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.4.3" data-path="../what-programmers-can-do/multi-thread-optimizations/bandwidth-considerations.html">
+            
+                <a href="../what-programmers-can-do/multi-thread-optimizations/bandwidth-considerations.html">
+            
+                    
+                    6.4.3. 頻寬考量
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5" data-path="../what-programmers-can-do/numa-programming.html">
+            
+                <a href="../what-programmers-can-do/numa-programming.html">
+            
+                    
+                    6.5. NUMA 程式設計
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.5.1" data-path="../what-programmers-can-do/numa-programming/memory-policy.html">
+            
+                <a href="../what-programmers-can-do/numa-programming/memory-policy.html">
+            
+                    
+                    6.5.1. 記憶體策略
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.2" data-path="../what-programmers-can-do/numa-programming/specifying-policies.html">
+            
+                <a href="../what-programmers-can-do/numa-programming/specifying-policies.html">
+            
+                    
+                    6.5.2. 指定策略
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.3" data-path="../what-programmers-can-do/numa-programming/swapping-and-policies.html">
+            
+                <a href="../what-programmers-can-do/numa-programming/swapping-and-policies.html">
+            
+                    
+                    6.5.3. 置換與策略
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.4" data-path="../what-programmers-can-do/numa-programming/vma-policy.html">
+            
+                <a href="../what-programmers-can-do/numa-programming/vma-policy.html">
+            
+                    
+                    6.5.4. VMA 策略
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.5" data-path="../what-programmers-can-do/numa-programming/querying-node-information.html">
+            
+                <a href="../what-programmers-can-do/numa-programming/querying-node-information.html">
+            
+                    
+                    6.5.5. 查詢節點資訊
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.6" data-path="../what-programmers-can-do/numa-programming/cpu-and-node-sets.html">
+            
+                <a href="../what-programmers-can-do/numa-programming/cpu-and-node-sets.html">
+            
+                    
+                    6.5.6. CPU 與節點集合
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.7" data-path="../what-programmers-can-do/numa-programming/explicit-numa-optimizations.html">
+            
+                <a href="../what-programmers-can-do/numa-programming/explicit-numa-optimizations.html">
+            
+                    
+                    6.5.7. 明確的 NUMA 最佳化
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.8" data-path="../what-programmers-can-do/numa-programming/utilizing-all-bandwidth.html">
+            
+                <a href="../what-programmers-can-do/numa-programming/utilizing-all-bandwidth.html">
+            
+                    
+                    6.5.8. 利用所有頻寬
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="../memory-performance-tools.html">
+            
+                <a href="../memory-performance-tools.html">
+            
+                    
+                    7. 記憶體性能量測工具
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.8.1" data-path="memory-operation-profiling.html">
+            
+                <a href="memory-operation-profiling.html">
+            
+                    
+                    7.1. 記憶體操作分析
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.2" data-path="simulating-cpu-caches.html">
+            
+                <a href="simulating-cpu-caches.html">
+            
+                    
+                    7.2. 模擬處理器快取行為
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.3" data-path="measuring-memory-usage.html">
+            
+                <a href="measuring-memory-usage.html">
+            
+                    
+                    7.3. 計算記憶體使用
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.4" data-path="improving-branch-prediction.html">
+            
+                <a href="improving-branch-prediction.html">
+            
+                    
+                    7.4. 改善分支預測
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.8.5" data-path="page-fault-optimization.html">
+            
+                <a href="page-fault-optimization.html">
+            
+                    
+                    7.5. 分頁錯誤最佳化
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="../examples-and-benchmark-programs.html">
+            
+                <a href="../examples-and-benchmark-programs.html">
+            
+                    
+                    A. 範例與基準測試程式
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.1" data-path="../examples-and-benchmark-programs/matrix-multiplication.html">
+            
+                <a href="../examples-and-benchmark-programs/matrix-multiplication.html">
+            
+                    
+                    A.1 矩陣乘法
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="../bibliography.html">
+            
+                <a href="../bibliography.html">
+            
+                    
+                    參考書目
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            本書使用 GitBook 釋出
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >7.5. 分頁錯誤最佳化</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="75-&#x5206;&#x9801;&#x932F;&#x8AA4;&#x6700;&#x4F73;&#x5316;">7.5 &#x5206;&#x9801;&#x932F;&#x8AA4;&#x6700;&#x4F73;&#x5316;</h1>
+<p>&#x5728; Linux &#x9019;&#x6A23;&#x5177;&#x6709;&#x96A8;&#x9078;&#x5206;&#x9801; (demand paging) &#x7684;&#x4F5C;&#x696D;&#x7CFB;&#x7D71;&#x4E0A;&#xFF0C;&#x4F7F;&#x7528; <a href="https://www.man7.org/linux/man-pages/man2/mmap.2.html" target="_blank"><code>mmap</code></a> &#x53EA;&#x4FEE;&#x6539;&#x9801;&#x9762;&#x8868;&#x5167;&#x5BB9;&#xFF0C;&#x5B83;&#x78BA;&#x4FDD;&#x5C0D;&#x6A94;&#x6848;&#x652F;&#x6301;&#x7684;&#x9801;&#x9762;&#x53EF;&#x627E;&#x5230;&#x5E95;&#x5C64;&#x7684;&#x8CC7;&#x6599;&#x3002;&#x5C0D;&#x65BC;&#x533F;&#x540D;&#x7684;&#x8A18;&#x61B6;&#x9AD4;&#x7A7A;&#x9593;&#xFF0C;&#x5247;&#x63D0;&#x4F9B;&#x521D;&#x59CB;&#x5316;&#x7684;&#x9801;&#x9762;&#x4E26;&#x5C07;&#x5167;&#x5BB9;&#x8A2D;&#x5B9A;&#x70BA; 0&#x3002;<code>mmap</code> &#x4F7F;&#x7528;&#x6642;&#x4E26;&#x4E0D;&#x6703;&#x5BE6;&#x969B;&#x914D;&#x7F6E;&#x8A18;&#x61B6;&#x9AD4;&#x3002;&#x7B2C;&#x4E00;&#x6B21;&#x8B80;&#x53D6;&#x9801;&#x9762;&#x6642;&#x4E0D;&#x7BA1;&#x662F;&#x8B80;&#x5BEB;&#x8CC7;&#x6599;&#x6216;&#x57F7;&#x884C;&#x7A0B;&#x5F0F;&#x78BC;&#x6642;&#xFF0C;&#x624D;&#x6703;&#x771F;&#x7684;&#x914D;&#x7F6E;&#x8A18;&#x61B6;&#x9AD4;&#x7A7A;&#x9593;&#x3002;&#x7576;&#x51FA;&#x73FE;&#x5206;&#x9801;&#x932F;&#x8AA4;&#x6642;&#xFF0C;&#x4F5C;&#x696D;&#x7CFB;&#x7D71;&#x6838;&#x5FC3;&#x6703;&#x6839;&#x64DA;&#x9801;&#x8868;&#x6A39;&#x6C7A;&#x5B9A;&#x9700;&#x8981;&#x5728;&#x9801;&#x9762;&#x4E0A;&#x51FA;&#x73FE;&#x7684;&#x8CC7;&#x6599;&#xFF0C;&#x9032;&#x884C;&#x5206;&#x9801;&#x932F;&#x8AA4;&#x8655;&#x7406;&#x3002;&#x8655;&#x7406;&#x5206;&#x9801;&#x932F;&#x8AA4;&#x7684;&#x6210;&#x672C;&#x5F88;&#x9AD8;&#xFF0C;&#x4F46;&#x5728;&#x884C;&#x7A0B;&#x4F7F;&#x7528;&#x6BCF;&#x500B;&#x8A18;&#x61B6;&#x9AD4;&#x9801;&#x9762;&#x90FD;&#x6642;&#x5E38;&#x767C;&#x751F;&#x3002;</p>
+<p>&#x70BA;&#x4E86;&#x964D;&#x4F4E;&#x5206;&#x9801;&#x932F;&#x8AA4;&#x7684;&#x6210;&#x672C;&#xFF0C;&#x6E1B;&#x5C11;&#x4F7F;&#x7528;&#x7684;&#x7E3D;&#x9801;&#x9762;&#x6578;&#x662F;&#x500B;&#x597D;&#x65B9;&#x6CD5;&#x3002;&#x900F;&#x904E;&#x6E1B;&#x5C11;&#x7A0B;&#x5F0F;&#x78BC;&#x6578;&#x91CF;&#x53EF;&#x5E6B;&#x52A9;&#x5BE6;&#x73FE;&#x6B64;&#x76EE;&#x7684;&#x3002;&#x70BA;&#x4E86;&#x6E1B;&#x5C11;&#x7279;&#x5B9A;&#x7A0B;&#x5F0F;&#x8DEF;&#x5F91;&#xFF08;&#x4F8B;&#x5982;&#x7A0B;&#x5F0F;&#x555F;&#x52D5;&#xFF09;&#x7684;&#x6210;&#x672C;&#xFF0C;&#x91CD;&#x65B0;&#x6392;&#x5217;&#x7A0B;&#x5F0F;&#x78BC;&#x4EE5;&#x4FBF;&#x5728;&#x8A72;&#x7A0B;&#x5F0F;&#x8DEF;&#x5F91;&#x4E2D;&#x6E1B;&#x5C11;&#x63A5;&#x89F8;&#x5230;&#x7684;&#x9801;&#x9762;&#x6578;&#x91CF;&#x4E5F;&#x6709;&#x5E6B;&#x52A9;&#x3002;&#x4F46;&#x8981;&#x6B63;&#x78BA;&#x6392;&#x5E8F;&#x4E26;&#x4E0D;&#x5BB9;&#x6613;&#x3002;</p>
+<p>&#x5716; 7.8 &#x7684;&#x7BC4;&#x4F8B;&#x4E2D;&#xFF0C;&#x7A0B;&#x5F0F;&#x5F9E;&#x5730;&#x5740; 3000000B5016 &#x958B;&#x59CB;&#x57F7;&#x884C;&#xFF0C;&#x7CFB;&#x7D71;&#x63A5;&#x8457;&#x8B80;&#x53D6;&#x4F4D;&#x65BC;&#x5730;&#x5740; 300000000016 &#x7684;&#x9801;&#x9762;&#x3002;&#x4E0D;&#x4E45;&#x5F8C;&#xFF0C;&#x4E0B;&#x4E00;&#x500B;&#x9801;&#x9762;&#x4E5F;&#x8DDF;&#x8457;&#x88AB;&#x8F09;&#x5165;&#xFF0C;&#x88AB;&#x547C;&#x53EB;&#x7684;&#x51FD;&#x5F0F; <code>_dl_start</code> &#x4F4D;&#x65BC;&#x6B64;&#x9801;&#x9762;&#x4E0A;&#x3002;&#x6700;&#x521D;&#x7684;&#x7A0B;&#x5F0F;&#x78BC;&#x5B58;&#x53D6;&#x4F4D;&#x65BC;&#x5730;&#x5740; 7FF00000016 &#x7684;&#x8B8A;&#x6578;&#x3002;&#x767C;&#x751F;&#x5728;&#x7B2C;&#x4E00;&#x6B21;&#x5206;&#x9801;&#x932F;&#x8AA4;&#x5F8C; 3,320 &#x500B;&#x6307;&#x4EE4;&#x9031;&#x671F;&#xFF0C;&#x5F88;&#x53EF;&#x80FD;&#x662F;&#x7A0B;&#x5F0F;&#x7684;&#x7B2C;&#x4E8C;&#x9053;&#x6307;&#x4EE4;&#xFF08;&#x7B2C;&#x4E00;&#x500B;&#x6307;&#x4EE4;&#x5F8C;&#x4E09;&#x500B;&#x4F4D;&#x5143;&#x8655;&#xFF09;&#x3002;&#x5982;&#x679C;&#x67E5;&#x770B;&#x7A0B;&#x5F0F;&#x78BC;&#xFF0C;&#x6CE8;&#x610F;&#x9019;&#x500B;&#x8A18;&#x61B6;&#x9AD4;&#x5B58;&#x53D6;&#x6709;&#x4E00;&#x4E9B;&#x5947;&#x602A;&#x7684;&#x5730;&#x65B9;&#x3002;&#x6B64;&#x6307;&#x4EE4;&#x50C5;&#x662F;&#x547C;&#x53EB;&#x6307;&#x4EE4;&#xFF0C;&#x4E26;&#x6C92;&#x6709;&#x8F09;&#x5165;&#x6216;&#x5132;&#x5B58;&#x4EFB;&#x4F55;&#x8CC7;&#x6599;&#xFF0C;&#x4F46;&#x662F;&#x5B83;&#x6703;&#x5728;&#x5806;&#x758A;&#x4E0A;&#x5132;&#x5B58;&#x8FD4;&#x56DE;&#x4F4D;&#x5740;&#x3002;&#x4F46;&#x9019;&#x4E26;&#x4E0D;&#x662F;&#x884C;&#x7A0B;&#x7684;&#x5806;&#x758A;&#xFF0C;&#x800C;&#x662F; valgrind &#x5167;&#x90E8;&#x7684;&#x5806;&#x758A; &#x3002;&#x9019;&#x8868;&#x793A;&#x5728;&#x89E3;&#x91CB;&#x9801;&#x9762;&#x7F6E;&#x63DB;&#x7684;&#x7D50;&#x679C;&#x6642;&#xFF0C;valgrind &#x4E5F;&#x6703;&#x9020;&#x6210;&#x5F71;&#x97FF;&#x3002;</p>
+<pre class="language-"><code class="lang-c"><span class="token number">0</span> <span class="token number">0x3000000000</span> C           <span class="token number">0</span> <span class="token number">0x3000000B50</span><span class="token operator">:</span> <span class="token punctuation">(</span>within <span class="token operator">/</span>lib64<span class="token operator">/</span>ld<span class="token operator">-</span><span class="token number">2.5</span><span class="token punctuation">.</span>so<span class="token punctuation">)</span>
+<span class="token number">1</span> <span class="token number">0</span>x <span class="token number">7FF</span><span class="token number">000000</span> D        <span class="token number">3320</span> <span class="token number">0x3000000B53</span><span class="token operator">:</span> <span class="token punctuation">(</span>within <span class="token operator">/</span>lib64<span class="token operator">/</span>ld<span class="token operator">-</span><span class="token number">2.5</span><span class="token punctuation">.</span>so<span class="token punctuation">)</span>
+<span class="token number">2</span> <span class="token number">0x3000001000</span> C       <span class="token number">58270</span> <span class="token number">0x3000001080</span><span class="token operator">:</span> <span class="token function">_dl_start</span> <span class="token punctuation">(</span>in <span class="token operator">/</span>lib64<span class="token operator">/</span>ld<span class="token operator">-</span><span class="token number">2.5</span><span class="token punctuation">.</span>so<span class="token punctuation">)</span>
+<span class="token number">3</span> <span class="token number">0x3000219000</span> D      <span class="token number">128020</span> <span class="token number">0x30000010AE</span><span class="token operator">:</span> <span class="token function">_dl_start</span> <span class="token punctuation">(</span>in <span class="token operator">/</span>lib64<span class="token operator">/</span>ld<span class="token operator">-</span><span class="token number">2.5</span><span class="token punctuation">.</span>so<span class="token punctuation">)</span>
+<span class="token number">4</span> <span class="token number">0x300021A000</span> D      <span class="token number">132170</span> <span class="token number">0x30000010B5</span><span class="token operator">:</span> <span class="token function">_dl_start</span> <span class="token punctuation">(</span>in <span class="token operator">/</span>lib64<span class="token operator">/</span>ld<span class="token operator">-</span><span class="token number">2.5</span><span class="token punctuation">.</span>so<span class="token punctuation">)</span>
+<span class="token number">5</span> <span class="token number">0x3000008000</span> C    <span class="token number">10489930</span> <span class="token number">0x3000008B20</span><span class="token operator">:</span> <span class="token function">_dl_setup_hash</span> <span class="token punctuation">(</span>in <span class="token operator">/</span>lib64<span class="token operator">/</span>ld<span class="token operator">-</span><span class="token number">2.5</span><span class="token punctuation">.</span>so<span class="token punctuation">)</span>
+<span class="token number">6</span> <span class="token number">0x3000012000</span> C    <span class="token number">13880830</span> <span class="token number">0x3000012CC0</span><span class="token operator">:</span> <span class="token function">_dl_sysdep_start</span> <span class="token punctuation">(</span>in <span class="token operator">/</span>lib64<span class="token operator">/</span>ld<span class="token operator">-</span><span class="token number">2.5</span><span class="token punctuation">.</span>so<span class="token punctuation">)</span>
+<span class="token number">7</span> <span class="token number">0x3000013000</span> C    <span class="token number">18091130</span> <span class="token number">0x3000013440</span><span class="token operator">:</span> <span class="token function">brk</span> <span class="token punctuation">(</span>in <span class="token operator">/</span>lib64<span class="token operator">/</span>ld<span class="token operator">-</span><span class="token number">2.5</span><span class="token punctuation">.</span>so<span class="token punctuation">)</span>
+<span class="token number">8</span> <span class="token number">0x3000014000</span> C    <span class="token number">19123850</span> <span class="token number">0x3000014020</span><span class="token operator">:</span> <span class="token function">strlen</span> <span class="token punctuation">(</span>in <span class="token operator">/</span>lib64<span class="token operator">/</span>ld<span class="token operator">-</span><span class="token number">2.5</span><span class="token punctuation">.</span>so<span class="token punctuation">)</span>
+<span class="token number">9</span> <span class="token number">0x3000002000</span> C    <span class="token number">23772480</span> <span class="token number">0x3000002450</span><span class="token operator">:</span> <span class="token function">dl_main</span> <span class="token punctuation">(</span>in <span class="token operator">/</span>lib64<span class="token operator">/</span>ld<span class="token operator">-</span><span class="token number">2.5</span><span class="token punctuation">.</span>so<span class="token punctuation">)</span>
+</code></pre>
+<p>&#x5716; 7.8&#xFF1A;pagein &#x8F38;&#x51FA;&#x7D50;&#x679C;</p>
+<p><a href="https://manpages.ubuntu.com/manpages/jammy/man1/pagein.1.html" target="_blank">pagein</a> &#x7684;&#x8F38;&#x51FA;&#x53EF;&#x7528;&#x4F86;&#x78BA;&#x5B9A;&#x7A0B;&#x5F0F;&#x78BC;&#x4E2D;&#x6700;&#x7406;&#x60F3;&#x7684;&#x76F8;&#x9130;&#x9806;&#x5E8F;&#x3002;&#x5F9E; <code>/lib64/ld-2.5.so</code> &#x7684;&#x7A0B;&#x5F0F;&#x78BC;&#x53EF;&#x767C;&#x73FE;&#xFF0C;&#x6700;&#x521D;&#x7684;&#x6307;&#x4EE4;&#x547C;&#x53EB;&#x51FD;&#x5F0F;&#x70BA; <code>_dl_start</code> &#xFF0C;&#x4F46;&#x9019;&#x4E8C;&#x500B;&#x51FD;&#x5F0F;&#x4F4D;&#x65BC;&#x4E0D;&#x540C;&#x7684;&#x9801;&#x9762;&#x3002;&#x91CD;&#x65B0;&#x6392;&#x5217;&#x7A0B;&#x5F0F;&#x78BC;&#x6703;&#x628A;&#x7A0B;&#x5F0F;&#x78BC;&#x79FB;&#x52D5;&#x5230;&#x540C;&#x4E00;&#x9801;&#x9762;&#x4EE5;&#x907F;&#x514D;&#x6216;&#x5EF6;&#x9072;&#x5206;&#x9801;&#x932F;&#x8AA4;&#x3002;&#x4F46;&#x8981;&#x78BA;&#x8A8D;&#x6700;&#x4F73;&#x7A0B;&#x5F0F;&#x78BC;&#x9806;&#x5E8F;&#x662F;&#x4E00;&#x500B;&#x7E41;&#x7463;&#x7684;&#x904E;&#x7A0B;&#x3002;&#x7531;&#x65BC;&#x8A2D;&#x8A08;&#x4E0A; pagein &#x4E0D;&#x6703;&#x7D00;&#x9304;&#x7B2C;&#x4E8C;&#x6B21;&#x4F7F;&#x7528;&#x9801;&#x9762;&#x7684;&#x7D00;&#x9304;&#xFF0C;&#x56E0;&#x6B64;&#x8981;&#x4F7F;&#x7528;&#x8A66;&#x932F;&#x6CD5;&#x4F86;&#x67E5;&#x770B;&#x66F4;&#x6539;&#x7684;&#x5F71;&#x97FF;&#x3002;&#x4E26;&#x4F7F;&#x7528;&#x547C;&#x53EB;&#x5716;&#x5206;&#x6790;&#x4F86;&#x731C;&#x6E2C;&#x53EF;&#x80FD;&#x7684;&#x547C;&#x53EB;&#x5E8F;&#x5217;&#xFF0C;&#x6709;&#x52A9;&#x65BC;&#x52A0;&#x5FEB;&#x5C0D;&#x51FD;&#x5F0F;&#x548C;&#x8B8A;&#x6578;&#x6392;&#x5E8F;&#x7684;&#x904E;&#x7A0B;&#x3002;</p>
+<p>&#x5982;&#x679C;&#x53EA;&#x60F3;&#x6709;&#x7C97;&#x7565;&#x6982;&#x5FF5;&#xFF0C;&#x53EF;&#x901A;&#x904E;&#x67E5;&#x770B;&#x7D44;&#x6210;&#x53EF;&#x57F7;&#x884C;&#x6A94;&#x6216;&#x52D5;&#x614B;&#x51FD;&#x5F0F;&#x5EAB;&#x7684;&#x76EE;&#x6A19;&#x6A94;&#x4F86;&#x67E5;&#x770B;&#x547C;&#x53EB;&#x5E8F;&#x5217;&#x3002;&#x5F9E;&#x55AE;&#x500B;&#x6216;&#x591A;&#x500B;&#x9032;&#x5165;&#x9EDE;&#xFF08;&#x5373;&#x51FD;&#x5F0F;&#x540D;&#x7A31;&#xFF09;&#x958B;&#x59CB;&#xFF0C;&#x53EF;&#x8A08;&#x7B97;&#x51FD;&#x5F0F;&#x7684;&#x4E92;&#x76F8;&#x4F9D;&#x8CF4;&#x7684;&#x95DC;&#x4FC2;&#x3002;&#x4EE5;&#x76EE;&#x6A19;&#x6A94;&#x6848; (object file) &#x4E0A;&#x4F86;&#x8AAA;&#x5F88;&#x5BB9;&#x6613;&#x3002;&#x6BCF;&#x4E00;&#x8F2A;&#x958B;&#x59CB;&#x4E4B;&#x524D;&#x5148;&#x78BA;&#x5B9A;&#x76EE;&#x6A19;&#x6A94;&#x6848;&#x662F;&#x5426;&#x5305;&#x542B;&#x6240;&#x9700;&#x51FD;&#x5F0F;&#x548C;&#x8B8A;&#x6578;&#x7684;&#x3002;&#x4F46;&#x7A2E;&#x5B50; (seed) &#x96C6;&#x5408;&#x5FC5;&#x9808;&#x660E;&#x78BA;&#x6307;&#x5B9A;&#x3002;&#x7136;&#x5F8C;&#x5C07;&#x9019;&#x4E9B;&#x76EE;&#x6A94;&#x6848;&#x4E2D;&#x6240;&#x6709;&#x672A;&#x5B9A;&#x7FA9;&#x7684;&#x5F15;&#x7528; (undefined reference) &#x90FD;&#x52A0;&#x5230;&#x6240;&#x9700;&#x7B26;&#x865F;&#x96C6;&#x5408; (needed symbols)&#x3002;&#x91CD;&#x8907;&#x57F7;&#x884C;&#x76F4;&#x5230;&#x96C6;&#x5408;&#x7A69;&#x5B9A;&#x3002;</p>
+<p>&#x7B2C;&#x4E8C;&#x6B65;&#x9A5F;&#x662F;&#x6C7A;&#x5B9A;&#x9806;&#x5E8F;&#x3002;&#x5404;&#x500B;&#x76EE;&#x6A19;&#x6A94;&#x6848;&#x5E0C;&#x671B;&#x80FD;&#x4F7F;&#x7528;&#x6700;&#x5C11;&#x7684;&#x9801;&#x9762;&#x6578;&#x3002;&#x66F4;&#x9032;&#x4E00;&#x6B65;&#x9054;&#x5230;&#x6C92;&#x6709;&#x4EFB;&#x4F55;&#x4E00;&#x500B;&#x51FD;&#x5F0F;&#x6A6B;&#x8DE8;&#x4E0D;&#x540C;&#x9801;&#x9762;&#x3002;&#x6B64;&#x60C5;&#x6CC1;&#x4E2D;&#x7684;&#x8907;&#x96DC;&#x4E4B;&#x8655;&#x662F;&#xFF1A;&#x70BA;&#x4E86;&#x6700;&#x4F73;&#x5730;&#x5B89;&#x6392;&#x76EE;&#x6A19;&#x6A94;&#x6848;&#xFF0C;&#x5FC5;&#x9808;&#x77E5;&#x9053;&#x9023;&#x7D50;&#x5668; (linker) &#x4E4B;&#x5F8C;&#x7684;&#x884C;&#x70BA;&#x3002;&#x5728;&#x6B64;&#x4F8B;&#x9023;&#x7D50;&#x5668;&#x5C07;&#x6309;&#x7167;&#x5B83;&#x5011;&#x51FA;&#x73FE;&#x5728;&#x8F38;&#x5165;&#x6A94;&#x548C;&#x547D;&#x4EE4;&#x884C;&#x4E2D;&#x7684;&#x9806;&#x5E8F;&#x5C07;&#x76EE;&#x6A19;&#x6A94;&#x6848;&#x653E;&#x5165;&#x53EF;&#x57F7;&#x884C;&#x6A94;&#x6216; <a href="https://en.wikipedia.org/wiki/Dynamic_linker" target="_blank">DSO</a> &#x4E2D;&#x3002;&#x5C0D;&#x7A0B;&#x5F0F;&#x958B;&#x767C;&#x8005;&#x4F86;&#x8AAA;&#x76F8;&#x5C0D;&#x53EF;&#x9810;&#x671F;&#x3002;</p>
+<p>&#x9858;&#x610F;&#x6295;&#x5165;&#x66F4;&#x591A;&#x6642;&#x9593;&#x7684;&#x4F7F;&#x7528;&#x8005;&#x53EF;&#x4F7F;&#x7528;&#x81EA;&#x52D5;&#x8FFD;&#x8E64;&#x547C;&#x53EB;&#x7684;&#x51FD;&#x5F0F;&#x4F86;&#x91CD;&#x65B0;&#x6392;&#x5E8F;&#xFF0C;&#x65B9;&#x6CD5;&#x662F;&#x900F;&#x904E; gcc &#x5728; <a href="https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html" target="_blank"><code>-finstrument-functions</code></a> &#x9078;&#x9805;&#x63D2;&#x5165; <code>__cyg_profile_func_enter</code> &#x548C; <code>__cyg_profile_func_exit</code> &#x3002;&#x8A73;&#x7D30;&#x4F7F;&#x7528;&#x65B9;&#x5F0F;&#x8DDF;&#x529F;&#x80FD;&#x8ACB;&#x53C3;&#x95B1; gcc &#x4F7F;&#x7528;&#x624B;&#x518A;&#x4EE5;&#x7372;&#x53D6;&#x6709;&#x95DC;&#x9019;&#x4E9B; <code>__cyg_*</code><sup><a href="#fn_&#x8B6F;&#x8A3B;1" id="reffn_&#x8B6F;&#x8A3B;1">&#x8B6F;&#x8A3B;1</a></sup> &#x4F7F;&#x7528;&#x754C;&#x9762;&#x7684;&#x66F4;&#x591A;&#x8CC7;&#x8A0A;&#x3002;&#x901A;&#x904E;&#x8FFD;&#x8E64;&#x7A0B;&#x5F0F;&#x7684;&#x57F7;&#x884C;&#xFF0C;&#x7A0B;&#x5F0F;&#x958B;&#x767C;&#x8005;&#x53EF;&#x66F4;&#x6E96;&#x78BA;&#x5730;&#x78BA;&#x5B9A;&#x51FD;&#x5F0F;&#x547C;&#x53EB;&#x93C8;&#x3002; [17] &#x7684;&#x7D50;&#x679C;&#x662F;&#x901A;&#x904E;&#x91CD;&#x65B0;&#x6392;&#x5E8F;&#x51FD;&#x5F0F;&#x4F86;&#x6E1B;&#x5C11; 5&#xFF05; &#x7684;&#x555F;&#x52D5;&#x6210;&#x672C;&#x3002;&#x4E3B;&#x8981;&#x597D;&#x8655;&#x5728;&#x65BC;&#x6E1B;&#x5C11;&#x4E86;&#x5206;&#x9801;&#x932F;&#x8AA4;&#x6578;&#x91CF;&#xFF0C;&#x4F46; TLB &#x5FEB;&#x53D6;&#x4E5F;&#x767C;&#x63EE;&#x4E86;&#x4F5C;&#x7528;&#x56E0;&#x70BA;&#x5728;&#x865B;&#x64EC;&#x5316;&#x74B0;&#x5883;&#x4E2D;&#xFF0C;TLB &#x672A;&#x547D;&#x4E2D;&#x7684;&#x4EE3;&#x50F9;&#x8B8A;&#x5F97;&#x66F4;&#x52A0;&#x6602;&#x8CB4;&#x3002;</p>
+<p>&#x900F;&#x904E; pagein &#x5DE5;&#x5177;&#x7684;&#x5206;&#x6790;&#x7D50;&#x679C;&#x8207;&#x547C;&#x53EB;&#x9806;&#x5E8F;&#x8CC7;&#x8A0A;&#xFF0C;&#x53EF;&#x80FD;&#x5C0D;&#x6E1B;&#x5C11;&#x7A0B;&#x5F0F;&#x4E2D;&#x67D0;&#x4E9B;&#x968E;&#x6BB5;&#xFF08;&#x4F8B;&#x5982;&#x555F;&#x52D5;&#x968E;&#x6BB5;&#xFF09;&#x5206;&#x9801;&#x932F;&#x8AA4;&#x6578;&#x91CF;&#x6709;&#x6240;&#x5E6B;&#x52A9;&#x3002;</p>
+<p>Linux &#x7CFB;&#x7D71;&#x6838;&#x5FC3;&#x63D0;&#x4F9B;&#x4E86;&#x4E8C;&#x500B;&#x984D;&#x5916;&#x7684;&#x6A5F;&#x5236;&#x53EF;&#x907F;&#x514D;&#x9801;&#x932F;&#x8AA4;&#x3002;&#x7B2C;&#x4E00;&#x500B;&#x6A5F;&#x5236;&#x662F; <code>mmap</code> &#x7CFB;&#x7D71;&#x547C;&#x53EB;&#x7684;&#x6A19;&#x8A8C; (flag) &#xFF0C;&#x53EF;&#x544A;&#x8A34;&#x4F5C;&#x696D;&#x7CFB;&#x7D71;&#x6838;&#x5FC3;&#x5148;&#x53BB;&#x4FEE;&#x6539;&#x9801;&#x9762;&#x8868;&#x7684;&#x8CC7;&#x6599;&#xFF0C;&#x751A;&#x81F3;&#x5C0D;&#x6620;&#x5C04;&#x5340;&#x57DF;&#x4E2D;&#x7684;&#x6240;&#x6709;&#x9801;&#x9762;&#x5148;&#x6A19;&#x8A18;&#x5206;&#x9801;&#x932F;&#x8AA4;&#x3002;&#x53EA;&#x9700;&#x5728; <code>mmap</code> &#x7684;&#x7B2C;&#x56DB;&#x500B;&#x53C3;&#x6578;&#x4E2D;&#x52A0;&#x5165; <code>MAP_POPULATE</code> &#x6A19;&#x8A8C;&#x5373;&#x53EF;&#x3002;&#x4F46;&#x9019;&#x4E5F;&#x5C0E;&#x81F4; <code>mmap</code> &#x7684;&#x4F7F;&#x7528;&#x6210;&#x672C;&#x986F;&#x8457;&#x589E;&#x52A0;&#x3002;&#x5982;&#x679C;&#x9019;&#x4E9B;&#x6620;&#x5C04;&#x7A7A;&#x9593;&#x7684;&#x6240;&#x6709;&#x9801;&#x9762;&#x90FD;&#x7ACB;&#x5373;&#x4F7F;&#x7528;&#xFF0C;&#x597D;&#x8655;&#x5341;&#x5206;&#x986F;&#x8457;&#x3002;&#x76F8;&#x8F03;&#x65BC;&#x4E00;&#x6B21;&#x8655;&#x7406;&#x591A;&#x500B;&#x5206;&#x9801;&#x932F;&#x8AA4;&#xFF0C;&#x6BCF;&#x6B21;&#x8655;&#x7406;&#x4E00;&#x500B;&#x5206;&#x9801;&#x932F;&#x8AA4;&#x7684;&#x6210;&#x672C;&#x53EF;&#x80FD;&#x66F4;&#x9AD8;&#xFF0C;&#x56E0;&#x70BA;&#x9084;&#x9700;&#x8981;&#x8655;&#x7406;&#x540C;&#x6B65;&#x5316;&#x7B49;&#x7B49;&#x5176;&#x4ED6;&#x554F;&#x984C;&#xFF0C;&#x8207;&#x5176;&#x5982;&#x6B64;&#x4E0D;&#x5982;&#x8B93;&#x7A0B;&#x5F0F;&#x53EA;&#x6709;&#x4E00;&#x500B;&#x6602;&#x8CB4;&#x7684; <code>mmap</code> &#x547C;&#x53EB;&#x3002;&#x4F46;&#x4F7F;&#x7528;&#x6B64;&#x6A19;&#x8A8C;&#x4E5F;&#x6709;&#x4E00;&#x4E9B;&#x7F3A;&#x9EDE;&#xFF0C;&#x7576;&#x6620;&#x5C04;&#x9801;&#x9762;&#x4E2D;&#x5927;&#x90E8;&#x5206;&#x7684;&#x9801;&#x9762;&#x5728;&#x547C;&#x53EB;&#x5F8C;&#x6C92;&#x6709;&#x4F7F;&#x7528;&#x6703;&#x9020;&#x6210;&#x6642;&#x9593;&#x548C;&#x8A18;&#x61B6;&#x9AD4;&#x7684;&#x6D6A;&#x8CBB;&#x3002;&#x9810;&#x5148;&#x8655;&#x7406;&#x7684;&#x9801;&#x9762;&#x5982;&#x679C;&#x6C92;&#x6709;&#x5728;&#x77ED;&#x6642;&#x9593;&#x5167;&#x4F7F;&#x7528;&#x4E5F;&#x6703;&#x9020;&#x6210;&#x7CFB;&#x7D71;&#x963B;&#x585E;&#x3002;&#x7531;&#x65BC;&#x8A18;&#x61B6;&#x9AD4;&#x5728;&#x9801;&#x9762;&#x4F7F;&#x7528;&#x4E4B;&#x524D;&#x5C31;&#x5DF2;&#x914D;&#x7F6E;&#xFF0C;&#x9019;&#x53EF;&#x80FD;&#x5C0E;&#x81F4;&#x8A18;&#x61B6;&#x9AD4;&#x77ED;&#x7F3A;&#x3002;&#x5728;&#x6700;&#x7CDF;&#x7684;&#x60C5;&#x6CC1;&#x4E0B;&#xFF0C;&#x540C;&#x4E00;&#x500B;&#x9801;&#x9762;&#x53EF;&#x80FD;&#x56E0;&#x5176;&#x4ED6;&#x7528;&#x9014;&#x88AB;&#x91CD;&#x65B0;&#x4F7F;&#x7528;&#xFF08;&#x56E0;&#x70BA;&#x5C1A;&#x672A;&#x4FEE;&#x6539;&#xFF09;&#xFF0C;&#x96D6;&#x7136;&#x4E0D;&#x9020;&#x6210;&#x56B4;&#x91CD;&#x7CFB;&#x7D71;&#x8CA0;&#x64D4;&#xFF0C;&#x4F46;&#x4ECD;&#x6703;&#x589E;&#x52A0;&#x8655;&#x7406;&#x6642;&#x9593;&#xFF0C;&#x52A0;&#x4E0A;&#x8A18;&#x61B6;&#x9AD4;&#x914D;&#x7F6E;&#x6210;&#x672C;&#x3002;</p>
+<p>&#x4F46; <code>MAP_POPULATE</code> &#x7684;&#x65B9;&#x5F0F;&#x6709;&#x4E9B;&#x904E;&#x65BC;&#x7C97;&#x7CD9;&#x3002;&#x800C;&#x4E14;&#x9084;&#x6709;&#x7B2C;&#x4E8C;&#x500B;&#x554F;&#x984C;&#x662F;&#x5BE6;&#x969B;&#x4E0A;&#x6C92;&#x6709;&#x5FC5;&#x8981;&#x5C07;&#x6240;&#x6709;&#x9801;&#x9762;&#x90FD;&#x6620;&#x5C04;&#x9032;&#x4F86;&#x3002;&#x5982;&#x679C;&#x7CFB;&#x7D71;&#x592A;&#x5FD9;&#x7121;&#x6CD5;&#x57F7;&#x884C;&#x64CD;&#x4F5C;&#xFF0C;&#x5DF2;&#x7D93;&#x9810;&#x53D6;&#x7684;&#x9801;&#x9762;&#x4E5F;&#x53EF;&#x80FD;&#x6703;&#x88AB;&#x4E1F;&#x68C4;&#x3002;&#x4E00;&#x65E6;&#x771F;&#x7684;&#x4F7F;&#x7528;&#x4E86;&#x8A72;&#x9801;&#x9762;&#xFF0C;&#x7A0B;&#x5F0F;&#x5C31;&#x6703;&#x51FA;&#x73FE;&#x5206;&#x9801;&#x932F;&#x8AA4;&#x3002;&#x53E6;&#x4E00;&#x7A2E;&#x65B9;&#x6CD5;&#x662F;&#x4F7F;&#x7528; <a href="https://man7.org/linux/man-pages/man3/posix_madvise.3.html" target="_blank"><code>posix_madvise</code></a> &#x51FD;&#x5F0F;&#x7684; <code>POSIX_MADV_WILLNEED</code> &#x3002;&#x9019;&#x6703;&#x63D0;&#x793A;&#x4F5C;&#x696D;&#x7CFB;&#x7D71;&#x7A0B;&#x5F0F;&#x5728;&#x4E0D;&#x4E45;&#x5F8C;&#x6703;&#x9700;&#x8981;&#x76EE;&#x6A19;&#x9801;&#x9762;&#x3002;&#x7576;&#x7136;&#x4F5C;&#x696D;&#x7CFB;&#x7D71;&#x6838;&#x5FC3;&#x53EF;&#x80FD;&#x5FFD;&#x7565;&#x6B64;&#x8A2D;&#x5B9A;&#x6216;&#x9810;&#x5148;&#x53D6;&#x597D;&#x76EE;&#x6A19;&#x9801;&#x9762;&#x3002;&#x512A;&#x9EDE;&#x5728;&#x65BC;&#x64CD;&#x4F5C;&#x66F4;&#x7D30;&#x5FAE;&#xFF0C;&#x4EFB;&#x4F55;&#x6620;&#x5C04;&#x5730;&#x5740;&#x7A7A;&#x9593;&#x5340;&#x57DF;&#x4E2D;&#x7684;&#x55AE;&#x500B;&#x9801;&#x9762;&#x6216;&#x591A;&#x500B;&#x9801;&#x9762;&#x7BC4;&#x570D;&#x90FD;&#x53EF;&#x88AB;&#x9810;&#x5148;&#x63D0;&#x53D6;&#x3002;&#x5C0D;&#x65BC;&#x8A31;&#x591A;&#x5728;&#x904B;&#x884C;&#x6642;&#x4E0D;&#x4F7F;&#x7528;&#x8CC7;&#x6599;&#x7684;&#x8A18;&#x61B6;&#x9AD4;&#x6620;&#x5C04;&#x6A94;&#x6848;&#xFF0C;&#x53EF;&#x80FD;&#x6BD4;&#x4F7F;&#x7528; <code>MAP_POPULATE</code> &#x6548;&#x679C;&#x9084;&#x597D;&#x3002;</p>
+<p>&#x9664;&#x4E86;&#x9019;&#x4E9B;&#x4E3B;&#x52D5;&#x6E1B;&#x5C11;&#x5206;&#x9801;&#x932F;&#x8AA4;&#x7684;&#x65B9;&#x6CD5;&#x4E4B;&#x5916;&#xFF0C;&#x9084;&#x53EF;&#x63A1;&#x7528;&#x4E00;&#x4E9B;&#x786C;&#x9AD4;&#x8A2D;&#x8A08;&#x5E2B;&#x559C;&#x6B61;&#x7684;&#x65B9;&#x6CD5;&#x3002;&#x4E00;&#x500B; DSO &#x4F54;&#x64DA;&#x5B9A;&#x5740;&#x7A7A;&#x9593;&#x4E2D;&#x7684;&#x76F8;&#x9130;&#x9801;&#x9762;&#x3002;&#x9801;&#x9762;&#x5C3A;&#x5BF8;&#x8D8A;&#x5C0F;&#xFF0C;&#x9700;&#x8981;&#x7684;&#x9801;&#x9762;&#x8D8A;&#x591A;&#xFF0C;&#x5206;&#x9801;&#x932F;&#x8AA4;&#x7684;&#x6B21;&#x6578;&#x4E5F;&#x6703;&#x589E;&#x52A0;&#x3002;&#x5C0D;&#x65BC;&#x8F03;&#x5927;&#x7684;&#x9801;&#x9762;&#x5BB9;&#x91CF;&#xFF0C;&#x6620;&#x5C04;&#xFF08;&#x6216;&#x533F;&#x540D;&#x8A18;&#x61B6;&#x9AD4;&#xFF09;&#x6240;&#x9700;&#x7684;&#x9801;&#x9762;&#x6578;&#x91CF;&#x6E1B;&#x5C11;&#xFF0C;&#x5206;&#x9801;&#x932F;&#x8AA4;&#x7684;&#x6578;&#x91CF;&#x4E5F;&#x96A8;&#x4E4B;&#x6E1B;&#x5C11;&#x3002;</p>
+<p>&#x5927;&#x591A;&#x6578;&#x7684;&#x67B6;&#x69CB;&#x90FD;&#x652F;&#x63F4; 4K &#x7684;&#x9801;&#x9762;&#x5BB9;&#x91CF;&#x3002;&#x5728; <a href="http://refspecs.linux-foundation.org/IA64-softdevman-vol2.pdf" target="_blank">IA-64</a> &#x548C; <a href="https://zh.wikipedia.org/zh-tw/Ppc64" target="_blank">PPC64</a> &#x67B6;&#x69CB;&#x4E0A;&#xFF0C;64K &#x7684;&#x9801;&#x9762;&#x5BB9;&#x91CF;&#x4E5F;&#x5341;&#x5206;&#x5E38;&#x898B;&#x3002;&#x9019;&#x8868;&#x793A;&#x914D;&#x7F6E;&#x8A18;&#x61B6;&#x9AD4;&#x7684;&#x6700;&#x5C0F;&#x55AE;&#x4F4D;&#x70BA; 64K &#x3002;&#x9019;&#x500B;&#x503C;&#x5FC5;&#x9808;&#x5728;&#x7DE8;&#x8B6F;&#x6838;&#x5FC3;&#x6642;&#x5C31;&#x8A2D;&#x5B9A;&#x597D;&#xFF0C;&#x800C;&#x4E14;&#x7121;&#x6CD5;&#x5728;&#x57F7;&#x884C;&#x6642;&#x671F;&#x66F4;&#x6539;&#xFF08;&#x81F3;&#x5C11;&#x76EE;&#x524D;&#x7121;&#x6CD5;&#xFF09;&#x3002; <a href="https://en.wikipedia.org/wiki/Application_binary_interface" target="_blank">ABI</a> &#x63D0;&#x4F9B;&#x591A;&#x7A2E;&#x9801;&#x9762;&#x5BB9;&#x91CF;&#x8A2D;&#x5B9A;&#x53EF;&#x8B93;&#x61C9;&#x7528;&#x7A0B;&#x5F0F;&#x9078;&#x64C7;&#x4E26;&#x5728;&#x57F7;&#x884C;&#x6642;&#x505A;&#x51FA;&#x8ABF;&#x6574;&#x3002;&#x8F03;&#x5927;&#x7684;&#x9801;&#x9762;&#x7A7A;&#x9593;&#x53EF;&#x80FD;&#x6703;&#x6D6A;&#x8CBB;&#x66F4;&#x591A;&#x7A7A;&#x9593;&#xFF0C;&#x4F46;&#x5728;&#x67D0;&#x4E9B;&#x60C5;&#x6CC1;&#x4E0B;&#x9084;&#x7B97;&#x53EF;&#x63A5;&#x53D7;&#x3002;</p>
+<p>&#x5927;&#x591A;&#x6578;&#x67B6;&#x69CB;&#x9084;&#x652F;&#x63F4; 1MB &#x6216;&#x751A;&#x81F3;&#x66F4;&#x5927;&#x7684;&#x9801;&#x9762;&#x5BB9;&#x91CF;&#x3002;&#x9019;&#x6A23;&#x7684;&#x9801;&#x9762;&#x5728;&#x67D0;&#x4E9B;&#x60C5;&#x6CC1;&#x4E0B;&#x5F88;&#x6709;&#x7528;&#xFF0C;&#x4F46;&#x9019;&#x6A23;&#x7684;&#x8A18;&#x61B6;&#x9AD4;&#x914D;&#x7F6E;&#x6CD5;&#x5C0D;&#x5BE6;&#x9AD4;&#x8A18;&#x61B6;&#x9AD4;&#x7A7A;&#x9593;&#x592A;&#x904E;&#x6D6A;&#x8CBB;&#x3002;&#x5927;&#x9801;&#x9762;&#x7684;&#x512A;&#x9EDE;&#x5728;&#x5DE8;&#x5927;&#x8CC7;&#x6599;&#x96C6;&#x7684;&#x60C5;&#x6CC1;&#xFF0C;&#x4EE5; x86-64 &#x4E0A;&#x7684; 2MB &#x9801;&#x9762;&#x6BD4;&#x4F7F;&#x7528; 4k &#x9801;&#x9762;&#x7BC0;&#x7701;&#x4E86; 511 &#x500B;&#x5206;&#x9801;&#x932F;&#x8AA4;&#xFF08;&#x6BCF;&#x500B;&#x5927;&#x9801;&#x9762;&#xFF09;&#x3002;&#x9019;&#x53EF;&#x80FD;&#x6703;&#x7522;&#x751F;&#x5F88;&#x5927;&#x7684;&#x5DEE;&#x7570;&#x3002;&#x89E3;&#x6C7A;&#x65B9;&#x6CD5;&#x662F;&#x6709;&#x9078;&#x64C7;&#x5730;&#x8ACB;&#x6C42;&#x8A18;&#x61B6;&#x9AD4;&#x914D;&#x7F6E;&#xFF0C;&#x50C5;&#x67D0;&#x4E9B;&#x5730;&#x5740;&#x7BC4;&#x570D;&#x4F7F;&#x7528;&#x5927;&#x578B;&#x8A18;&#x61B6;&#x9AD4;&#x9801;&#x9762;&#xFF0C;&#x4F46;&#x5C0D;&#x540C;&#x4E00;&#x884C;&#x7A0B;&#x4E2D;&#x7684;&#x6240;&#x6709;&#x5176;&#x4ED6;&#x6620;&#x5C04;&#x4F7F;&#x7528;&#x6B63;&#x5E38;&#x7684;&#x9801;&#x9762;&#x5BB9;&#x91CF;&#x3002;</p>
+<p>&#x4F7F;&#x7528;&#x5927;&#x9801;&#x9762;&#x7684;&#x4EE3;&#x50F9;&#x5728;&#x5BE6;&#x9AD4;&#x8A18;&#x61B6;&#x9AD4;&#x7A7A;&#x9593;&#x5FC5;&#x9808;&#x9023;&#x7E8C;&#xFF0C;&#x56E0;&#x6B64;&#x5B58;&#x5728;&#x5167;&#x5B58;&#x788E;&#x88C2;&#x7684;&#x554F;&#x984C;&#xFF0C;&#x53EF;&#x80FD;&#x5728;&#x4E00;&#x6BB5;&#x6642;&#x9593;&#x5F8C;&#x5C31;&#x7121;&#x6CD5;&#x914D;&#x7F6E;&#x65B0;&#x7684;&#x9801;&#x9762;&#x7A7A;&#x9593;&#x3002;&#x4F46;&#x8981;&#x8655;&#x7406;&#x8A18;&#x61B6;&#x9AD4;&#x788E;&#x7247;&#x5316;&#x975E;&#x5E38;&#x8907;&#x96DC;&#x3002;&#x4F8B;&#x5982;&#x5C0D; 2MB &#x7684;&#x5927;&#x9801;&#x9762;&#xFF0C;&#x8981;&#x53D6;&#x5F97; 512 &#x500B;&#x9023;&#x7E8C;&#x9801;&#x9762;&#x975E;&#x5E38;&#x56F0;&#x96E3;&#xFF0C;&#x9664;&#x975E;&#x5728;&#x7CFB;&#x7D71;&#x555F;&#x52D5;&#x968E;&#x6BB5;&#x3002;&#x9019;&#x5C31;&#x662F;&#x70BA;&#x4EC0;&#x9EBC;&#x76EE;&#x524D;&#x5927;&#x9801;&#x9762;&#x7684;&#x89E3;&#x6C7A;&#x65B9;&#x6848;&#x662F;&#x4F7F;&#x7528;&#x7279;&#x6B8A;&#x6A94;&#x6848;&#x7CFB;&#x7D71; <a href="https://www.kernel.org/doc/html/latest/admin-guide/mm/hugetlbpage.html" target="_blank"><code>hugetlbfs</code></a> &#x3002;&#x53EF;&#x901A;&#x904E;&#x5BEB;&#x5165;&#x8981;&#x4FDD;&#x7559;&#x7684;&#x5927;&#x9801;&#x9762;&#x6578;&#x91CF;&#x4F86;&#x505A;&#x914D;&#x7F6E;&#xFF0C;&#x6A94;&#x6848;&#x4F4D;&#x7F6E;&#x5982;&#x4E0B;&#xFF1A;</p>
+<pre class="language-"><code class="lang-c"><span class="token operator">/</span>proc<span class="token operator">/</span>sys<span class="token operator">/</span>vm<span class="token operator">/</span>nr_hugepages
+</code></pre>
+<p>&#x5982;&#x679C;&#x7121;&#x6CD5;&#x627E;&#x5230;&#x8DB3;&#x5920;&#x9023;&#x7E8C;&#x7684;&#x8A18;&#x61B6;&#x9AD4;&#x7A7A;&#x9593;&#xFF0C;&#x64CD;&#x4F5C;&#x53EF;&#x80FD;&#x6703;&#x5931;&#x6557;&#x3002;&#x5728;&#x4F7F;&#x7528;&#x865B;&#x64EC;&#x5316;&#x6280;&#x8853;&#x6642;&#xFF0C;&#x60C5;&#x6CC1;&#x6703;&#x8B8A;&#x5F97;&#x7279;&#x5225;&#x6709;&#x8DA3;&#x3002;&#x7531;&#x65BC; <a href="https://en.wikipedia.org/wiki/Virt-manager" target="_blank">VMM</a><sup><a href="#fn_&#x8B6F;&#x8A3B;2" id="reffn_&#x8B6F;&#x8A3B;2">&#x8B6F;&#x8A3B;2</a></sup> &#x6A21;&#x578B;&#x7684;&#x865B;&#x64EC;&#x7CFB;&#x7D71;&#x4E26;&#x4E0D;&#x80FD;&#x76F4;&#x63A5;&#x7BA1;&#x7406;&#x5BE6;&#x9AD4;&#x7684;&#x8A18;&#x61B6;&#x9AD4;&#x7A7A;&#x9593;&#xFF0C;&#x56E0;&#x6B64;&#x7121;&#x6CD5;&#x81EA;&#x884C;&#x914D;&#x7F6E; <code>hugetlbfs</code> &#x3002;&#x5FC5;&#x9808;&#x4F9D;&#x8CF4; VMM &#x4EE3;&#x70BA;&#x8655;&#x7406;&#xFF0C;&#x4F46;&#x9019;&#x500B;&#x529F;&#x80FD;&#x4E26;&#x4E0D;&#x662F;&#x6240;&#x6709;&#x865B;&#x64EC;&#x6A5F;&#x90FD;&#x6709;&#x3002;&#x5C0D;&#x65BC; <a href="https://www.kernel.org/doc/html/latest/virt/kvm/index.html" target="_blank">KVM</a> &#x6A21;&#x578B;&#xFF0C;&#x904B;&#x884C; KVM &#x6A21;&#x7D44;&#x7684; Linux &#x4F5C;&#x696D;&#x7CFB;&#x7D71;&#x6838;&#x5FC3;&#x53EF;&#x57F7;&#x884C; <code>hugetlbfs</code> &#x914D;&#x7F6E;&#xFF0C;&#x4E26;&#x53EF;&#x80FD;&#x5C07;&#x5176;&#x4E2D;&#x7684;&#x4E00;&#x90E8;&#x5206;&#x9801;&#x9762;&#x50B3;&#x905E;&#x7D66;&#x5176;&#x4E2D;&#x4E00;&#x500B;&#x5BA2;&#x6236;&#x7A7A;&#x9593;&#x3002;</p>
+<p>&#x7576;&#x4E00;&#x500B;&#x7A0B;&#x5F0F;&#x9700;&#x8981;&#x5927;&#x9801;&#x9762;&#x6642;&#x6709;&#x591A;&#x7A2E;&#x53EF;&#x884C;&#x7684;&#x65B9;&#x6CD5;&#xFF1A;</p>
+<ul>
+<li>&#x7A0B;&#x5F0F;&#x53EF;&#x4F7F;&#x7528; System V &#x5171;&#x4EAB;&#x8A18;&#x61B6;&#x9AD4;&#x754C;&#x9762;&#x4E26;&#x8A2D;&#x5B9A; <a href="https://man7.org/linux/man-pages/man2/shmget.2.html" target="_blank"><code>SHM_HUGETLB</code></a> &#x6A19;&#x8A8C; (flag) </li>
+<li>&#x5BE6;&#x969B;&#x639B;&#x8F09; <code>hugetlbfs</code> &#x985E;&#x578B;&#x7684;&#x6A94;&#x6848;&#x7CFB;&#x7D71;&#xFF0C;&#x7A0B;&#x5F0F;&#x53EF;&#x5728;&#x639B;&#x8F09;&#x9EDE;&#x65B0;&#x589E;&#x4E00;&#x500B;&#x6A94;&#x6848;&#xFF0C;&#x4E26;&#x4F7F;&#x7528; <code>mmap</code> &#x5C07;&#x4E00;&#x500B;&#x6216;&#x591A;&#x500B;&#x9801;&#x9762;&#x6620;&#x5C04;&#x70BA;&#x8A18;&#x61B6;&#x9AD4;&#x7A7A;&#x9593;&#x3002;</li>
+</ul>
+<p>&#x7B2C;&#x4E00;&#x7A2E;&#x60C5;&#x6CC1;&#x4E0B;&#xFF0C;<code>hugetlbfs</code> &#x4E0D;&#x9700;&#x8981;&#x639B;&#x8F09;&#x3002;</p>
+<p>&#x8ACB;&#x6C42;&#x4E00;&#x500B;&#x6216;&#x591A;&#x500B;&#x5927;&#x9801;&#x9762;&#x7684;&#x7A0B;&#x5F0F;&#x78BC;&#x53EF;&#x80FD;&#x5982;&#x4E0B;&#xFF1A;</p>
+<pre class="language-"><code class="lang-c"><span class="token class-name">key_t</span> k <span class="token operator">=</span> <span class="token function">ftok</span><span class="token punctuation">(</span><span class="token string">&quot;/some/key/file&quot;</span><span class="token punctuation">,</span> <span class="token number">42</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> id <span class="token operator">=</span> <span class="token function">shmget</span><span class="token punctuation">(</span>k<span class="token punctuation">,</span> LENGTH<span class="token punctuation">,</span> SHM_HUGETLB<span class="token operator">|</span>IPC_CREAT<span class="token operator">|</span>SHM_R<span class="token operator">|</span>SHM_W<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token operator">*</span>a <span class="token operator">=</span> <span class="token function">shmat</span><span class="token punctuation">(</span>id<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>&#x9019;&#x6BB5;&#x7A0B;&#x5F0F;&#x78BC;&#x7684;&#x95DC;&#x9375;&#x5BE6;&#x4F5C;&#x900F;&#x904E; <a href="https://man7.org/linux/man-pages/man2/shmget.2.html" target="_blank"><code>shmget</code></a> &#x4E2D;&#x4F7F;&#x7528; <code>SHM_HUGETLB</code> &#x65D7;&#x6A19;&#x548C;&#x9078;&#x64C7;&#x6B63;&#x78BA;&#x7684; <code>LENGTH</code>&#x3002; <code>LENGTH</code> &#x5FC5;&#x9808;&#x662F;&#x7CFB;&#x7D71;&#x5927;&#x9801;&#x9762;&#x7684;&#x500D;&#x6578;&#x3002;&#x4E0D;&#x540C;&#x7684;&#x67B6;&#x69CB;&#x6703;&#x9700;&#x8981;&#x586B;&#x5165;&#x4E0D;&#x540C;&#x7684;&#x503C;&#x3002;&#x4F7F;&#x7528; System V &#x5171;&#x4EAB;&#x8A18;&#x61B6;&#x9AD4;&#x4ECB;&#x9762;&#x6709;&#x4E00;&#x500B;&#x9EBB;&#x7169;&#x7684;&#x554F;&#x984C;&#xFF0C;&#x56E0;&#x70BA;&#x9700;&#x8981;&#x900F;&#x904E; key &#x53C3;&#x6578;&#x4EE5;&#x5340;&#x5206;&#xFF08;&#x6216;&#x5171;&#x4EAB;&#xFF09;&#x6620;&#x5C04;&#x5340;&#x57DF;&#x800C;&#x4E14;&#x5F88;&#x5BB9;&#x6613;&#x8DDF; <a href="https://man7.org/linux/man-pages/man3/ftok.3.html" target="_blank"><code>ftok</code></a> &#x4ECB;&#x9762;&#x7522;&#x751F;&#x885D;&#x7A81;&#x56E0;&#x6B64;&#x6700;&#x597D;&#x4F7F;&#x7528;&#x5176;&#x4ED6;&#x6A5F;&#x5236;&#x3002;</p>
+<p>&#x5982;&#x679C;&#x53EF;&#x639B;&#x8F09; <code>hugetlbfs</code> &#x6A94;&#x6848;&#x7CFB;&#x7D71;&#xFF0C;&#x6700;&#x597D;&#x4E0D;&#x8981;&#x4F7F;&#x7528; System V &#x7684;&#x5171;&#x4EAB;&#x8A18;&#x61B6;&#x9AD4;&#x3002;&#x4F7F;&#x7528;&#x7279;&#x6B8A;&#x6A94;&#x6848;&#x7CFB;&#x7D71;&#x7684;&#x552F;&#x4E00;&#x554F;&#x984C;&#x662F;&#x4F5C;&#x696D;&#x7CFB;&#x7D71;&#x5FC5;&#x9808;&#x652F;&#x63F4;&#xFF0C;&#x4F46;&#x76EE;&#x524D;&#x5C1A;&#x672A;&#x6709;&#x6A19;&#x6E96;&#x5316;&#x7684;&#x639B;&#x8F09;&#x9EDE;&#x3002;&#x4E00;&#x65E6;&#x6A94;&#x6848;&#x7CFB;&#x7D71;&#x6210;&#x529F;&#x639B;&#x8F09;&#xFF0C;&#x4F8B;&#x5982;&#x5728; <code>/dev/hugetlb</code> &#xFF0C;&#x7A0B;&#x5F0F;&#x5C31;&#x53EF;&#x8F15;&#x9B06;&#x4F7F;&#x7528;&#x5B83;&#xFF1A;</p>
+<pre class="language-"><code class="lang-c"><span class="token keyword">int</span> fd <span class="token operator">=</span> <span class="token function">open</span><span class="token punctuation">(</span><span class="token string">&quot;/dev/hugetlb/file1&quot;</span><span class="token punctuation">,</span>O_RDWR<span class="token operator">|</span>O_CREAT<span class="token punctuation">,</span> <span class="token number">0700</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token operator">*</span>a <span class="token operator">=</span> <span class="token function">mmap</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">,</span> LENGTH<span class="token punctuation">,</span>PROT_READ<span class="token operator">|</span>PROT_WRITE<span class="token punctuation">,</span>fd<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>&#x900F;&#x904E;&#x5728; <code>open</code> &#x547C;&#x53EB;&#x4E2D;&#x4F7F;&#x7528;&#x76F8;&#x540C;&#x7684;&#x6A94;&#x540D;&#xFF0C;&#x591A;&#x500B;&#x884C;&#x7A0B;&#x53EF;&#x5171;&#x4EAB;&#x76F8;&#x540C;&#x7684;&#x5927;&#x9801;&#x9762;&#x4E26;&#x5354;&#x4F5C;&#x3002;&#x4E5F;&#x53EF;&#x5C07;&#x9801;&#x9762;&#x8A2D;&#x7F6E;&#x70BA;&#x53EF;&#x57F7;&#x884C;&#xFF0C;&#x53EA;&#x662F;&#x5728; <code>mmap</code> &#x547C;&#x53EB;&#x4E2D;&#x5FC5;&#x9808;&#x8A2D;&#x5B9A; <code>PROT_EXEC</code>  &#x6A19;&#x8A8C;&#x3002;&#x8207; System V &#x5171;&#x4EAB;&#x8A18;&#x61B6;&#x9AD4;&#x76F8;&#x540C;&#xFF0C; <code>LENGTH</code> &#x7684;&#x503C;&#x5FC5;&#x9808;&#x662F;&#x7CFB;&#x7D71;&#x7684;&#x5927;&#x9801;&#x9762;&#x5C3A;&#x5BF8;&#x7684;&#x500D;&#x6578;&#x3002;</p>
+<p>&#x4E00;&#x500B;&#x9632;&#x5BEB;&#x5165;&#x7684;&#x7A0B;&#x5F0F;&#xFF08;&#x6240;&#x6709;&#x7A0B;&#x5F0F;&#x90FD;&#x61C9;&#x8A72;&#x5982;&#x6B64;&#xFF09;&#x53EF;&#x4F7F;&#x7528;&#x4EE5;&#x4E0B;&#x51FD;&#x5F0F;&#x5728;&#x904B;&#x884C;&#x6642;&#x78BA;&#x5B9A;&#x639B;&#x8F09;&#x9EDE;&#x5B58;&#x5728;&#xFF1A;</p>
+<pre class="language-"><code class="lang-c"><span class="token keyword">char</span> <span class="token operator">*</span><span class="token function">hugetlbfs_mntpoint</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">char</span> <span class="token operator">*</span>result <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+    FILE <span class="token operator">*</span>fp <span class="token operator">=</span> <span class="token function">setmntent</span><span class="token punctuation">(</span>_PATH_MOUNTED<span class="token punctuation">,</span> <span class="token string">&quot;r&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>fp <span class="token operator">!=</span> <span class="token constant">NULL</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">struct</span> <span class="token class-name">mntent</span> <span class="token operator">*</span>m<span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>m <span class="token operator">=</span> <span class="token function">getmntent</span><span class="token punctuation">(</span>fp<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token constant">NULL</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>m<span class="token operator">-&gt;</span>mnt_fsname<span class="token punctuation">,</span> <span class="token string">&quot;hugetlbfs&quot;</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                result <span class="token operator">=</span> <span class="token function">strdup</span><span class="token punctuation">(</span>m<span class="token operator">-&gt;</span>mnt_dir<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token function">endmntent</span><span class="token punctuation">(</span>fp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x95DC;&#x65BC;&#x9019;&#x4E8C;&#x7A2E;&#x60C5;&#x6CC1;&#x7684;&#x66F4;&#x591A;&#x8CC7;&#x8A0A;&#xFF0C;&#x53EF;&#x53C3;&#x898B; Linux &#x6838;&#x5FC3;&#x539F;&#x59CB;&#x7A0B;&#x5F0F;&#x78BC;&#x5167;&#x9644;&#x6587;&#x4EF6; <a href="https://www.kernel.org/doc/Documentation/vm/hugetlbpage.txt" target="_blank">hugetlbpage.txt</a>&#xFF0C;&#x8A72;&#x6A94;&#x9084;&#x63CF;&#x8FF0; IA-64 &#x7279;&#x6709;&#x8655;&#x7406;&#x6A5F;&#x5236;&#x3002;&#x70BA;&#x4E86;&#x8AAA;&#x660E;&#x5927;&#x9801;&#x9762;&#x7684;&#x512A;&#x9EDE;&#xFF0C;&#x5716; 7.9 &#x986F;&#x793A;&#x4E86;&#x5C0D;&#x65BC; <code>NPAD=0</code> &#x7684;&#x96A8;&#x6A5F; &#x300C;&#x8DDF;&#x96A8;&#x300D; &#x6E2C;&#x8A66;&#x7D50;&#x679C;&#x3002;&#x8207;&#x5716; 3.15 &#x76F8;&#x540C;&#xFF0C;&#x4F46;&#x9019;&#x6B21;&#x4E5F;&#x6E2C;&#x91CF;&#x4E86;&#x4F7F;&#x7528;&#x5927;&#x9801;&#x9762;&#x914D;&#x7F6E;&#x8A18;&#x61B6;&#x9AD4;&#x7684;&#x6578;&#x64DA;&#x3002;&#x53EF;&#x770B;&#x5230;&#x6548;&#x80FD;&#x512A;&#x52E2;&#x975E;&#x5E38;&#x5927;&#x3002;&#x5C0D;&#x65BC; $2^{20}$ &#x4F4D;&#x5143;&#x7D44;&#xFF0C;&#x4F7F;&#x7528;&#x5927;&#x9801;&#x9762;&#x7684;&#x6E2C;&#x8A66;&#x901F;&#x5EA6;&#x5FEB;&#x4E86; 57&#xFF05; &#x3002;&#x662F;&#x7531;&#x65BC;&#x9019;&#x500B;&#x5BB9;&#x91CF;&#x5B8C;&#x5168;&#x9069;&#x5408;&#x4E00;&#x500B; 2MB &#x7684;&#x9801;&#x9762;&#xFF0C;&#x56E0;&#x6B64;&#x4E0D;&#x6703;&#x767C;&#x751F; DTLB &#x672A;&#x547D;&#x4E2D;&#x3002;</p>
+<figure>
+  <img src="../assets/figure-7.9.png" alt="&#x5716; 7.9&#xFF1A;&#x300C;&#x8DDF;&#x96A8;&#x300D;&#x5728;&#x5927;&#x9801;&#x9762;&#x7684;&#x8F38;&#x51FA;&#x7D50;&#x679C;">
+  <figcaption>&#x5716; 7.9&#xFF1A;&#x300C;&#x8DDF;&#x96A8;&#x300D;&#x5728;&#x5927;&#x9801;&#x9762;&#x7684;&#x8F38;&#x51FA;&#x7D50;&#x679C;</figcaption>
+</figure>
+
+<p>&#x6578;&#x5B57;&#x4E00;&#x958B;&#x59CB;&#x6BD4;&#x8F03;&#x5C0F;&#xFF0C;&#x4F46;&#x96A8;&#x8457;&#x5DE5;&#x4F5C;&#x96C6;&#x5BB9;&#x91CF;&#x589E;&#x52A0;&#x800C;&#x958B;&#x59CB;&#x905E;&#x589E;&#x3002;&#x4F7F;&#x7528;&#x5927;&#x9801;&#x9762;&#x6E2C;&#x8A66;&#xFF0C;&#x5728; 512MB &#x7684;&#x5DE5;&#x4F5C;&#x96C6;&#x5FEB;&#x4E86; 38&#xFF05;&#x3002;&#x5927;&#x9801;&#x9762;&#x6E2C;&#x8A66;&#x66F2;&#x7DDA;&#x5728;&#x5927;&#x7D04; 250 &#x500B;&#x9031;&#x671F;&#x8655;&#x5F62;&#x6210;&#x4E00;&#x500B;&#x9AD8;&#x539F;&#x3002;&#x7576;&#x5DE5;&#x4F5C;&#x96C6;&#x8D85;&#x904E; $2^{27}$ &#x500B;&#x5B57;&#x5143;&#x6642;&#x6578;&#x5B57;&#x518D;&#x6B21;&#x986F;&#x8457;&#x4E0A;&#x5347;&#x3002;&#x9AD8;&#x539F;&#x5F62;&#x6210;&#x7684;&#x539F;&#x56E0;&#x662F; 64 &#x500B; 2MB &#x7684; TLB &#x53EF;&#x6DB5;&#x84CB; $2^{27}$ &#x500B;&#x5B57;&#x5143;&#x3002;</p>
+<p>&#x6B63;&#x5982;&#x9019;&#x4E9B;&#x6578;&#x5B57;&#x6240;&#x986F;&#x793A;&#xFF0C;&#x4F7F;&#x7528;&#x5927;&#x5DE5;&#x4F5C;&#x96C6;&#x7684;&#x6210;&#x672C;&#x4E2D;&#x6709;&#x5F88;&#x5927;&#x4E00;&#x90E8;&#x5206;&#x4F86;&#x81EA; TLB &#x672A;&#x547D;&#x4E2D;&#x3002;&#x4E5F;&#x56E0;&#x6B64;&#x4F7F;&#x7528;&#x672C;&#x7BC0;&#x4E2D;&#x63CF;&#x8FF0;&#x7684;&#x754C;&#x9762;&#x53EF;&#x80FD;&#x6703;&#x5E36;&#x4F86;&#x4E0D;&#x932F;&#x7684;&#x6210;&#x679C;&#x3002;&#x5716;&#x8868;&#x4E2D;&#x7684;&#x6578;&#x5B57;&#x5F88;&#x53EF;&#x80FD;&#x662F;&#x7406;&#x60F3;&#x503C;&#x7684;&#x4E0A;&#x9650;&#xFF0C;&#x4F46;&#x5728;&#x73FE;&#x5BE6;&#x4E2D;&#x7684;&#x67D0;&#x4E9B;&#x61C9;&#x7528;&#x7A0B;&#x5F0F;&#x4E5F;&#x53EF;&#x900F;&#x904E;&#x5927;&#x9801;&#x9762;&#x6709;&#x986F;&#x8457;&#x7684;&#x52A0;&#x901F;&#x6548;&#x679C;&#x3002;&#x4F8B;&#x5982;&#xFF1A;&#x8CC7;&#x6599;&#x5EAB;&#xFF1A;&#x56E0;&#x70BA;&#x4F7F;&#x7528;&#x6848;&#x4F8B;&#x591A;&#x662F;&#x5927;&#x91CF;&#x8CC7;&#x6599;&#x5B58;&#x53D6;&#xFF0C;&#x662F;&#x4ECA;&#x5929;&#x4F7F;&#x7528;&#x5927;&#x9801;&#x9762;&#x7684;&#x61C9;&#x7528;&#x7A0B;&#x5F0F;&#x4E4B;&#x4E00;&#x3002;</p>
+<p>&#x76EE;&#x524D;&#x9084;&#x6C92;&#x6709;&#x8FA6;&#x6CD5;&#x5C07;&#x5927;&#x9801;&#x9762;&#x6620;&#x5C04;&#x81F3;&#x6A94;&#x6848;&#x652F;&#x6301; (file-backed) &#x7684;&#x8A18;&#x61B6;&#x9AD4;&#x5340;&#x584A;&#x3002;&#x4F46;&#x76EE;&#x524D;&#x70BA;&#x6B62;&#x4ECD;&#x6709;&#x4E00;&#x4E9B;&#x5BE6;&#x4F5C;&#x63D0;&#x6848;&#xFF0C;&#x4F46;&#x7121;&#x975E;&#x90FD;&#x662F;&#x660E;&#x78BA;&#x4F7F;&#x7528;&#x5927;&#x9801;&#x9762;&#xFF0C;&#x4E26;&#x642D;&#x914D; <code>hugetlbfs</code> &#x6A94;&#x6848;&#x7CFB;&#x7D71;&#x3002;&#x4F46;&#x9019;&#x7A2E;&#x65B9;&#x5F0F;&#x4EE4;&#x4EBA;&#x7121;&#x6CD5;&#x63A5;&#x53D7;&#x3002;&#x5927;&#x9801;&#x9762;&#x4F7F;&#x7528;&#x5FC5;&#x9808;&#x900F;&#x660E;&#xFF0C;&#x9019;&#x6A23;&#x4F5C;&#x696D;&#x7CFB;&#x7D71;&#x6838;&#x5FC3;&#x624D;&#x53EF;&#x8F15;&#x9B06;&#x5730;&#x78BA;&#x5B9A;&#x54EA;&#x4E9B;&#x6620;&#x5C04;&#x7BC4;&#x570D;&#x9069;&#x5408;&#x4E26;&#x81EA;&#x52D5;&#x4F7F;&#x7528;&#x5927;&#x9801;&#x9762;&#x3002;&#x554F;&#x984C;&#x5728;&#x4F5C;&#x696D;&#x7CFB;&#x7D71;&#x6838;&#x5FC3;&#x4E0D;&#x6703;&#x6C38;&#x9060;&#x77E5;&#x9053;&#x8A18;&#x61B6;&#x9AD4;&#x7684;&#x914D;&#x7F6E;&#x6A21;&#x5F0F;&#x3002;&#x5982;&#x679C;&#x4E00;&#x500B;&#x53EF;&#x4F7F;&#x7528;&#x5927;&#x9801;&#x9762;&#x7684;&#x8A18;&#x61B6;&#x9AD4;&#x7A7A;&#x9593;&#x8981;&#x6C42; 4k &#x9801;&#x9762;&#x7CBE;&#x7D30;&#x5EA6;&#xFF08;&#x4F8B;&#xFF1A;&#x56E0;&#x70BA;&#x4F7F;&#x7528; <a href="https://man7.org/linux/man-pages/man2/mprotect.2.html" target="_blank">mprotect</a> &#x66F4;&#x6539;&#x4E86;&#x90E8;&#x5206;&#x8A18;&#x61B6;&#x9AD4;&#x7684;&#x4FDD;&#x8B77;&#x7BC4;&#x570D;&#xFF09;&#xFF0C;&#x5728;&#x7DDA;&#x6027;&#x7684;&#x5BE6;&#x9AD4;&#x8A18;&#x61B6;&#x9AD4;&#x7A7A;&#x9593;&#x5247;&#x6703;&#x6D6A;&#x8CBB;&#x5F88;&#x591A;&#x5BF6;&#x8CB4;&#x7684;&#x8CC7;&#x6E90;&#x3002;&#x56E0;&#x6B64;&#x6210;&#x529F;&#x5BE6;&#x73FE;&#x9019;&#x7A2E;&#x65B9;&#x6CD5;&#x80AF;&#x5B9A;&#x9700;&#x8981;&#x66F4;&#x591A;&#x6642;&#x9593;&#x3002;</p>
+<blockquote id="fn_&#x8B6F;&#x8A3B;1">
+<sup>&#x8B6F;&#x8A3B;1</sup>. &#x9019;&#x4E9B;&#x51FD;&#x5F0F;&#x4E4B;&#x6240;&#x4EE5;&#x6703;&#x7528; <em>_cyg</em> &#x958B;&#x982D;&#xFF0C;&#x662F;&#x56E0;&#x6536;&#x9304;&#x4F86;&#x81EA; Cygnus Solutions &#x516C;&#x53F8;&#x9019;&#x9593;&#x65E9;&#x671F;&#x7684; GCC &#x8CA2;&#x737B;&#x8005;&#x7684;&#x7A0B;&#x5F0F;&#x78BC;&#xFF0C;&#x5F8C;&#x4F86;&#x9019;&#x9593;&#x516C;&#x53F8;&#x88AB; Red Hat &#x516C;&#x53F8;&#x6536;&#x8CFC;&#xFF0C;&#x5176;&#x958B;&#x767C;&#x8005;&#x6301;&#x7E8C;&#x6295;&#x5165; GCC &#x7684;&#x7DAD;&#x8B77;&#xFF0C;&#x4E26;&#x7DAD;&#x8B77;&#x524D;&#x8FF0;&#x51FD;&#x5F0F;&#x7684;&#x5BE6;&#x4F5C;&#x81F3;&#x4ECA;&#x3002;<a href="#reffn_&#x8B6F;&#x8A3B;1" title="Jump back to footnote [&#x8B6F;&#x8A3B;1] in the text."> &#x21A9;</a>
+</blockquote>
+<blockquote id="fn_&#x8B6F;&#x8A3B;2">
+<sup>&#x8B6F;&#x8A3B;2</sup>. VMM &#x662F; virtual machine manager &#x6216; virtual machine monitor &#x7684;&#x7C21;&#x7A31;&#xFF0C;&#x8A73;&#x898B; Wikipedia <a href="https://en.wikipedia.org/wiki/Hypervisor" target="_blank">hypervisor</a> &#x8A5E;&#x76EE;<a href="#reffn_&#x8B6F;&#x8A3B;2" title="Jump back to footnote [&#x8B6F;&#x8A3B;2] in the text."> &#x21A9;</a>
+</blockquote>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="improving-branch-prediction.html" class="navigation navigation-prev " aria-label="Previous page: 7.4. 改善分支預測">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="../examples-and-benchmark-programs.html" class="navigation navigation-next " aria-label="Next page: A. 範例與基準測試程式">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"7.5. 分頁錯誤最佳化","level":"1.8.5","depth":2,"next":{"title":"A. 範例與基準測試程式","level":"1.9","depth":1,"path":"examples-and-benchmark-programs.md","ref":"examples-and-benchmark-programs.md","articles":[{"title":"A.1 矩陣乘法","level":"1.9.1","depth":2,"path":"examples-and-benchmark-programs/matrix-multiplication.md","ref":"examples-and-benchmark-programs/matrix-multiplication.md","articles":[]}]},"previous":{"title":"7.4. 改善分支預測","level":"1.8.4","depth":2,"path":"memory-performance-tools/improving-branch-prediction.md","ref":"memory-performance-tools/improving-branch-prediction.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-lunr","-search","search-pro","-sharing","katex","github-buttons","github-issue-feedback","-highlight","prism","splitter","theme-comscore","hide-element","alerts"],"styles":{"pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css","website":"styles/website.css"},"pluginsConfig":{"prism":{},"github-issue-feedback":{"repo":"sysprog21/cpumemory-zhtw"},"splitter":{},"search-pro":{},"hide-element":{"elements":[".gitbook-link"]},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-comscore":{},"alerts":{},"github-buttons":{"buttons":[{"user":"sysprog21","repo":"cpumemory-zhtw","type":"star","size":"small"}]},"theme-default":{"styles":{"pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css","website":"styles/website.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"每位程式開發者都該有的記憶體知識","language":"zh-tw","gitbook":">=3.0.0","description":"本文解釋用於現代電腦硬體的記憶體子系統的結構、闡述 CPU 快取發展的考量、它們如何運作，以及程式該如何針對記憶體操作調整，從而達到最佳的效能。"},"file":{"path":"memory-performance-tools/page-fault-optimization.md","mtime":"2025-12-24T07:41:31.219Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2025-12-24T07:42:11.361Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-pro/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-github-buttons/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-github-issue-feedback/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-splitter/splitter.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-hide-element/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-alerts/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-theme-comscore/test.js"></script>
+        
+    
+
+    </body>
+</html>
+
