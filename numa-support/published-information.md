@@ -339,7 +339,7 @@
 
 將表 5.2 與 5.3 擺在一起，我們能夠發現
 
-* 沒有 CPU 擁有 HT （`thethread_siblings` 位元圖有一個位元被設置）、
+* 沒有 CPU 擁有 HT （`thread_siblings` 位元圖有一個位元被設置）、
 * 這個系統實際上共有四個處理器（`physical_package_id` 0 到 3）、
 * 每個處理器有二顆核、以及
 * 沒有處理器核共享任何快取。
